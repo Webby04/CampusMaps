@@ -31,6 +31,7 @@ The folder structure is {z}/{x}/{theme}-{y}.png where:
 - x = x coordinate
 - y = y coordinate
 - theme = light or dark.
+
 The .png files are called rastor tiles and are generated from the geojson into images.
 The .pbf files are called vector tiles and are generated from the geojson into binary files.
 The vector tiles don't have a theme in the file name because the theme is applied dynamically using the theme-dark.json and theme-light.json files in the base /mapstiles folder.
