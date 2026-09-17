@@ -1,4 +1,4 @@
-# JCU Map SPA POC
+# JCU Map Single Page Application (SPA) Proof of Concept (POC)
 This map concept will utilise Geojson data to present campus maps in a simple HTML page.
 
 ## Helpful Links
