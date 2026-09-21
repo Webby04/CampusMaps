@@ -40,4 +40,10 @@ fetch("../data/mapsdata/tsv_nature_paths.json")
     .then((response) => response.json())
     .then((data) => {
         L.geoJSON(data).addTo(map)
-    });    
+    });   
+    
+fetch("../data/mapsdata/tsv_buildings.json")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data).addTo(map)
+    });     
