@@ -46,4 +46,16 @@ fetch("../data/mapsdata/tsv_buildings.json")
     .then((response) => response.json())
     .then((data) => {
         L.geoJSON(data).addTo(map)
-    });     
+    });  
+
+fetch("../data/mapsdata/tsv_path_center_lines.json")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data).addTo(map)
+    });  
+    
+fetch("../data/mapsdata/tsv_poi.json")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data).addTo(map)
+    });  
