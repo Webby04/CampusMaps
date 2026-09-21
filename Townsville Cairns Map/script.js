@@ -29,3 +29,15 @@ fetch("../data/mapsdata/tsv_parking.json")
     .then((data) => {
         L.geoJSON(data).addTo(map)
     });       
+
+fetch("../data/mapsdata/tsv_path_areas.json")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data).addTo(map)
+    });    
+
+fetch("../data/mapsdata/tsv_nature_paths.json")
+    .then((response) => response.json())
+    .then((data) => {
+        L.geoJSON(data).addTo(map)
+    });    
