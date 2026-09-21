@@ -28,4 +28,12 @@ var myLines = [{
     "coordinates": [[-105, 40], [-110, 45], [-115, 55]]
 }];
 
-L.geoJSON(myLines).addTo(map);
+var myStyle = {
+    "color": "#ff7800",
+    "weight": 5,
+    "opacity": 0.65
+};
+
+L.geoJSON(myLines, {
+    style: myStyle
+}).addTo(map);
