@@ -6,7 +6,7 @@ This map concept will utilise Geojson data to present campus maps in a simple HT
 - https://leafletjs.com/
 
 ## Milestones
-- Initial Rendering of GIS Geojson data into a map inside a basic webpage.
+- #3
 - Ability to switch between Cairns and Townsville.
 - Expand out the map to include toggles and filters of POIs. Interface Design and UX.
 - Add theming (dark/light/auto).
