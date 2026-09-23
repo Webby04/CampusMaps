@@ -1,4 +1,7 @@
-var map = L.map('map').setView([-19.328, 146.756], 16);
+var map = L.map('map', {
+    minZoom: 16,
+    maxZoom: 19
+}).setView([-19.328, 146.756], 16);
 
 fetch("../data/mapsdata/tsv_creeks.json")
     .then((response) => response.json())
