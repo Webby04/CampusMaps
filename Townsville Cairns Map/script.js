@@ -106,6 +106,11 @@ fetch("../data/mapsdata/tsv_nature_paths.json")
 fetch("../data/mapsdata/tsv_buildings.json")
     .then((response) => response.json())
     .then((data) => {
+        var FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
+        var SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+
+        var buildingLabels = [];
+
         L.geoJSON(data, {
             style: {
                 color: "rgba(68, 170, 221, 1.00)",
@@ -116,20 +121,93 @@ fetch("../data/mapsdata/tsv_buildings.json")
             onEachFeature: function (feature, layer) {
                 var center = layer.getBounds().getCenter();
 
-                L.marker(center, {
+                var buildingNumber = String(feature.properties.buildingNumber);
+                var buildingName = feature.properties.buildingName;
+
+                var label = L.marker(center, {
                     icon: L.divIcon({
                         className: "building-label",
-                        html: feature.properties.buildingNumber,
+                        html: buildingNumber,
                         iconSize: [40, 20],
                         iconAnchor: [20, 10]
                     })
-                }).addTo(map);
+                });
+
+                buildingLabels.push({
+                    number: buildingNumber,
+                    name: buildingName,
+                    label: label
+                });
             }
         }).addTo(map)
+
+        function updateBuildingLabels() {
+            var zoom = map.getZoom();
+
+            buildingLabels.forEach(function (building) {
+                if (zoom <= 17) {
+                    if (FirstZoomBuildings.includes(building.number)) {
+                        building.label.setIcon(
+                            L.divIcon({
+                                className: "building-label",
+                                html: building.number + "<br>" + building.name,
+                                iconSize: [150, 40],
+                                iconAnchor: [75, 20]
+                            })
+                        );
+                        building.label.addTo(map)
+                    } else { 
+                        map.removeLayer(building.label)
+                    }
+                }
+
+                else if (zoom === 18) {
+                    if (SecondZoomBuildings.includes(building.number)) {
+                        building.label.setIcon(
+                            L.divIcon({
+                                className: "building-label",
+                                html: building.number + "<br>" + building.name,
+                                iconSize: [150, 40],
+                                iconAnchor: [75, 20]
+                            })
+                        );
+                        building.label.addTo(map)
+                    } else { 
+                        map.removeLayer(building.label)
+                    }
+                }
+
+                else if (zoom >= 19) {
+                    if (SecondZoomBuildings.includes(building.number)) {
+                        building.label.setIcon(
+                            L.divIcon({
+                                className: "building-label",
+                                html: building.number + "<br>" + building.name,
+                                iconSize: [150, 40],
+                                iconAnchor: [75, 20]
+                            })
+                        );
+                    } else {
+                        building.label.setIcon(
+                            L.divIcon({
+                                className: "building-label",
+                                html: building.number,
+                                iconSize: [40, 20],
+                                iconAnchor: [20, 10]
+                            })
+                        );
+                    }
+                    building.label.addTo(map);
+                }
+            })
+        }
+        updateBuildingLabels();
+
+        map.on("zoomend", updateBuildingLabels)
     });  
     
-fetch("../data/mapsdata/tsv_poi.json")
-    .then((response) => response.json())
-    .then((data) => {
-        L.geoJSON(data).addTo(map)
-    });
+// fetch("../data/mapsdata/tsv_poi.json")
+//     .then((response) => response.json())
+//     .then((data) => {
+//         L.geoJSON(data).addTo(map)
+//     });
