@@ -2,3 +2,14 @@
     height: 100vh;
     margin: 0 auto;
 }
+
+.building-label {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: black;
+    font-weight: bold;
+    font-size: 10.px;
+    text-align: center;
+    line-height: 20px;
+}

@@ -109,6 +109,18 @@ fetch("../data/mapsdata/tsv_buildings.json")
                 weight: 1,
                 fillColor: "rgba(102, 221, 255, 1.00)",
                 fillOpacity: 1
+            },
+            onEachFeature: function (feature, layer) {
+                var center = layer.getBounds().getCenter();
+
+                L.marker(center, {
+                    icon: L.divIcon({
+                        className: "building-label",
+                        html: feature.properties.buildingNumber,
+                        iconSize: [40, 20],
+                        iconAnchor: [20, 10]
+                    })
+                }).addTo(map);
             }
         }).addTo(map)
     });  
