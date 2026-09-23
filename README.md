@@ -6,13 +6,16 @@ This map concept will utilise Geojson data to present campus maps in a simple HT
 - https://leafletjs.com/
 
 ## Milestones
-- Initial Rendering of GIS Geojson data into a map inside a basic webpage.
-- Ability to switch between Cairns and Townsville.
-- Expand out the map to include toggles and filters of POIs. Interface Design and UX.
-- Add theming (dark/light/auto).
-- Add details and information when tapping a building or POI.
+- [Initial Rendering of GIS Geojson data into a map inside a basic webpage.](https://github.com/jcu-dev/spa-jcu-map-poc/issues/3)
+- [Ability to switch between Cairns and Townsville.](https://github.com/jcu-dev/spa-jcu-map-poc/issues/4)
+- [Expand out the map to include toggles and filters of POIs. Interface Design and UX.](https://github.com/jcu-dev/spa-jcu-map-poc/issues/5)
+- [Add theming (dark/light/auto).](https://github.com/jcu-dev/spa-jcu-map-poc/issues/8)
+- [Ability to show own device location.](https://github.com/jcu-dev/spa-jcu-map-poc/issues/6)
+- [Add details and information when tapping a building or POI.](https://github.com/jcu-dev/spa-jcu-map-poc/issues/9)
+- [Navigate directions across the campus based on location or building/POI.](https://github.com/jcu-dev/spa-jcu-map-poc/issues/7)
 
 ## Stretch Goals
+- Searching and additional UX changes.
 - Flutterify/Mobile the maps.
 - SPA `manifest.json` setup.
 - Deep Linking.
