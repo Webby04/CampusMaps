@@ -42,6 +42,92 @@
     color: #bb0000
 }
 
-.parking-icon {
+.parking-icon,
+.poi-icon .material-symbols-outlined,
+.poi-icon i {
     font-size: 20px;
+}   
+
+.poi-icon {
+    border: 2px solid black;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poi-motorc {
+    color: #00aa00;
+    border-color: #00aa00;
+}
+
+.poi-accpark {
+    color: #c48309;
+    border-color: #c48309;
+}
+
+.poi-trans {
+    color: #003366;
+    border-color: #003366;
+}
+
+.poi-bike {
+    color: #663300;
+    border-color: #663300;
+}
+
+.poi-bikews {
+    color: #663300;
+    border-color: #663300;
+}
+
+.poi-bikews {
+    color: #aa2200;
+    border-color: #aa2200;
+}
+
+.poi-atm {
+    color: #226699;
+    border-color: #226699;
+}
+
+.poi-helpphone {
+    color: #ff1111;
+    border-color: #ff1111;
+}
+
+.poi-security {
+    color: #ff1111;
+    border-color: #ff1111;
+}
+
+.poi-defib {
+    color: #ff1111;
+    border-color: #ff1111;
+}
+
+.poi-parent {
+    color: #226699;
+    border-color: #226699;
+}
+
+.poi-info {
+    color: #226699;
+    border-color: #226699;
+}
+
+.poi-wellness {
+    color: #189618;
+    border-color: #189618;
+}
+
+.poi-shower {
+    color: #226699;
+    border-color: #226699;
+}
+
+.poi-pwd {
+    color: #c48001;
+    border-color: #c48001;
 }

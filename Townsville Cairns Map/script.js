@@ -187,8 +187,20 @@ async function callbacktest() {
     
     map.on("zoomend", updateBuildingLabels);
 
-    // let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
-    // L.geoJSON(await poiJSON.json()).addTo(map);
+    let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
+    L.geoJSON(await poiJSON.json(), {
+        pointToLayer: function (feature, latlng) {
+            var icon = getPOIIcon(feature.properties.type);
+
+            if (icon == null) {
+                return;
+            }
+
+            return L.marker(latlng, {
+                icon: icon
+            });
+        }
+    }).addTo(map);
 }
 
 callbacktest();
@@ -229,4 +241,81 @@ function getParkingIcon(parkType) {
         iconSize: [30, 30],
         iconAnchor: [15, 15]
     })
+}
+
+function getPOIIcon(type) {
+    let iconHTML;
+    let iconClass;
+
+    switch(type) {
+        case 'MOTORC':
+            iconHTML = `<span class="material-symbols-outlined">motorcycle</span>`;
+            iconClass = 'poi-motorc';
+            break;
+        case 'ACCPARK':
+            iconHTML = `<span class="material-symbols-outlined">accessible</span>`;
+            iconClass = 'poi-accpark'
+            break;
+        case 'TRANS':
+            iconHTML = `<i class="ri-bus-line"></i>`;
+            iconClass = 'poi-trans';
+            break;
+        case 'BIKE':
+            iconHTML = `<span class="material-symbols-outlined">directions_bike</span>`;
+            iconClass = 'poi-bike';
+            break;
+        case 'BIKEWS':
+            iconHTML = `<i class="ri-wrench-fill"></i>`;
+            iconClass = 'poi-bikews';
+            break;
+        case 'FOODBEV':
+            iconHTML = `<span class="material-symbols-outlined">restaurant</span>`;
+            iconClass = 'poi-foodbev';
+            break;
+        case 'ATM':
+            iconHTML = `<span class="material-symbols-outlined">attach_money</span>`;
+            iconClass = 'poi-atm';
+            break;
+        case 'HELPPHONE':
+            iconHTML = `<i class="ri-phone-fill"></i>`;
+            iconClass = 'poi-helpphone';
+            break;
+        case 'SECURITY':
+            iconHTML = `<span class="material-symbols-outlined">security</span>`;
+            iconClass = 'poi-security';
+            break;
+        case 'DEFIB':
+            iconHTML = `<span class="material-symbols-outlined">heart_broken</span>`;
+            iconClass = 'poi-defib';
+            break; 
+        case 'PARENT':
+            iconHTML = `<i class="ri-parent-fill"></i>`;
+            iconClass = 'poi-parent';
+            break;      
+        case 'INFO':
+            iconHTML = `<i class="ri-information-fill"></i>`;
+            iconClass = 'poi-info';
+            break; 
+        case 'WELLNESS':
+            iconHTML = `<span class="material-symbols-outlined">menstrual_health</span>`;
+            iconClass = 'poi-wellness';
+            break;
+        case 'SHWR':
+            iconHTML = `<i class="fa-solid fa-shower"></i>`;
+            iconClass = 'poi-shower';
+            break;
+        case 'PWD':
+            iconHTML = `<i class="fa-solid fa-restroom"></i>`;
+            iconClass = 'poi-pwd';
+            break;
+        default:
+            return null;
+    }
+
+    return L.divIcon({
+        html: iconHTML,
+        className: `poi-icon ${iconClass}`,
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    });
 }
