@@ -68,6 +68,13 @@ async function callbacktest() {
             weight: 1,
             fillColor: "rgba(243, 243, 243, 1.00)",
             fillOpacity: 1
+        },
+        onEachFeature: function (feature, layer) {
+            var center = layer.getBounds().getCenter();
+
+            L.marker(center, {
+                icon: getParkingIcon(feature.properties.parkType)
+            }).addTo(map);
         }
     }).addTo(map)
 
@@ -180,8 +187,46 @@ async function callbacktest() {
     
     map.on("zoomend", updateBuildingLabels);
 
-    let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
-    L.geoJSON(await poiJSON.json()).addTo(map);
+    // let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
+    // L.geoJSON(await poiJSON.json()).addTo(map);
 }
 
 callbacktest();
+
+function getParkingIcon(parkType) {
+    let iconClass;
+
+    switch (parkType) {
+        case 'FREE':
+            iconClass = 'parking-free';
+            break;
+        case 'FREEVPERMIT':
+            iconClass = 'parking-freevpermit'
+            break;
+        case 'PAID-ALL':
+            iconClass = 'parking-paid-all';
+            break;
+        case 'PAID-4HR':
+            iconClass = 'parking-paid-4hr'
+            break;
+        case 'RESIDENTIAL':
+            iconClass = 'parking-residential';
+            break;
+        case 'CEL-PREM':
+            iconClass = 'parking-cel-prem'
+            break;            
+        case 'COMMERCIAL':
+        case 'RESERVED':
+        case 'LOADING':
+        case 'VISITOR':
+            iconClass = 'parking-special';
+            break;
+    }
+
+    return L.divIcon({
+        html: `<i class="ri-parking-box-fill ${iconClass}"></i>`,
+        className: 'parking-icon',
+        iconSize: [30, 30],
+        iconAnchor: [15, 15]
+    })
+}

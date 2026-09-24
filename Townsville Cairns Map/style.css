@@ -13,3 +13,35 @@
     text-align: center;
     line-height: 20px;
 }
+
+.parking-free {
+    color: #00aa00
+}
+
+.parking-freevpermit {
+    color: #c4b501
+}
+
+.parking-paid-all {
+    color: #0088aa
+}
+
+.parking-paid-4hr {
+    color: #0011cc
+}
+
+.parking-residential {
+    color: #c48001
+}
+
+.parking-cel-prem {
+    color: #bb0000
+}
+
+.parking-special {
+    color: #bb0000
+}
+
+.parking-icon {
+    font-size: 20px;
+}
