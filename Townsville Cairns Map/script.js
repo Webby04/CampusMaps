@@ -1,6 +1,13 @@
+const campusBounds = [
+    [-19.335, 146.750],
+    [-19.320, 146.770]
+];
+
 var map = L.map('map', {
     minZoom: 16,
-    maxZoom: 19
+    maxZoom: 19,
+    maxBounds: campusBounds,
+    maxBoundsViscosity: 1.0
 }).setView([-19.328, 146.756], 16);
 
 async function callbacktest() {
