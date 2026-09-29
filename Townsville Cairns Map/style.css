@@ -69,6 +69,16 @@
     border-color: #003366;
 }
 
+.poi-escooter {
+    color: #744aff;
+    border-color: #744aff;
+}
+
+.poi-ev-chg {
+    color: #F5C542;
+    border-color: #F5C542;
+}
+
 .poi-bike,
 .poi-bikews {
     color: #663300;
