@@ -10,72 +10,118 @@ var map = L.map('map', {
     maxBoundsViscosity: 1.0
 }).setView([-19.328, 146.756], 16);
 
+// ------- Styles -------
+const MAP_OBJECT_COLORS = {
+    CREEK_OUTLINE: "rgba(188, 210, 255, 0.80)",
+    CREEK_FILL: "rgba(211, 226, 234, 1.00)",
+    SPORTS_FIELDS_OUTLINE: "rgba(170, 221, 170, 1.00)",
+    SPORTS_FIELDS_FILL: "rgba(204, 228, 204, 1.00)",
+    FENCE: "rgba(170, 136, 136, 1.00)",
+    ROAD_OUTLINE: "rgba(153, 153, 153, 1.00)",
+    ROAD_FILL: "rgba(255, 255, 255, 1.00)",
+    PARKING_FILL: "rgba(243, 243, 243, 1.00)",
+    PATH: "rgba(119, 153, 170, 1.00)",
+    NATURE_PATH: "rgba(102, 0, 153, 1.00)",
+    BUILDING_OUTLINE: "rgba(68, 170, 221, 1.00)",
+    BUILDING_FILL: "rgba(102, 221, 255, 1.00)"
+}
+
+const MAP_OBJECT_STYLES = {
+    CREEK: {
+        color: MAP_OBJECT_COLORS.CREEK_OUTLINE,
+        weight: 1,
+        fillColor: MAP_OBJECT_COLORS.CREEK_FILL,
+        fillOpacity: 1
+    },
+
+    SPORTS_FIELD: {
+        color: MAP_OBJECT_COLORS.SPORTS_FIELDS_OUTLINE,
+        weight: 1,
+        fillColor: MAP_OBJECT_COLORS.SPORTS_FIELDS_FILL,
+        fillOpacity: 1
+    },
+
+    FENCE: {
+        color: MAP_OBJECT_COLORS.FENCE
+    },
+
+    ROAD_AREA: {
+        color: MAP_OBJECT_COLORS.ROAD_OUTLINE,
+        weight: 1,
+        fillColor: MAP_OBJECT_COLORS.ROAD_FILL,
+        fillOpacity: 1
+    },
+
+    PATH_AREA: {
+        color: MAP_OBJECT_COLORS.PATH,
+        weight: 1,
+        fillColor: MAP_OBJECT_COLORS.PATH,
+        fillOpacity: 1 
+    },
+
+    PATH_CENTER_LINE: {
+        color: MAP_OBJECT_COLORS.PATH,
+        weight: 2,
+        lineCap: "round",
+        lineJoin: "miter"
+    },
+
+    PARKING: {
+        color: MAP_OBJECT_COLORS.ROAD_OUTLINE,
+        weight: 1,
+        fillColor: MAP_OBJECT_COLORS.PARKING_FILL,
+        fillOpacity: 1
+    },
+
+    NATURE_PATH: {
+        color: MAP_OBJECT_COLORS.NATURE_PATH,
+        weight: 2,
+        fillColor: MAP_OBJECT_COLORS.NATURE_PATH,
+        dashArray: "1.5, 2.5"
+    },
+
+    BUILDING: {
+        color: MAP_OBJECT_COLORS.BUILDING_OUTLINE,
+        weight: 1,
+        fillColor: MAP_OBJECT_COLORS.BUILDING_FILL,
+        fillOpacity: 1
+    }
+}
+
 async function callbacktest() {
     let creekJSON = await fetch("../data/mapsdata/tsv_creeks.json");
     L.geoJSON(await creekJSON.json(), {
-        style: {
-            color: "rgba(188, 210, 255, 0.80)",
-            weight: 1,
-            fillColor: "rgba(211, 226, 234, 1.00)",
-            fillOpacity: 1
-        }
+        style: MAP_OBJECT_STYLES.CREEK
     }).addTo(map)
 
     let sportsfieldsJSON = await fetch("../data/mapsdata/tsv_sports_fields.json");
     L.geoJSON(await sportsfieldsJSON.json(), {
-        style: {
-            color: "rgba(188, 210, 255, 0.80)",
-            weight: 1,
-            fillColor: "rgba(211, 226, 234, 1.00)",
-            fillOpacity: 1
-        }
+        style: MAP_OBJECT_STYLES.SPORTS_FIELD
     }).addTo(map)
 
     let fencesJSON = await fetch("../data/mapsdata/tsv_fences.json");
     L.geoJSON(await fencesJSON.json(), {
-        style: {
-            color: "rgba(170, 136, 136, 1.00)"
-        }
+        style: MAP_OBJECT_STYLES.FENCE
     }).addTo(map)
 
     let roadareasJSON = await fetch("../data/mapsdata/tsv_road_areas.json");
     L.geoJSON(await roadareasJSON.json(), {
-        style: {
-            color: "rgba(153, 153, 153, 1.00)",
-            weight: 1,
-            fillColor: "rgba(255, 255, 255, 1.00)",
-            fillOpacity: 1
-        }
+        style: MAP_OBJECT_STYLES.ROAD_AREA
     }).addTo(map)
 
     let pathareasJSON = await fetch("../data/mapsdata/tsv_path_areas.json");
     L.geoJSON(await pathareasJSON.json(), {
-        style: {
-            color: "rgba(119, 153, 170, 1.00)",
-            weight: 1,
-            fillColor: "rgba(119, 153, 170, 1.00)",
-            fillOpacity: 1
-        }
+        style: MAP_OBJECT_STYLES.PATH_AREA
     }).addTo(map)
 
     let pathcenterlinesJSON = await fetch("../data/mapsdata/tsv_path_center_lines.json");
     L.geoJSON(await pathcenterlinesJSON.json(), {
-        style: {
-            color: "rgba(119, 153, 170, 1.00)",
-            weight: 2,
-            lineCap: "round",
-            lineJoin: "miter"
-        }
+        style: MAP_OBJECT_STYLES.PATH_CENTER_LINE
     }).addTo(map)
 
     let parkingJSON = await fetch("../data/mapsdata/tsv_parking.json");
     L.geoJSON(await parkingJSON.json(), {
-        style: {
-            color: "rgba(153, 153, 153, 1.00)",
-            weight: 1,
-            fillColor: "rgba(243, 243, 243, 1.00)",
-            fillOpacity: 1
-        },
+        style: MAP_OBJECT_STYLES.PARKING,
         onEachFeature: function (feature, layer) {
             var center = layer.getBounds().getCenter();
 
@@ -87,11 +133,7 @@ async function callbacktest() {
 
     let naturepathsJSON = await fetch("../data/mapsdata/tsv_nature_paths.json");
     L.geoJSON(await naturepathsJSON.json(), {
-        style: {
-            color: "rgba(102, 0, 153, 1.00)",
-            weight: 2,
-            dashArray: "1.5, 2.5"
-        }
+        style: MAP_OBJECT_STYLES.NATURE_PATH
     }).addTo(map)
 
     let buildingsJSON = await fetch("../data/mapsdata/tsv_buildings.json");
@@ -101,12 +143,7 @@ async function callbacktest() {
     var buildingLabels = [];
 
     L.geoJSON(await buildingsJSON.json(), {
-        style: {
-            color: "rgba(68, 170, 221, 1.00)",
-            weight: 1,
-            fillColor: "rgba(102, 221, 255, 1.00)",
-            fillOpacity: 1
-        },
+        style: MAP_OBJECT_STYLES.BUILDING,
         onEachFeature: function (feature, layer) {
             var center = layer.getBounds().getCenter();
 
