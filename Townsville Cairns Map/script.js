@@ -390,3 +390,10 @@ function getPOIIcon(type) {
         iconAnchor: [15, 15]
     });
 }
+
+const mapSidebar = document.getElementById("map-sidebar");
+const menuButton = document.getElementById("menu-button");
+
+menuButton.addEventListener("click", function () {
+    mapSidebar.classList.toggle("expanded");
+});

@@ -7,6 +7,10 @@ body {
     margin-left: 60px;
 }
 
+.map-sidebar.expanded + #map {
+    margin-left: 250px;
+}
+
 .building-label {
     background: transparent;
     border: none;
@@ -131,6 +135,15 @@ body {
     flex-direction: column;
     align-items: center;
     box-shadow: 2px 0 6px rgba(0, 0, 0, 0.15);
+    transition: width 0.3s ease;
+}
+
+.map-sidebar.expanded {
+    width: 250px;
+}
+
+.map-sidebar.expanded .sidebar-button:not(#menu-button) {
+    display: none;
 }
 
 .sidebar-button {
