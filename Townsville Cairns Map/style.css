@@ -9,7 +9,7 @@
     box-shadow: none;
     color: black;
     font-weight: bold;
-    font-size: 10.px;
+    font-size: 10px;
     text-align: center;
     line-height: 20px;
 }
@@ -34,10 +34,7 @@
     color: #c48001
 }
 
-.parking-cel-prem {
-    color: #bb0000
-}
-
+.parking-cel-prem,
 .parking-special {
     color: #bb0000
 }
@@ -72,59 +69,35 @@
     border-color: #003366;
 }
 
-.poi-bike {
-    color: #663300;
-    border-color: #663300;
-}
-
+.poi-bike,
 .poi-bikews {
     color: #663300;
     border-color: #663300;
 }
 
-.poi-bikews {
+.poi-foodbev {
     color: #aa2200;
     border-color: #aa2200;
 }
 
-.poi-atm {
+.poi-atm,
+.poi-parent,
+.poi-info,
+.poi-shower {
     color: #226699;
     border-color: #226699;
 }
 
-.poi-helpphone {
-    color: #ff1111;
-    border-color: #ff1111;
-}
-
-.poi-security {
-    color: #ff1111;
-    border-color: #ff1111;
-}
-
+.poi-helpphone,
+.poi-security,
 .poi-defib {
     color: #ff1111;
     border-color: #ff1111;
 }
 
-.poi-parent {
-    color: #226699;
-    border-color: #226699;
-}
-
-.poi-info {
-    color: #226699;
-    border-color: #226699;
-}
-
 .poi-wellness {
     color: #189618;
     border-color: #189618;
-}
-
-.poi-shower {
-    color: #226699;
-    border-color: #226699;
 }
 
 .poi-pwd {
