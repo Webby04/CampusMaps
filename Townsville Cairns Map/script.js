@@ -296,7 +296,7 @@ function getParkingIcon(parkType) {
     }
 
     return L.divIcon({
-        html: `<i class="ri-parking-box-fill ${iconClass}"></i>`,
+        html: `<i class="fa-solid fa-square-parking ${iconClass}"></i>`,
         className: 'parking-icon',
         iconSize: [30, 30],
         iconAnchor: [15, 15]
