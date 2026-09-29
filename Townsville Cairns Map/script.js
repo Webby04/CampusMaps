@@ -301,11 +301,11 @@ function getPOIIcon(type) {
             iconClass = 'poi-motorc';
             break;
         case 'ACCPARK':
-            iconHTML = `<span class="material-symbols-outlined">accessible</span>`;
+            iconHTML = `<i class="fa-solid fa-wheelchair"></i>`;
             iconClass = 'poi-accpark'
             break;
         case 'TRANS':
-            iconHTML = `<i class="ri-bus-line"></i>`;
+            iconHTML = `<i class="fa-solid fa-bus-simple"></i>`;
             iconClass = 'poi-trans';
             break;
         case 'BIKE':
@@ -313,7 +313,7 @@ function getPOIIcon(type) {
             iconClass = 'poi-bike';
             break;
         case 'BIKEWS':
-            iconHTML = `<i class="ri-wrench-fill"></i>`;
+            iconHTML = `<i class="fa-solid fa-wrench"></i>`;
             iconClass = 'poi-bikews';
             break;
         case 'FOODBEV':
@@ -325,27 +325,27 @@ function getPOIIcon(type) {
             iconClass = 'poi-atm';
             break;
         case 'HELPPHONE':
-            iconHTML = `<i class="ri-phone-fill"></i>`;
+            iconHTML = `<i class="fa-solid fa-phone"></i>`;
             iconClass = 'poi-helpphone';
             break;
         case 'SECURITY':
-            iconHTML = `<span class="material-symbols-outlined">security</span>`;
+            iconHTML = `<i class="fa-solid fa-shield"></i>`;
             iconClass = 'poi-security';
             break;
         case 'DEFIB':
-            iconHTML = `<span class="material-symbols-outlined">heart_broken</span>`;
+            iconHTML = `<i class="fa-solid fa-heart-crack"></i>`;
             iconClass = 'poi-defib';
             break; 
         case 'PARENT':
-            iconHTML = `<i class="ri-parent-fill"></i>`;
+            iconHTML = `<i class="fa-solid fa-baby"></i>`;
             iconClass = 'poi-parent';
             break;      
         case 'INFO':
-            iconHTML = `<i class="ri-information-fill"></i>`;
+            iconHTML = `<i class="fa-solid fa-circle-info"></i>`;
             iconClass = 'poi-info';
             break; 
         case 'WELLNESS':
-            iconHTML = `<span class="material-symbols-outlined">menstrual_health</span>`;
+            iconHTML = `<i class="fa-solid fa-leaf"></i>`;
             iconClass = 'poi-wellness';
             break;
         case 'SHWR':
