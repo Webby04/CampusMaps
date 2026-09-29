@@ -96,6 +96,8 @@ function addParkingIcon(feature, layer) {
     }).addTo(map);
 }
 
+var buildingLabels = [];
+
 function addBuildingLabel(feature, layer) {
     var center = layer.getBounds().getCenter();
 
@@ -163,8 +165,6 @@ async function callbacktest() {
     let buildingsJSON = await fetch("../data/mapsdata/tsv_buildings.json");
     var FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
     var SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
-
-    var buildingLabels = [];
 
     L.geoJSON(await buildingsJSON.json(), {
         style: MAP_OBJECT_STYLES.BUILDING,
