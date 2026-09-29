@@ -1,14 +1,10 @@
-const campusBounds = [
-    [-19.335, 146.750],
-    [-19.320, 146.764]
-];
-
 var map = L.map('map', {
     minZoom: 16,
     maxZoom: 19,
-    maxBounds: campusBounds,
     maxBoundsViscosity: 1.0
 }).setView([-19.328, 146.756], 16);
+
+var campusLayers = L.featureGroup();
 
 // ------- Styles -------
 const MAP_OBJECT_COLORS = {
@@ -122,54 +118,63 @@ function addBuildingLabel(feature, layer) {
 
 async function callbacktest() {
     let creekJSON = await fetch("../data/mapsdata/tsv_creeks.json");
-    L.geoJSON(await creekJSON.json(), {
+    var creekLayer = L.geoJSON(await creekJSON.json(), {
         style: MAP_OBJECT_STYLES.CREEK
     }).addTo(map)
+    campusLayers.addLayer(creekLayer)
 
     let sportsfieldsJSON = await fetch("../data/mapsdata/tsv_sports_fields.json");
-    L.geoJSON(await sportsfieldsJSON.json(), {
+    var sportsfieldsLayer = L.geoJSON(await sportsfieldsJSON.json(), {
         style: MAP_OBJECT_STYLES.SPORTS_FIELD
     }).addTo(map)
+    campusLayers.addLayer(sportsfieldsLayer)
 
     let fencesJSON = await fetch("../data/mapsdata/tsv_fences.json");
-    L.geoJSON(await fencesJSON.json(), {
+    var fencesLayer = L.geoJSON(await fencesJSON.json(), {
         style: MAP_OBJECT_STYLES.FENCE
     }).addTo(map)
+    campusLayers.addLayer(fencesLayer)
 
     let roadareasJSON = await fetch("../data/mapsdata/tsv_road_areas.json");
-    L.geoJSON(await roadareasJSON.json(), {
+    var roadareasLayer = L.geoJSON(await roadareasJSON.json(), {
         style: MAP_OBJECT_STYLES.ROAD_AREA
     }).addTo(map)
+    campusLayers.addLayer(roadareasLayer)
 
     let pathareasJSON = await fetch("../data/mapsdata/tsv_path_areas.json");
-    L.geoJSON(await pathareasJSON.json(), {
+    var pathareasLayer = L.geoJSON(await pathareasJSON.json(), {
         style: MAP_OBJECT_STYLES.PATH_AREA
     }).addTo(map)
+    campusLayers.addLayer(pathareasLayer)
 
     let pathcenterlinesJSON = await fetch("../data/mapsdata/tsv_path_center_lines.json");
-    L.geoJSON(await pathcenterlinesJSON.json(), {
+    var pathcenterlinesLayer = L.geoJSON(await pathcenterlinesJSON.json(), {
         style: MAP_OBJECT_STYLES.PATH_CENTER_LINE
     }).addTo(map)
+    campusLayers.addLayer(pathcenterlinesLayer)
 
     let parkingJSON = await fetch("../data/mapsdata/tsv_parking.json");
-    L.geoJSON(await parkingJSON.json(), {
+    var parkingLayer = L.geoJSON(await parkingJSON.json(), {
         style: MAP_OBJECT_STYLES.PARKING,
         onEachFeature: addParkingIcon
     }).addTo(map)
+    campusLayers.addLayer(parkingLayer)
 
     let naturepathsJSON = await fetch("../data/mapsdata/tsv_nature_paths.json");
-    L.geoJSON(await naturepathsJSON.json(), {
+    var naturepathsLayer = L.geoJSON(await naturepathsJSON.json(), {
         style: MAP_OBJECT_STYLES.NATURE_PATH
     }).addTo(map)
+    campusLayers.addLayer(naturepathsLayer)
 
     let buildingsJSON = await fetch("../data/mapsdata/tsv_buildings.json");
     var FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
     var SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
 
-    L.geoJSON(await buildingsJSON.json(), {
+    var buildingsLayer = L.geoJSON(await buildingsJSON.json(), {
         style: MAP_OBJECT_STYLES.BUILDING,
         onEachFeature: addBuildingLabel
     }).addTo(map)
+    campusLayers.addLayer(buildingsLayer)
 
     function updateBuildingLabels() {
         var zoom = map.getZoom();
@@ -236,7 +241,7 @@ async function callbacktest() {
     map.on("zoomend", updateBuildingLabels);
 
     let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
-    L.geoJSON(await poiJSON.json(), {
+    var poiLayer = L.geoJSON(await poiJSON.json(), {
         pointToLayer: function (feature, latlng) {
             var icon = getPOIIcon(feature.properties.type);
 
@@ -249,6 +254,13 @@ async function callbacktest() {
             });
         }
     }).addTo(map);
+    campusLayers.addLayer(poiLayer);
+
+    var campusBounds = campusLayers.getBounds().pad(0.05);
+    var campusCenter = campusBounds.getCenter();
+
+    map.setView(campusCenter, 16);
+    map.setMaxBounds(campusBounds);
 }
 
 callbacktest();
