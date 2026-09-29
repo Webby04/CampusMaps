@@ -88,6 +88,36 @@ const MAP_OBJECT_STYLES = {
     }
 }
 
+function addParkingIcon(feature, layer) {
+    var center = layer.getBounds().getCenter();
+
+    L.marker(center, {
+        icon: getParkingIcon(feature.properties.parkType)
+    }).addTo(map);
+}
+
+function addBuildingLabel(feature, layer) {
+    var center = layer.getBounds().getCenter();
+
+    var buildingNumber = String(feature.properties.buildingNumber);
+    var buildingName = feature.properties.buildingName;
+
+    var label = L.marker(center, {
+        icon: L.divIcon({
+            className: "building-label",
+            html: buildingNumber,
+            iconSize: [40, 20],
+            iconAnchor: [20, 10]
+        })
+    });
+
+    buildingLabels.push({
+        number: buildingNumber,
+        name: buildingName,
+        label: label
+    });
+}
+
 async function callbacktest() {
     let creekJSON = await fetch("../data/mapsdata/tsv_creeks.json");
     L.geoJSON(await creekJSON.json(), {
@@ -122,13 +152,7 @@ async function callbacktest() {
     let parkingJSON = await fetch("../data/mapsdata/tsv_parking.json");
     L.geoJSON(await parkingJSON.json(), {
         style: MAP_OBJECT_STYLES.PARKING,
-        onEachFeature: function (feature, layer) {
-            var center = layer.getBounds().getCenter();
-
-            L.marker(center, {
-                icon: getParkingIcon(feature.properties.parkType)
-            }).addTo(map);
-        }
+        onEachFeature: addParkingIcon
     }).addTo(map)
 
     let naturepathsJSON = await fetch("../data/mapsdata/tsv_nature_paths.json");
@@ -144,27 +168,7 @@ async function callbacktest() {
 
     L.geoJSON(await buildingsJSON.json(), {
         style: MAP_OBJECT_STYLES.BUILDING,
-        onEachFeature: function (feature, layer) {
-            var center = layer.getBounds().getCenter();
-
-            var buildingNumber = String(feature.properties.buildingNumber);
-            var buildingName = feature.properties.buildingName;
-
-            var label = L.marker(center, {
-                icon: L.divIcon({
-                    className: "building-label",
-                    html: buildingNumber,
-                    iconSize: [40, 20],
-                    iconAnchor: [20, 10]
-                })
-            });
-
-            buildingLabels.push({
-                number: buildingNumber,
-                name: buildingName,
-                label: label
-            });
-        }
+        onEachFeature: addBuildingLabel
     }).addTo(map)
 
     function updateBuildingLabels() {
