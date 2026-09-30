@@ -1,0 +1,120 @@
+body {
+    margin: 0;
+}
+
+#map {
+    height: 100vh;
+    margin: 0 auto;
+}
+
+.building-label {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    color: black;
+    font-weight: bold;
+    font-size: 10px;
+    text-align: center;
+    line-height: 20px;
+}
+
+.parking-free {
+    color: #00aa00
+}
+
+.parking-freevpermit {
+    color: #c4b501
+}
+
+.parking-paid-all {
+    color: #0088aa
+}
+
+.parking-paid-4hr {
+    color: #0011cc
+}
+
+.parking-residential {
+    color: #c48001
+}
+
+.parking-cel-prem,
+.parking-special {
+    color: #bb0000
+}
+
+.parking-icon,
+.poi-icon .material-symbols-outlined,
+.poi-icon i {
+    font-size: 20px;
+}   
+
+.poi-icon {
+    border: 2px solid black;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.poi-motorc {
+    color: #00aa00;
+    border-color: #00aa00;
+}
+
+.poi-accpark {
+    color: #c48309;
+    border-color: #c48309;
+}
+
+.poi-trans {
+    color: #003366;
+    border-color: #003366;
+}
+
+.poi-escooter {
+    color: #744aff;
+    border-color: #744aff;
+}
+
+.poi-ev-chg {
+    color: #F5C542;
+    border-color: #F5C542;
+}
+
+.poi-bike,
+.poi-bikews {
+    color: #663300;
+    border-color: #663300;
+}
+
+.poi-foodbev {
+    color: #aa2200;
+    border-color: #aa2200;
+}
+
+.poi-atm,
+.poi-parent,
+.poi-info,
+.poi-shower {
+    color: #226699;
+    border-color: #226699;
+}
+
+.poi-helpphone,
+.poi-security,
+.poi-defib {
+    color: #ff1111;
+    border-color: #ff1111;
+}
+
+.poi-wellness {
+    color: #189618;
+    border-color: #189618;
+}
+
+.poi-pwd {
+    color: #c48001;
+    border-color: #c48001;
+}
