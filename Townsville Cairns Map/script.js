@@ -97,7 +97,7 @@ var buildingLabels = [];
 function addBuildingLabel(feature, layer) {
     var center = layer.getBounds().getCenter();
 
-    var buildingNumber = String(feature.properties.buildingNumber);
+    var buildingNumber = String(feature.properties.buildingTag);
     var buildingName = feature.properties.buildingName;
 
     var label = L.marker(center, {
@@ -235,11 +235,11 @@ async function callbacktest(campus) {
     var SecondZoomBuildings;
 
     if (campus ==="tsv") {
-        FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
-        SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+        FirstZoomBuildings = ["18", "26", "104", "134", "142", "500" ];
+        SecondZoomBuildings = ["18", "26", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
     } else if (campus ==="cns") {
-        FirstZoomBuildings = ["B001", "D003", "F001"];
-        SecondZoomBuildings = ["B001", "D003", "D004", "F001"];
+        FirstZoomBuildings = ["B1", "D3", "F1"];
+        SecondZoomBuildings = ["B1", "D3", "D4", "F1"];
     }
 
     if (generation !== campusLoadGeneration)  {
