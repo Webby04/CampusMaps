@@ -219,6 +219,11 @@ body {
     gap: 4px;
 }
 
+.campus-button.selected {
+    background-color: #005494;
+    font-weight: bold;
+}
+
 .campus-button i {
     font-size: 20px;
 }

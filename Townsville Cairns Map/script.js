@@ -4,7 +4,7 @@ var map = L.map('map', {
     maxBoundsViscosity: 1.0
 }).setView([-19.328, 146.756], 16);
 
-var campusLayers = L.featureGroup();
+var campusLayers = L.featureGroup().addTo(map);
 
 // ------- Styles -------
 const MAP_OBJECT_COLORS = {
@@ -89,7 +89,7 @@ function addParkingIcon(feature, layer) {
 
     L.marker(center, {
         icon: getParkingIcon(feature.properties.parkType)
-    }).addTo(map);
+    }).addTo(campusLayers);
 }
 
 var buildingLabels = [];
@@ -116,57 +116,67 @@ function addBuildingLabel(feature, layer) {
     });
 }
 
-async function callbacktest() {
-    let creekJSON = await fetch("../data/mapsdata/tsv_creeks.json");
+async function callbacktest(campus) {
+    campusLayers.clearLayers();
+
+    buildingLabels.forEach(function(building) {
+        if (map.hasLayer(building.label)) {
+            map.removeLayer(building.label);
+        }
+    });
+
+    buildingLabels = [];
+
+    let creekJSON = await fetch(`../data/mapsdata/${campus}_creeks.json`);
     var creekLayer = L.geoJSON(await creekJSON.json(), {
         style: MAP_OBJECT_STYLES.CREEK
     }).addTo(map)
     campusLayers.addLayer(creekLayer)
 
-    let sportsfieldsJSON = await fetch("../data/mapsdata/tsv_sports_fields.json");
+    let sportsfieldsJSON = await fetch(`../data/mapsdata/${campus}_sports_fields.json`);
     var sportsfieldsLayer = L.geoJSON(await sportsfieldsJSON.json(), {
         style: MAP_OBJECT_STYLES.SPORTS_FIELD
     }).addTo(map)
     campusLayers.addLayer(sportsfieldsLayer)
 
-    let fencesJSON = await fetch("../data/mapsdata/tsv_fences.json");
+    let fencesJSON = await fetch(`../data/mapsdata/${campus}_fences.json`);
     var fencesLayer = L.geoJSON(await fencesJSON.json(), {
         style: MAP_OBJECT_STYLES.FENCE
     }).addTo(map)
     campusLayers.addLayer(fencesLayer)
 
-    let roadareasJSON = await fetch("../data/mapsdata/tsv_road_areas.json");
+    let roadareasJSON = await fetch(`../data/mapsdata/${campus}_road_areas.json`);
     var roadareasLayer = L.geoJSON(await roadareasJSON.json(), {
         style: MAP_OBJECT_STYLES.ROAD_AREA
     }).addTo(map)
     campusLayers.addLayer(roadareasLayer)
 
-    let pathareasJSON = await fetch("../data/mapsdata/tsv_path_areas.json");
+    let pathareasJSON = await fetch(`../data/mapsdata/${campus}_path_areas.json`);
     var pathareasLayer = L.geoJSON(await pathareasJSON.json(), {
         style: MAP_OBJECT_STYLES.PATH_AREA
     }).addTo(map)
     campusLayers.addLayer(pathareasLayer)
 
-    let pathcenterlinesJSON = await fetch("../data/mapsdata/tsv_path_center_lines.json");
+    let pathcenterlinesJSON = await fetch(`../data/mapsdata/${campus}_path_center_lines.json`);
     var pathcenterlinesLayer = L.geoJSON(await pathcenterlinesJSON.json(), {
         style: MAP_OBJECT_STYLES.PATH_CENTER_LINE
     }).addTo(map)
     campusLayers.addLayer(pathcenterlinesLayer)
 
-    let parkingJSON = await fetch("../data/mapsdata/tsv_parking.json");
+    let parkingJSON = await fetch(`../data/mapsdata/${campus}_parking.json`);
     var parkingLayer = L.geoJSON(await parkingJSON.json(), {
         style: MAP_OBJECT_STYLES.PARKING,
         onEachFeature: addParkingIcon
     }).addTo(map)
     campusLayers.addLayer(parkingLayer)
 
-    let naturepathsJSON = await fetch("../data/mapsdata/tsv_nature_paths.json");
+    let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
     var naturepathsLayer = L.geoJSON(await naturepathsJSON.json(), {
         style: MAP_OBJECT_STYLES.NATURE_PATH
     }).addTo(map)
     campusLayers.addLayer(naturepathsLayer)
 
-    let buildingsJSON = await fetch("../data/mapsdata/tsv_buildings.json");
+    let buildingsJSON = await fetch(`../data/mapsdata/${campus}_buildings.json`);
     var FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
     var SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
 
@@ -240,7 +250,7 @@ async function callbacktest() {
     
     map.on("zoomend", updateBuildingLabels);
 
-    let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
+    let poiJSON = await fetch(`../data/mapsdata/${campus}_poi.json`);
     var poiLayer = L.geoJSON(await poiJSON.json(), {
         pointToLayer: function (feature, latlng) {
             var icon = getPOIIcon(feature.properties.type);
@@ -263,7 +273,9 @@ async function callbacktest() {
     map.setMaxBounds(campusBounds);
 }
 
-callbacktest();
+callbacktest("tsv");
+
+document.querySelector('[data-campus="tsv"]').classList.add("selected");
 
 function getParkingIcon(parkType) {
     let iconClass;
@@ -394,6 +406,23 @@ function getPOIIcon(type) {
 const mapSidebar = document.getElementById("map-sidebar");
 const menuButton = document.getElementById("menu-button");
 const closeButton = document.getElementById("close-button");
+const campusButtons = document.querySelectorAll(".campus-button");
+
+campusButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+        const campus = button.dataset.campus;
+
+        callbacktest(campus);
+
+        campusButtons.forEach(function(campusButton) {
+            campusButton.classList.remove("selected");
+        });
+
+        button.classList.add("selected");
+
+        mapSidebar.classList.remove("expanded");
+    });
+});
 
 menuButton.addEventListener("click", function () {
     mapSidebar.classList.toggle("expanded");
