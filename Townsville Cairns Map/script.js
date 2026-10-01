@@ -116,7 +116,12 @@ function addBuildingLabel(feature, layer) {
     });
 }
 
+let campusLoadGeneration = 0;
+let zoomEndHandler = null;
+
 async function callbacktest(campus) {
+    const generation = ++campusLoadGeneration;
+
     campusLayers.clearLayers();
 
     buildingLabels.forEach(function(building) {
@@ -128,62 +133,123 @@ async function callbacktest(campus) {
     buildingLabels = [];
 
     let creekJSON = await fetch(`../data/mapsdata/${campus}_creeks.json`);
-    var creekLayer = L.geoJSON(await creekJSON.json(), {
+    let creekData = await creekJSON.json();
+    
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+    
+    var creekLayer = L.geoJSON(creekData, {
         style: MAP_OBJECT_STYLES.CREEK
-    }).addTo(map)
+    })
     campusLayers.addLayer(creekLayer)
 
     let sportsfieldsJSON = await fetch(`../data/mapsdata/${campus}_sports_fields.json`);
-    var sportsfieldsLayer = L.geoJSON(await sportsfieldsJSON.json(), {
+    let sportsfieldsData = await sportsfieldsJSON.json();
+    
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+    var sportsfieldsLayer = L.geoJSON(sportsfieldsData, {
         style: MAP_OBJECT_STYLES.SPORTS_FIELD
-    }).addTo(map)
+    })
     campusLayers.addLayer(sportsfieldsLayer)
 
     let fencesJSON = await fetch(`../data/mapsdata/${campus}_fences.json`);
-    var fencesLayer = L.geoJSON(await fencesJSON.json(), {
+    let fencesData = await fencesJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var fencesLayer = L.geoJSON(fencesData, {
         style: MAP_OBJECT_STYLES.FENCE
-    }).addTo(map)
+    })
     campusLayers.addLayer(fencesLayer)
 
     let roadareasJSON = await fetch(`../data/mapsdata/${campus}_road_areas.json`);
-    var roadareasLayer = L.geoJSON(await roadareasJSON.json(), {
+    let roadareasData = await roadareasJSON.json();
+    
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var roadareasLayer = L.geoJSON(roadareasData, {
         style: MAP_OBJECT_STYLES.ROAD_AREA
-    }).addTo(map)
+    })
     campusLayers.addLayer(roadareasLayer)
 
     let pathareasJSON = await fetch(`../data/mapsdata/${campus}_path_areas.json`);
-    var pathareasLayer = L.geoJSON(await pathareasJSON.json(), {
+    let pathareasData = await pathareasJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var pathareasLayer = L.geoJSON(pathareasData, {
         style: MAP_OBJECT_STYLES.PATH_AREA
-    }).addTo(map)
+    })
     campusLayers.addLayer(pathareasLayer)
 
     let pathcenterlinesJSON = await fetch(`../data/mapsdata/${campus}_path_center_lines.json`);
-    var pathcenterlinesLayer = L.geoJSON(await pathcenterlinesJSON.json(), {
+    let pathcenterlinesData = await pathcenterlinesJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var pathcenterlinesLayer = L.geoJSON(pathcenterlinesData, {
         style: MAP_OBJECT_STYLES.PATH_CENTER_LINE
-    }).addTo(map)
+    })
     campusLayers.addLayer(pathcenterlinesLayer)
 
     let parkingJSON = await fetch(`../data/mapsdata/${campus}_parking.json`);
-    var parkingLayer = L.geoJSON(await parkingJSON.json(), {
+    let parkingData = await parkingJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var parkingLayer = L.geoJSON(parkingData, {
         style: MAP_OBJECT_STYLES.PARKING,
         onEachFeature: addParkingIcon
-    }).addTo(map)
+    })
     campusLayers.addLayer(parkingLayer)
 
     let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
-    var naturepathsLayer = L.geoJSON(await naturepathsJSON.json(), {
+    let naturepathsData = await naturepathsJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var naturepathsLayer = L.geoJSON(naturepathsData, {
         style: MAP_OBJECT_STYLES.NATURE_PATH
-    }).addTo(map)
+    })
     campusLayers.addLayer(naturepathsLayer)
 
     let buildingsJSON = await fetch(`../data/mapsdata/${campus}_buildings.json`);
-    var FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
-    var SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+    let buildingsData = await buildingsJSON.json();
 
-    var buildingsLayer = L.geoJSON(await buildingsJSON.json(), {
+    var FirstZoomBuildings;
+    var SecondZoomBuildings;
+
+    if (campus ==="tsv") {
+        FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
+        SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+    } else if (campus ==="cns") {
+        FirstZoomBuildings = ["B001", "D003", "F001"];
+        SecondZoomBuildings = ["B001", "D003", "D004", "F001"];
+    }
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var buildingsLayer = L.geoJSON(buildingsData, {
         style: MAP_OBJECT_STYLES.BUILDING,
         onEachFeature: addBuildingLabel
-    }).addTo(map)
+    })
     campusLayers.addLayer(buildingsLayer)
 
     function updateBuildingLabels() {
@@ -248,10 +314,20 @@ async function callbacktest(campus) {
     }
     updateBuildingLabels();
     
-    map.on("zoomend", updateBuildingLabels);
+    if (zoomEndHandler) {
+        map.off("zoomend", zoomEndHandler);
+    }
+
+    zoomEndHandler = updateBuildingLabels;
+    map.on("zoomend", zoomEndHandler);
 
     let poiJSON = await fetch(`../data/mapsdata/${campus}_poi.json`);
-    var poiLayer = L.geoJSON(await poiJSON.json(), {
+    let poiData = await poiJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+    var poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
             var icon = getPOIIcon(feature.properties.type);
 
@@ -263,7 +339,7 @@ async function callbacktest(campus) {
                 icon: icon
             });
         }
-    }).addTo(map);
+    })
     campusLayers.addLayer(poiLayer);
 
     var campusBounds = campusLayers.getBounds().pad(0.05);
