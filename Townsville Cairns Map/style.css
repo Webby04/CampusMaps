@@ -269,7 +269,15 @@ body {
 }
 
 .campus-option input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.campus-option input:focus + .radio-custom {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }
 
 .radio-custom {

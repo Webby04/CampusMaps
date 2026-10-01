@@ -493,9 +493,11 @@ campusButtons.forEach(function(button) {
 
         campusButtons.forEach(function(campusButton) {
             campusButton.classList.remove("selected");
+            campusButton.setAttribute("aria-pressed", "false");
         });
 
         button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
 
         const radioButton = document.querySelector(
             `input[name="campus"][value="${campus}"]`
@@ -517,6 +519,7 @@ campusOptions.forEach(function(option) {
 
         campusButtons.forEach(function(campusButton) {
             campusButton.classList.remove("selected");
+            campusButton.setAttribute("aria-pressed", "false");
         });
 
         const selectedButton = document.querySelector(
@@ -525,6 +528,7 @@ campusOptions.forEach(function(option) {
 
         if (selectedButton) {
             selectedButton.classList.add("selected");
+            selectedButton.setAttribute("aria-pressed", "true");
         }
     });
 }); 
