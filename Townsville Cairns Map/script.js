@@ -535,8 +535,10 @@ campusOptions.forEach(function(option) {
 
 menuButton.addEventListener("click", function () {
     mapSidebar.classList.toggle("expanded");
+    map.invalidateSize();
 });
 
 closeButton.addEventListener("click", function () {
     mapSidebar.classList.remove("expanded");
+    map.invalidateSize();
 });
