@@ -5,6 +5,9 @@ var map = L.map('map', {
 }).setView([-19.328, 146.756], 16);
 
 var campusLayers = L.featureGroup().addTo(map);
+var parkingLayer = null;
+var parkingIcons = L.featureGroup().addTo(map);
+var poiLayer = null;
 
 // ------- Styles -------
 const MAP_OBJECT_COLORS = {
@@ -89,7 +92,7 @@ function addParkingIcon(feature, layer) {
 
     L.marker(center, {
         icon: getParkingIcon(feature.properties.parkType)
-    }).addTo(campusLayers);
+    }).addTo(parkingIcons);
 }
 
 var buildingLabels = [];
@@ -121,6 +124,8 @@ let zoomEndHandler = null;
 
 async function callbacktest(campus) {
     const generation = ++campusLoadGeneration;
+
+    parkingIcons.clearLayers();
 
     campusLayers.clearLayers();
 
@@ -210,7 +215,7 @@ async function callbacktest(campus) {
         return;
     }
 
-    var parkingLayer = L.geoJSON(parkingData, {
+    parkingLayer  = L.geoJSON(parkingData, {
         style: MAP_OBJECT_STYLES.PARKING,
         onEachFeature: addParkingIcon
     })
@@ -327,7 +332,7 @@ async function callbacktest(campus) {
     if (generation !== campusLoadGeneration)  {
         return;
     }
-    var poiLayer = L.geoJSON(poiData, {
+    poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
             var icon = getPOIIcon(feature.properties.type);
 
@@ -347,11 +352,13 @@ async function callbacktest(campus) {
 
     map.setView(campusCenter, 16);
     map.setMaxBounds(campusBounds);
+
+    if (!showAllCheckbox.checked) {
+        map.removeLayer(parkingLayer);
+        map.removeLayer(parkingIcons);
+        map.removeLayer(poiLayer);
+    }
 }
-
-callbacktest("tsv");
-
-document.querySelector('[data-campus="tsv"]').classList.add("selected");
 
 function getParkingIcon(parkType) {
     let iconClass;
@@ -542,3 +549,45 @@ closeButton.addEventListener("click", function () {
     mapSidebar.classList.remove("expanded");
     map.invalidateSize();
 });
+
+const showAllExpand = document.getElementById("showAllExpand");
+const showAllChevron = document.getElementById("showAllChevron");
+const filters = document.getElementById("filters");
+const showAllCheckbox = document.getElementById("showAllCheckbox");
+
+showAllCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(parkingLayer);
+        map.addLayer(parkingIcons);
+        map.addLayer(poiLayer);
+    } else {
+        map.removeLayer(parkingLayer);
+        map.removeLayer(parkingIcons);  
+        map.removeLayer(poiLayer);
+    }
+});
+
+showAllExpand.addEventListener("click", () => {
+    const isOpen = !filters.classList.contains("hidden");
+
+    if (isOpen) {
+        filters.classList.add("hidden");
+
+        showAllChevron.classList.remove("fa-chevron-down");
+        showAllChevron.classList.add("fa-chevron-up");
+
+        showAllExpand.setAttribute("aria-expanded", "false");
+
+    } else {
+        filters.classList.remove("hidden");
+
+        showAllChevron.classList.remove("fa-chevron-up");
+        showAllChevron.classList.add("fa-chevron-down");
+
+        showAllExpand.setAttribute("aria-expanded", "true");
+    }
+});
+
+callbacktest("tsv");
+
+document.querySelector('[data-campus="tsv"]').classList.add("selected");
