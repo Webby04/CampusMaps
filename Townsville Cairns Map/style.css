@@ -151,8 +151,19 @@ body {
     width: 250px;
 }
 
-.map-sidebar.expanded .sidebar-button:not(#menu-button) {
+.sidebar-header {
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+}
+
+.sidebar-title {
     display: none;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin-left: 20px;
 }
 
 .sidebar-button {
@@ -174,6 +185,32 @@ body {
 
 .sidebar-button:hover {
     background-color: #005494;
+}
+
+.menu-button {
+    display: flex;
+}
+
+.close-button {
+    display: none;
+    margin-left: auto;
+}
+
+.map-sidebar.expanded .sidebar-title {
+    display: block;
+}
+
+.map-sidebar.expanded .menu-button {
+    display: none;
+}
+
+.map-sidebar.expanded .close-button {
+    display: flex;
+}
+
+.map-sidebar.expanded .campus-button,
+.map-sidebar.expanded .settings-button {
+    display: none;
 }
 
 .campus-button {

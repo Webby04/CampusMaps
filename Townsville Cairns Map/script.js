@@ -393,7 +393,12 @@ function getPOIIcon(type) {
 
 const mapSidebar = document.getElementById("map-sidebar");
 const menuButton = document.getElementById("menu-button");
+const closeButton = document.getElementById("close-button");
 
 menuButton.addEventListener("click", function () {
     mapSidebar.classList.toggle("expanded");
+});
+
+closeButton.addEventListener("click", function () {
+    mapSidebar.classList.remove("expanded");
 });
