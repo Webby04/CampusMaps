@@ -161,9 +161,9 @@ body {
 .sidebar-title {
     display: none;
     color: white;
-    font-size: 24px;
+    font-size: 20px;
     font-weight: bold;
-    margin-left: 20px;
+    margin-left: 10px;
 }
 
 .sidebar-button {
@@ -235,4 +235,69 @@ body {
 .settings-button {
     margin-top: auto;
     margin-bottom: 15px;
+}
+
+.campus-filter {
+    display: none;
+    width: 100%;
+    height: 197px;
+    color: white;
+    font-family: Arial, sans-serif;
+    box-sizing: border-box;
+    padding: 10px;
+}
+
+.map-sidebar.expanded .campus-filter {
+    display: block;
+}
+
+.campus-filter h3 {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 0 22px 0;
+}
+
+.campus-option {
+    display: flex;
+    align-items: center;
+    height: 35px;
+    margin-left: 29px;
+    margin-bottom: 8px;
+    gap: 20px;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+.campus-option input {
+    display: none;
+}
+
+.radio-custom {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #a4c7e9;
+    border-radius: 50%;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.campus-option input:checked + .radio-custom {
+    border-color: #f5d34b;
+}
+
+.campus-option input:checked + .radio-custom::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    background-color: #f5d34b;
+    border-radius: 50%;
+}
+
+.campus-filter hr {
+    border: none;
+    border-top: 2px solid #2677b5;
+    margin: 17px 0 0 0;
 }

@@ -407,6 +407,7 @@ const mapSidebar = document.getElementById("map-sidebar");
 const menuButton = document.getElementById("menu-button");
 const closeButton = document.getElementById("close-button");
 const campusButtons = document.querySelectorAll(".campus-button");
+const campusOptions = document.querySelectorAll('input[name="campus"]');
 
 campusButtons.forEach(function(button) {
     button.addEventListener("click", function() {
@@ -420,9 +421,37 @@ campusButtons.forEach(function(button) {
 
         button.classList.add("selected");
 
+        const radioButton = document.querySelector(
+            `input[name="campus"][value="${campus}"]`
+        );
+
+        if (radioButton) {
+            radioButton.checked = true;
+        }
+
         mapSidebar.classList.remove("expanded");
     });
 });
+
+campusOptions.forEach(function(option) {
+    option.addEventListener("click", function() {
+        const campus = option.value;
+
+        callbacktest(campus);
+
+        campusButtons.forEach(function(campusButton) {
+            campusButton.classList.remove("selected");
+        });
+
+        const selectedButton = document.querySelector(
+            `.campus-button[data-campus="${campus}"]`
+        );
+
+        if (selectedButton) {
+            selectedButton.classList.add("selected");
+        }
+    });
+}); 
 
 menuButton.addEventListener("click", function () {
     mapSidebar.classList.toggle("expanded");
