@@ -9,6 +9,17 @@ var parkingLayer = L.featureGroup().addTo(map);
 var freeParkingLayer = null;
 var parkingIcons = L.featureGroup().addTo(map);
 var freeParkingIcons = L.featureGroup().addTo(map);
+var freevPermitLayer = null;
+var freevPermitIcons = L.featureGroup().addTo(map);
+var paidAllDayLayer = null;
+var paidAllDayIcons = L.featureGroup().addTo(map);
+var paid4hrMaxLayer = null;
+var paid4hrMaxIcons = L.featureGroup().addTo(map);
+var residentialLayer = null;
+var residentialIcons = L.featureGroup().addTo(map);
+var premiumLayer = null;
+var premiumIcons = L.featureGroup().addTo(map);
+
 var poiLayer = null;
 
 // ------- Styles -------
@@ -129,12 +140,32 @@ async function callbacktest(campus) {
 
     parkingIcons.clearLayers();
     freeParkingIcons.clearLayers();
+    freevPermitIcons.clearLayers();
+    paidAllDayIcons.clearLayers();
+    paid4hrMaxIcons.clearLayers();
+    residentialIcons.clearLayers();
+    premiumIcons.clearLayers();
 
     campusLayers.clearLayers();
     parkingLayer.clearLayers();
 
     if (freeParkingLayer) {
         map.removeLayer(freeParkingLayer);
+    }
+    if (freevPermitLayer) {
+        map.removeLayer(freevPermitLayer);
+    }
+    if (paidAllDayLayer) {
+        map.removeLayer(paidAllDayLayer);
+    }
+    if (paid4hrMaxLayer) {
+        map.removeLayer(paid4hrMaxLayer);
+    }
+    if (residentialLayer) {
+        map.removeLayer(residentialLayer);
+    }
+    if (premiumLayer) {
+        map.removeLayer(premiumLayer);
     }
 
     buildingLabels.forEach(function(building) {
@@ -223,15 +254,16 @@ async function callbacktest(campus) {
         return;
     }
 
-    parkingLayer.clearLayers();
-    parkingIcons.clearLayers();
-    freeParkingIcons.clearLayers();
-
     var otherParkingLayer = L.geoJSON(
         {
             type: "FeatureCollection",
             features: parkingData.features.filter(function(feature) {
-                return feature.properties.parkType !== "FREE";
+                return feature.properties.parkType !== "FREE" &&
+                feature.properties.parkType !== "FREEVPERMIT" &&
+                feature.properties.parkType !== "PAID-ALL" &&
+                feature.properties.parkType !== "PAID-4HR" &&
+                feature.properties.parkType !== "RESIDENTIAL" &&
+                feature.properties.parkType !== "CEL-PREM";
             })
         },
         {
@@ -254,7 +286,7 @@ async function callbacktest(campus) {
         }
     );
 
-    map.addLayer(freeParkingLayer);
+    parkingLayer.addLayer(freeParkingLayer);
 
     freeParkingLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
@@ -262,6 +294,116 @@ async function callbacktest(campus) {
         L.marker(center, {
             icon: getParkingIcon("FREE")
         }).addTo(freeParkingIcons);
+    });
+
+    freevPermitLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "FREEVPERMIT";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(freevPermitLayer);
+
+    freevPermitLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        L.marker(center, {
+            icon: getParkingIcon("FREEVPERMIT")
+        }).addTo(freevPermitIcons);
+    });
+
+    paidAllDayLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "PAID-ALL";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(paidAllDayLayer);
+
+    paidAllDayLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        L.marker(center, {
+            icon: getParkingIcon("PAID-ALL")
+        }).addTo(paidAllDayIcons);
+    });
+
+    paid4hrMaxLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "PAID-4HR";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(paid4hrMaxLayer);
+
+    paid4hrMaxLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        L.marker(center, {
+            icon: getParkingIcon("PAID-4HR")
+        }).addTo(paid4hrMaxIcons);
+    });
+
+    residentialLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "RESIDENTIAL";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(residentialLayer);
+
+    residentialLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        L.marker(center, {
+            icon: getParkingIcon("RESIDENTIAL")
+        }).addTo(residentialIcons);
+    });
+
+    premiumLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "CEL-PREM";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(premiumLayer);
+
+    premiumLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        L.marker(center, {
+            icon: getParkingIcon("CEL-PREM")
+        }).addTo(premiumIcons);
     });
 
     let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
@@ -401,10 +543,41 @@ async function callbacktest(campus) {
     } else {
         map.addLayer(parkingIcons);
     }
+
     if (!showAllCheckbox.checked || !freeParkingCheckbox.checked) {
         map.removeLayer(freeParkingIcons);
     } else {
         map.addLayer(freeParkingIcons);
+    }
+
+    if (!showAllCheckbox.checked || !freevPermitCheckbox.checked) {
+        map.removeLayer(freevPermitIcons);
+    } else {
+        map.addLayer(freevPermitIcons);
+    }
+
+    if (!showAllCheckbox.checked || !paidAllDayCheckbox.checked) {
+        map.removeLayer(paidAllDayIcons);
+    } else {
+        map.addLayer(paidAllDayIcons);
+    }
+
+    if (!showAllCheckbox.checked || !paid4hrMaxCheckbox.checked) {
+        map.removeLayer(paid4hrMaxIcons);
+    } else {
+        map.addLayer(paid4hrMaxIcons);
+    }
+
+    if (!showAllCheckbox.checked || !residentialCheckbox.checked) {
+        map.removeLayer(residentialIcons);
+    } else {
+        map.addLayer(residentialIcons);
+    }
+
+    if (!showAllCheckbox.checked || !premiumCheckbox.checked) {
+        map.removeLayer(premiumIcons);
+    } else {
+        map.addLayer(premiumIcons);
     }
 
     if (!showAllCheckbox.checked) {
@@ -608,32 +781,67 @@ const filters = document.getElementById("filters");
 const showAllCheckbox = document.getElementById("showAllCheckbox");
 const parkingCheckbox = document.getElementById("parkingCheckbox");
 const freeParkingCheckbox = document.getElementById("freeParkingCheckbox");
+const freevPermitCheckbox = document.getElementById("freevPermitCheckbox");
+const paidAllDayCheckbox = document.getElementById("paidAllDayCheckbox");
+const paid4hrMaxCheckbox = document.getElementById("paid4hrMaxCheckbox");
+const residentialCheckbox = document.getElementById("residentialCheckbox");
+const premiumCheckbox = document.getElementById("premiumCheckbox");
 
 
 showAllCheckbox.addEventListener("change", function () {
     parkingCheckbox.checked = this.checked;
     freeParkingCheckbox.checked = this.checked;
+    freevPermitCheckbox.checked = this.checked;
+    paidAllDayCheckbox.checked = this.checked;
+    paid4hrMaxCheckbox.checked = this.checked;
+    residentialCheckbox.checked = this.checked;
+    premiumCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
         map.addLayer(freeParkingIcons);
+        map.addLayer(freevPermitIcons);
+        map.addLayer(paidAllDayIcons);
+        map.addLayer(paid4hrMaxIcons);
+        map.addLayer(residentialIcons);
+        map.addLayer(premiumIcons);
         map.addLayer(poiLayer);
     } else {
         map.removeLayer(parkingIcons);
         map.removeLayer(freeParkingIcons);  
+        map.removeLayer(freevPermitIcons);
+        map.removeLayer(paidAllDayIcons);
+        map.removeLayer(paid4hrMaxIcons);
+        map.removeLayer(residentialIcons);
+        map.removeLayer(premiumIcons);
         map.removeLayer(poiLayer);
     }
 });
 
 parkingCheckbox.addEventListener("change", function () {
     freeParkingCheckbox.checked = this.checked;
-    
+    freevPermitCheckbox.checked = this.checked;
+    paidAllDayCheckbox.checked = this.checked;
+    paid4hrMaxCheckbox.checked = this.checked;
+    residentialCheckbox.checked = this.checked;
+    premiumCheckbox.checked = this.checked;
+
     if (this.checked) {
         map.addLayer(parkingIcons);
         map.addLayer(freeParkingIcons);
+        map.addLayer(freevPermitIcons);
+        map.addLayer(paidAllDayIcons);
+        map.addLayer(paid4hrMaxIcons);
+        map.addLayer(residentialIcons);
+        map.addLayer(premiumIcons);
     } else {
         map.removeLayer(parkingIcons);
         map.removeLayer(freeParkingIcons);
+        map.removeLayer(freevPermitIcons);
+        map.removeLayer(paidAllDayIcons);
+        map.removeLayer(paid4hrMaxIcons);
+        map.removeLayer(residentialIcons);
+        map.removeLayer(premiumIcons);
     }
 });
 
@@ -642,6 +850,45 @@ freeParkingCheckbox.addEventListener("change", function () {
         map.addLayer(freeParkingIcons);
     } else {
         map.removeLayer(freeParkingIcons);
+    }
+});
+
+freevPermitCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(freevPermitIcons);
+    } else {
+        map.removeLayer(freevPermitIcons);
+    }
+});
+
+paidAllDayCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(paidAllDayIcons);
+    } else {
+        map.removeLayer(paidAllDayIcons);
+    }
+});
+
+paid4hrMaxCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(paid4hrMaxIcons);
+    } else {
+        map.removeLayer(paid4hrMaxIcons);
+    }
+});
+residentialCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(residentialIcons);
+    } else {
+        map.removeLayer(residentialIcons);
+    }
+});
+
+premiumCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(premiumIcons);
+    } else {
+        map.removeLayer(premiumIcons);
     }
 });
 
