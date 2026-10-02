@@ -322,20 +322,29 @@ body {
     display: block;
 }
 
-.show-all-row {
+.filter-header {
+    width: 100%;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     padding: 6px 0;
     border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-    justify-content: space-between;
     margin-bottom: 16px;
 }
 
-.show-all-text {
-    flex: 1;
+.filter-title {
     color: white;
     font-size: 18px;
     font-weight: bold;
+}
+
+.filter-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-right: 10px;
+    flex-shrink: 0;
 }
 
 .expand-button {
@@ -343,7 +352,6 @@ body {
     border: none;
     color: white;
     font-size: 16px;
-    margin-right: 24px;
     padding: 6px;
     cursor: pointer;
 }
@@ -365,6 +373,9 @@ body {
     height: 20px;
     border: 2px solid #cceaff;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .checkbox-container input:checked ~ .checkmark {
@@ -374,9 +385,6 @@ body {
 
 .checkbox-container input:checked +.checkmark::after {
     content: "";
-    position: absolute;
-    left: 5px;
-    top: 2px;
     width: 5px;
     height: 10px;
     border: solid #0072b8;
@@ -386,4 +394,37 @@ body {
 
 .hidden {
     display: none;
+}
+
+.parking-header {
+    width: 100%;
+    box-sizing: border-box;
+    border-bottom: none;
+    margin-bottom: 0;
+    padding-left: 10px;
+    position: relative;
+}
+
+.parking-header .filter-controls {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-right: 0;
+}
+
+.parking-header .filter-title {
+    font-size: 16px;
+}
+
+.show-all-header {
+    margin-bottom: 6px;
+}
+
+#parkingFilters {
+    width: 100%;
+    box-sizing: border-box;
 }

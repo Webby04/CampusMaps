@@ -55,21 +55,38 @@
             </div>
 
             <div class="filter-menu">
-                <div class="show-all-row">
-                    <span class="show-all-text">Show All</span>
+                <div class="filter-header show-all-header">
+                    <span class="filter-title">Show All</span>
 
-                    <button class="expand-button" id="showAllExpand" aria-label="Expand or collapse all filters" aria-expanded="false" aria-controls="filters">
-                        <i class="fa-solid fa-chevron-down" id="showAllChevron"></i>
-                    </button>
+                    <div class="filter-controls">
+                        <button class="expand-button" id="showAllExpand" aria-label="Expand or collapse all filters" aria-expanded="false" aria-controls="filters">
+                            <i class="fa-solid fa-chevron-down" id="showAllChevron"></i>
+                        </button>
 
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="showAllCheckbox" checked>
-                        <span class="checkmark"></span>
-                    </label>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="showAllCheckbox" checked>
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
                 </div>
 
-                <div id="filters">
-                    <!-- Filter options go here -->
+                <div id="filters" class="hidden">
+                    <div class="filter-header parking-header">
+                        <span class="filter-title">Parking</span>
+                        <div class="filter-controls">
+                            <button class="expand-button" id="parkingExpand" aria-label="Expand or collapse parking filters" aria-expanded="false" aria-controls="parkingFilters">
+                                <i class="fa-solid fa-chevron-down" id="parkingChevron"></i>
+                            </button>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="parkingCheckbox" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div id="parkingFilters" class="hidden">
+                            
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">

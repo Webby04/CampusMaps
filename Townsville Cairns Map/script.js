@@ -353,9 +353,12 @@ async function callbacktest(campus) {
     map.setView(campusCenter, 16);
     map.setMaxBounds(campusBounds);
 
-    if (!showAllCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked) {
         map.removeLayer(parkingLayer);
         map.removeLayer(parkingIcons);
+    }
+
+    if (!showAllCheckbox.checked) {
         map.removeLayer(poiLayer);
     }
 }
@@ -554,8 +557,11 @@ const showAllExpand = document.getElementById("showAllExpand");
 const showAllChevron = document.getElementById("showAllChevron");
 const filters = document.getElementById("filters");
 const showAllCheckbox = document.getElementById("showAllCheckbox");
+const parkingCheckbox = document.getElementById("parkingCheckbox");
 
 showAllCheckbox.addEventListener("change", function () {
+    parkingCheckbox.checked = this.checked;
+
     if (this.checked) {
         map.addLayer(parkingLayer);
         map.addLayer(parkingIcons);
@@ -567,26 +573,40 @@ showAllCheckbox.addEventListener("change", function () {
     }
 });
 
-showAllExpand.addEventListener("click", () => {
-    const isOpen = !filters.classList.contains("hidden");
-
-    if (isOpen) {
-        filters.classList.add("hidden");
-
-        showAllChevron.classList.remove("fa-chevron-down");
-        showAllChevron.classList.add("fa-chevron-up");
-
-        showAllExpand.setAttribute("aria-expanded", "false");
-
+parkingCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(parkingLayer);
+        map.addLayer(parkingIcons);
     } else {
-        filters.classList.remove("hidden");
-
-        showAllChevron.classList.remove("fa-chevron-up");
-        showAllChevron.classList.add("fa-chevron-down");
-
-        showAllExpand.setAttribute("aria-expanded", "true");
+        map.removeLayer(parkingLayer);
+        map.removeLayer(parkingIcons);
     }
 });
+
+function setupChevron(buttonID, chevronID, contentID) {
+    const button = document.getElementById(buttonID);
+    const chevron = document.getElementById(chevronID);
+    const content = document.getElementById(contentID);
+
+    button.addEventListener("click", () => {
+        const isOpen = !content.classList.contains("hidden");
+
+        if (isOpen) {
+            content.classList.add("hidden");
+            chevron.classList.remove("fa-chevron-up");
+            chevron.classList.add("fa-chevron-down");
+            button.setAttribute("aria-expanded", "false");
+        } else {
+            content.classList.remove("hidden");
+            chevron.classList.remove("fa-chevron-down");
+            chevron.classList.add("fa-chevron-up");
+            button.setAttribute("aria-expanded", "true");
+        }
+    });
+}
+
+setupChevron("showAllExpand", "showAllChevron", "filters");
+setupChevron("parkingExpand", "parkingChevron", "parkingFilters");
 
 callbacktest("tsv");
 
