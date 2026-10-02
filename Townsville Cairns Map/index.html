@@ -144,7 +144,7 @@
                             </label>
                         </div>
 
-                                                <div class="parking-option">
+                        <div class="parking-option">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-cel-prem"></i>
                                 <span>Premium Parking</span>
@@ -154,6 +154,65 @@
                                 <input type="checkbox" id="premiumCheckbox" checked>
                                 <span class="checkmark"></span>
                             </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-special"></i>
+                                <span>Special Parking</span>
+                            </div>
+
+                            <div class="filter-controls">
+                                <button class="expand-button" id="specialParkingExpand" aria-label="Expand or collapse special parking filters" aria-expanded="false" aria-controls="specialParkingFilters">
+                                    <i class="fa-solid fa-chevron-down" id="specialParkingChevron"></i>
+                                </button>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="specialParkingCheckbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="specialParkingFilters" class="special-parking-filters hidden">
+                            <div class="special-parking-option">
+                                <div class="parking-option-name">
+                                    <span>Commercial</span>
+                                </div>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="commercialCheckbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            
+                            <div class="special-parking-option">
+                                <div class="parking-option-name">
+                                    <span>Reserved</span>
+                                </div>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="reservedCheckbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+
+                            <div class="special-parking-option">
+                                <div class="parking-option-name">
+                                    <span>Loading</span>
+                                </div>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="loadingCheckbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+
+                            <div class="special-parking-option">
+                                <div class="parking-option-name">
+                                    <span>Visitor</span>
+                                </div>
+                                <label class="checkbox-container">
+                                    <input type="checkbox" id="visitorCheckbox" checked>
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>

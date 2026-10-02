@@ -19,6 +19,10 @@ var residentialLayer = null;
 var residentialIcons = L.featureGroup().addTo(map);
 var premiumLayer = null;
 var premiumIcons = L.featureGroup().addTo(map);
+var commercialIcons = L.featureGroup().addTo(map);
+var reservedIcons = L.featureGroup().addTo(map);
+var loadingIcons = L.featureGroup().addTo(map);
+var visitorIcons = L.featureGroup().addTo(map);
 
 var poiLayer = null;
 
@@ -102,10 +106,23 @@ const MAP_OBJECT_STYLES = {
 
 function addParkingIcon(feature, layer) {
     var center = layer.getBounds().getCenter();
+    var parkType = feature.properties.parkType;
 
-    L.marker(center, {
-        icon: getParkingIcon(feature.properties.parkType)
-    }).addTo(parkingIcons);
+    var marker = L.marker(center, {
+        icon: getParkingIcon(parkType)
+    });
+
+    if (parkType === "COMMERCIAL") {
+        marker.addTo(commercialIcons);
+    } else if (parkType === "RESERVED") {
+        marker.addTo(reservedIcons);
+    } else if (parkType === "LOADING") {
+        marker.addTo(loadingIcons);
+    } else if (parkType === "VISITOR") {
+        marker.addTo(visitorIcons);
+    } else  {
+        marker.addTo(parkingIcons);
+    }
 }
 
 var buildingLabels = [];
@@ -145,6 +162,11 @@ async function callbacktest(campus) {
     paid4hrMaxIcons.clearLayers();
     residentialIcons.clearLayers();
     premiumIcons.clearLayers();
+
+    commercialIcons.clearLayers();
+    reservedIcons.clearLayers();
+    loadingIcons.clearLayers();
+    visitorIcons.clearLayers();
 
     campusLayers.clearLayers();
     parkingLayer.clearLayers();
@@ -580,6 +602,30 @@ async function callbacktest(campus) {
         map.addLayer(premiumIcons);
     }
 
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!commercialCheckbox.checked) {
+        map.removeLayer(commercialIcons);
+    } else {
+        map.addLayer(commercialIcons);
+    }
+
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!reservedCheckbox.checked) {
+        map.removeLayer(reservedIcons);
+    } else {
+        map.addLayer(reservedIcons);
+    }
+
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!loadingCheckbox.checked) {
+        map.removeLayer(loadingIcons);
+    } else {
+        map.addLayer(loadingIcons);
+    }
+
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!visitorCheckbox.checked) {
+        map.removeLayer(visitorIcons);
+    } else {
+        map.addLayer(visitorIcons);
+    }
+
     if (!showAllCheckbox.checked) {
         map.removeLayer(poiLayer);
     }
@@ -786,6 +832,11 @@ const paidAllDayCheckbox = document.getElementById("paidAllDayCheckbox");
 const paid4hrMaxCheckbox = document.getElementById("paid4hrMaxCheckbox");
 const residentialCheckbox = document.getElementById("residentialCheckbox");
 const premiumCheckbox = document.getElementById("premiumCheckbox");
+const specialParkingCheckbox = document.getElementById("specialParkingCheckbox");
+const commercialCheckbox = document.getElementById("commercialCheckbox");
+const reservedCheckbox = document.getElementById("reservedCheckbox");
+const loadingCheckbox = document.getElementById("loadingCheckbox");
+const visitorCheckbox = document.getElementById("visitorCheckbox");
 
 
 showAllCheckbox.addEventListener("change", function () {
@@ -796,6 +847,11 @@ showAllCheckbox.addEventListener("change", function () {
     paid4hrMaxCheckbox.checked = this.checked;
     residentialCheckbox.checked = this.checked;
     premiumCheckbox.checked = this.checked;
+    specialParkingCheckbox.checked = this.checked;
+    commercialCheckbox.checked = this.checked;
+    reservedCheckbox.checked = this.checked;
+    loadingCheckbox.checked = this.checked;
+    visitorCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -805,6 +861,10 @@ showAllCheckbox.addEventListener("change", function () {
         map.addLayer(paid4hrMaxIcons);
         map.addLayer(residentialIcons);
         map.addLayer(premiumIcons);
+        map.addLayer(commercialIcons);
+        map.addLayer(reservedIcons);
+        map.addLayer(loadingIcons);
+        map.addLayer(visitorIcons);
         map.addLayer(poiLayer);
     } else {
         map.removeLayer(parkingIcons);
@@ -814,6 +874,10 @@ showAllCheckbox.addEventListener("change", function () {
         map.removeLayer(paid4hrMaxIcons);
         map.removeLayer(residentialIcons);
         map.removeLayer(premiumIcons);
+        map.removeLayer(commercialIcons);
+        map.removeLayer(reservedIcons);
+        map.removeLayer(loadingIcons);
+        map.removeLayer(visitorIcons);
         map.removeLayer(poiLayer);
     }
 });
@@ -825,6 +889,11 @@ parkingCheckbox.addEventListener("change", function () {
     paid4hrMaxCheckbox.checked = this.checked;
     residentialCheckbox.checked = this.checked;
     premiumCheckbox.checked = this.checked;
+    specialParkingCheckbox.checked = this.checked;
+    commercialCheckbox.checked = this.checked;
+    reservedCheckbox.checked = this.checked;
+    loadingCheckbox.checked = this.checked;
+    visitorCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -834,6 +903,10 @@ parkingCheckbox.addEventListener("change", function () {
         map.addLayer(paid4hrMaxIcons);
         map.addLayer(residentialIcons);
         map.addLayer(premiumIcons);
+        map.addLayer(commercialIcons);
+        map.addLayer(reservedIcons);
+        map.addLayer(loadingIcons);
+        map.addLayer(visitorIcons);
     } else {
         map.removeLayer(parkingIcons);
         map.removeLayer(freeParkingIcons);
@@ -842,6 +915,10 @@ parkingCheckbox.addEventListener("change", function () {
         map.removeLayer(paid4hrMaxIcons);
         map.removeLayer(residentialIcons);
         map.removeLayer(premiumIcons);
+        map.removeLayer(commercialIcons);
+        map.removeLayer(reservedIcons);
+        map.removeLayer(loadingIcons);
+        map.removeLayer(visitorIcons);
     }
 });
 
@@ -892,6 +969,57 @@ premiumCheckbox.addEventListener("change", function () {
     }
 });
 
+specialParkingCheckbox.addEventListener("change", function () {
+    commercialCheckbox.checked = this.checked;
+    reservedCheckbox.checked = this.checked;
+    loadingCheckbox.checked = this.checked;
+    visitorCheckbox.checked = this.checked;
+
+    if (this.checked) {
+        map.addLayer(commercialIcons);
+        map.addLayer(reservedIcons);
+        map.addLayer(loadingIcons);
+        map.addLayer(visitorIcons);
+    } else {
+        map.removeLayer(commercialIcons);
+        map.removeLayer(reservedIcons);
+        map.removeLayer(loadingIcons);
+        map.removeLayer(visitorIcons);
+    }
+});
+
+commercialCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(commercialIcons);
+    } else {
+        map.removeLayer(commercialIcons);
+    }
+});
+
+reservedCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(reservedIcons);
+    } else {
+        map.removeLayer(reservedIcons);
+    }
+});
+
+loadingCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(loadingIcons);
+    } else {
+        map.removeLayer(loadingIcons);
+    }
+});
+
+visitorCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(visitorIcons);
+    } else {
+        map.removeLayer(visitorIcons);
+    }
+});
+
 function setupChevron(buttonID, chevronID, contentID) {
     const button = document.getElementById(buttonID);
     const chevron = document.getElementById(chevronID);
@@ -916,6 +1044,7 @@ function setupChevron(buttonID, chevronID, contentID) {
 
 setupChevron("showAllExpand", "showAllChevron", "filters");
 setupChevron("parkingExpand", "parkingChevron", "parkingFilters");
+setupChevron("specialParkingExpand", "specialParkingChevron", "specialParkingFilters");
 
 callbacktest("tsv");
 
