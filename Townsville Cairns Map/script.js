@@ -5,8 +5,10 @@ var map = L.map('map', {
 }).setView([-19.328, 146.756], 16);
 
 var campusLayers = L.featureGroup().addTo(map);
-var parkingLayer = null;
+var parkingLayer = L.featureGroup().addTo(map);
+var freeParkingLayer = null;
 var parkingIcons = L.featureGroup().addTo(map);
+var freeParkingIcons = L.featureGroup().addTo(map);
 var poiLayer = null;
 
 // ------- Styles -------
@@ -126,8 +128,14 @@ async function callbacktest(campus) {
     const generation = ++campusLoadGeneration;
 
     parkingIcons.clearLayers();
+    freeParkingIcons.clearLayers();
 
     campusLayers.clearLayers();
+    parkingLayer.clearLayers();
+
+    if (freeParkingLayer) {
+        map.removeLayer(freeParkingLayer);
+    }
 
     buildingLabels.forEach(function(building) {
         if (map.hasLayer(building.label)) {
@@ -215,11 +223,46 @@ async function callbacktest(campus) {
         return;
     }
 
-    parkingLayer  = L.geoJSON(parkingData, {
-        style: MAP_OBJECT_STYLES.PARKING,
-        onEachFeature: addParkingIcon
-    })
-    campusLayers.addLayer(parkingLayer)
+    parkingLayer.clearLayers();
+    parkingIcons.clearLayers();
+    freeParkingIcons.clearLayers();
+
+    var otherParkingLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType !== "FREE";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingIcon
+        }
+    );
+
+    parkingLayer.addLayer(otherParkingLayer);
+
+    freeParkingLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "FREE";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    map.addLayer(freeParkingLayer);
+
+    freeParkingLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        L.marker(center, {
+            icon: getParkingIcon("FREE")
+        }).addTo(freeParkingIcons);
+    });
 
     let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
     let naturepathsData = await naturepathsJSON.json();
@@ -354,8 +397,14 @@ async function callbacktest(campus) {
     map.setMaxBounds(campusBounds);
 
     if (!showAllCheckbox.checked || !parkingCheckbox.checked) {
-        map.removeLayer(parkingLayer);
         map.removeLayer(parkingIcons);
+    } else {
+        map.addLayer(parkingIcons);
+    }
+    if (!showAllCheckbox.checked || !freeParkingCheckbox.checked) {
+        map.removeLayer(freeParkingIcons);
+    } else {
+        map.addLayer(freeParkingIcons);
     }
 
     if (!showAllCheckbox.checked) {
@@ -558,28 +607,41 @@ const showAllChevron = document.getElementById("showAllChevron");
 const filters = document.getElementById("filters");
 const showAllCheckbox = document.getElementById("showAllCheckbox");
 const parkingCheckbox = document.getElementById("parkingCheckbox");
+const freeParkingCheckbox = document.getElementById("freeParkingCheckbox");
+
 
 showAllCheckbox.addEventListener("change", function () {
     parkingCheckbox.checked = this.checked;
+    freeParkingCheckbox.checked = this.checked;
 
     if (this.checked) {
-        map.addLayer(parkingLayer);
         map.addLayer(parkingIcons);
+        map.addLayer(freeParkingIcons);
         map.addLayer(poiLayer);
     } else {
-        map.removeLayer(parkingLayer);
-        map.removeLayer(parkingIcons);  
+        map.removeLayer(parkingIcons);
+        map.removeLayer(freeParkingIcons);  
         map.removeLayer(poiLayer);
     }
 });
 
 parkingCheckbox.addEventListener("change", function () {
+    freeParkingCheckbox.checked = this.checked;
+    
     if (this.checked) {
-        map.addLayer(parkingLayer);
         map.addLayer(parkingIcons);
+        map.addLayer(freeParkingIcons);
     } else {
-        map.removeLayer(parkingLayer);
         map.removeLayer(parkingIcons);
+        map.removeLayer(freeParkingIcons);
+    }
+});
+
+freeParkingCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(freeParkingIcons);
+    } else {
+        map.removeLayer(freeParkingIcons);
     }
 });
 
