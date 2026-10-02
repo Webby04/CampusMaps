@@ -23,6 +23,8 @@ var commercialIcons = L.featureGroup().addTo(map);
 var reservedIcons = L.featureGroup().addTo(map);
 var loadingIcons = L.featureGroup().addTo(map);
 var visitorIcons = L.featureGroup().addTo(map);
+var motorcycleIcons = L.featureGroup().addTo(map);
+var accessibleIcons = L.featureGroup().addTo(map);
 
 var poiLayer = null;
 
@@ -167,6 +169,9 @@ async function callbacktest(campus) {
     reservedIcons.clearLayers();
     loadingIcons.clearLayers();
     visitorIcons.clearLayers();
+
+    motorcycleIcons.clearLayers();
+    accessibleIcons.clearLayers();
 
     campusLayers.clearLayers();
     parkingLayer.clearLayers();
@@ -541,15 +546,28 @@ async function callbacktest(campus) {
     }
     poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
-            var icon = getPOIIcon(feature.properties.type);
+            var type = feature.properties.type;
+            var icon = getPOIIcon(type);
 
             if (icon == null) {
                 return;
             }
 
-            return L.marker(latlng, {
+            var marker = L.marker(latlng, {
                 icon: icon
             });
+
+            if (type === "MOTORC") {
+                marker.addTo(motorcycleIcons);
+                return;
+            }
+
+            if (type === "ACCPARK") {
+                marker.addTo(accessibleIcons);
+                return;
+            }
+
+            return marker;
         }
     })
     campusLayers.addLayer(poiLayer);
@@ -566,40 +584,52 @@ async function callbacktest(campus) {
         map.addLayer(parkingIcons);
     }
 
-    if (!showAllCheckbox.checked || !freeParkingCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !freeParkingCheckbox.checked) {
         map.removeLayer(freeParkingIcons);
     } else {
         map.addLayer(freeParkingIcons);
     }
 
-    if (!showAllCheckbox.checked || !freevPermitCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !freevPermitCheckbox.checked) {
         map.removeLayer(freevPermitIcons);
     } else {
         map.addLayer(freevPermitIcons);
     }
 
-    if (!showAllCheckbox.checked || !paidAllDayCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !paidAllDayCheckbox.checked) {
         map.removeLayer(paidAllDayIcons);
     } else {
         map.addLayer(paidAllDayIcons);
     }
 
-    if (!showAllCheckbox.checked || !paid4hrMaxCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !paid4hrMaxCheckbox.checked) {
         map.removeLayer(paid4hrMaxIcons);
     } else {
         map.addLayer(paid4hrMaxIcons);
     }
 
-    if (!showAllCheckbox.checked || !residentialCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !residentialCheckbox.checked) {
         map.removeLayer(residentialIcons);
     } else {
         map.addLayer(residentialIcons);
     }
 
-    if (!showAllCheckbox.checked || !premiumCheckbox.checked) {
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !premiumCheckbox.checked) {
         map.removeLayer(premiumIcons);
     } else {
         map.addLayer(premiumIcons);
+    }
+
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !motorcycleCheckbox.checked) {
+        map.removeLayer(motorcycleIcons);
+    } else {
+        map.addLayer(motorcycleIcons);
+    }
+    
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !accessibleCheckbox.checked) {
+        map.removeLayer(accessibleIcons);
+    } else {
+        map.addLayer(accessibleIcons);
     }
 
     if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!commercialCheckbox.checked) {
@@ -837,6 +867,8 @@ const commercialCheckbox = document.getElementById("commercialCheckbox");
 const reservedCheckbox = document.getElementById("reservedCheckbox");
 const loadingCheckbox = document.getElementById("loadingCheckbox");
 const visitorCheckbox = document.getElementById("visitorCheckbox");
+const motorcycleCheckbox = document.getElementById("motorcycleCheckbox");
+const accessibleCheckbox = document.getElementById("accessibleCheckbox");
 
 
 showAllCheckbox.addEventListener("change", function () {
@@ -852,6 +884,8 @@ showAllCheckbox.addEventListener("change", function () {
     reservedCheckbox.checked = this.checked;
     loadingCheckbox.checked = this.checked;
     visitorCheckbox.checked = this.checked;
+    motorcycleCheckbox.checked = this.checked;
+    accessibleCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -865,6 +899,8 @@ showAllCheckbox.addEventListener("change", function () {
         map.addLayer(reservedIcons);
         map.addLayer(loadingIcons);
         map.addLayer(visitorIcons);
+        map.addLayer(motorcycleIcons);
+        map.addLayer(accessibleIcons);
         map.addLayer(poiLayer);
     } else {
         map.removeLayer(parkingIcons);
@@ -878,6 +914,8 @@ showAllCheckbox.addEventListener("change", function () {
         map.removeLayer(reservedIcons);
         map.removeLayer(loadingIcons);
         map.removeLayer(visitorIcons);
+        map.removeLayer(motorcycleIcons);
+        map.removeLayer(accessibleIcons);
         map.removeLayer(poiLayer);
     }
 });
@@ -894,6 +932,8 @@ parkingCheckbox.addEventListener("change", function () {
     reservedCheckbox.checked = this.checked;
     loadingCheckbox.checked = this.checked;
     visitorCheckbox.checked = this.checked;
+    motorcycleCheckbox.checked = this.checked;
+    accessibleCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -907,6 +947,8 @@ parkingCheckbox.addEventListener("change", function () {
         map.addLayer(reservedIcons);
         map.addLayer(loadingIcons);
         map.addLayer(visitorIcons);
+        map.addLayer(motorcycleIcons);
+        map.addLayer(accessibleIcons);
     } else {
         map.removeLayer(parkingIcons);
         map.removeLayer(freeParkingIcons);
@@ -919,6 +961,8 @@ parkingCheckbox.addEventListener("change", function () {
         map.removeLayer(reservedIcons);
         map.removeLayer(loadingIcons);
         map.removeLayer(visitorIcons);
+        map.removeLayer(motorcycleIcons);
+        map.removeLayer(accessibleIcons);
     }
 });
 
@@ -993,6 +1037,22 @@ commercialCheckbox.addEventListener("change", function () {
         map.addLayer(commercialIcons);
     } else {
         map.removeLayer(commercialIcons);
+    }
+});
+
+motorcycleCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(motorcycleIcons);
+    } else {
+        map.removeLayer(motorcycleIcons);
+    }
+});
+
+accessibleCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(accessibleIcons);
+    } else {
+        map.removeLayer(accessibleIcons);
     }
 });
 

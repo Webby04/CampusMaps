@@ -447,7 +447,7 @@ body {
     font-size: 14px;
 }
 
-.parking-option-name i {
+.parking-option-name > i {
     font-size: 18px;
     background-color: white;
     padding: 1px 2px 0;
@@ -514,4 +514,16 @@ body {
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
+}
+
+.parking-filter-poi-icon {
+    width: 26px;
+    height: 26px;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+.parking-filter-poi-icon .material-symbols-outlined,
+.parking-filter-poi-icon i {
+    font-size: 18px;
 }
