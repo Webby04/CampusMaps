@@ -251,6 +251,37 @@
                             </label>
                         </div>
                     </div>
+
+                    <div class="filter-header show-on-map-header show-on-map-header">
+                        <span class="filter-title">Show on the Map:</span>
+
+                        <div class="filter-controls">
+                            <button class="expand-button" id="showOnMapExpand" aria-label="Expand or collapse show on map filters" aria-expanded="false" aria-controls="showOnMapFilters">
+                                <i class="fa-solid fa-chevron-down" id="showOnMapChevron"></i>    
+                            </button>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="showOnMapCheckbox" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div id="showOnMapFilters" class="hidden">
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-trans parking-filter-poi-icon">
+                                    <i class="fa-solid fa-bus-simple"></i>
+                                </span>
+                                <span>Bus Stops</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="transportCheckbox" checked>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">

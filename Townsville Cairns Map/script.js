@@ -26,6 +26,7 @@ var visitorIcons = L.featureGroup().addTo(map);
 var serviceIcons = L.featureGroup().addTo(map);
 var motorcycleIcons = L.featureGroup().addTo(map);
 var accessibleIcons = L.featureGroup().addTo(map);
+var transportIcons = L.featureGroup().addTo(map);
 
 var poiLayer = null;
 
@@ -176,6 +177,8 @@ async function callbacktest(campus) {
 
     motorcycleIcons.clearLayers();
     accessibleIcons.clearLayers();
+
+    transportIcons.clearLayers();
 
     campusLayers.clearLayers();
     parkingLayer.clearLayers();
@@ -571,6 +574,11 @@ async function callbacktest(campus) {
                 return;
             }
 
+            if (type === "TRANS") {
+                marker.addTo(transportIcons);
+                return;
+            }
+
             return marker;
         }
     })
@@ -624,18 +632,6 @@ async function callbacktest(campus) {
         map.addLayer(premiumIcons);
     }
 
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !motorcycleCheckbox.checked) {
-        map.removeLayer(motorcycleIcons);
-    } else {
-        map.addLayer(motorcycleIcons);
-    }
-    
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !accessibleCheckbox.checked) {
-        map.removeLayer(accessibleIcons);
-    } else {
-        map.addLayer(accessibleIcons);
-    }
-
     if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!commercialCheckbox.checked) {
         map.removeLayer(commercialIcons);
     } else {
@@ -664,6 +660,31 @@ async function callbacktest(campus) {
         map.removeLayer(serviceIcons);
     } else {
         map.addLayer(serviceIcons);
+    }
+
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !motorcycleCheckbox.checked) {
+        map.removeLayer(motorcycleIcons);
+    } else {
+        map.addLayer(motorcycleIcons);
+    }
+    
+    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !accessibleCheckbox.checked) {
+        map.removeLayer(accessibleIcons);
+    } else {
+        map.addLayer(accessibleIcons);
+    }
+    
+    if (!showAllCheckbox.checked || !showOnMapCheckbox.checked) {
+        map.removeLayer(poiLayer);
+        map.removeLayer(transportIcons);
+    } else {
+        map.addLayer(poiLayer);
+
+        if (transportCheckbox.checked) {
+            map.addLayer(transportIcons);
+        } else {
+            map.removeLayer(transportIcons);
+        }
     }
 
     if (!showAllCheckbox.checked) {
@@ -881,6 +902,8 @@ const visitorCheckbox = document.getElementById("visitorCheckbox");
 const serviceCheckbox = document.getElementById("serviceCheckbox");
 const motorcycleCheckbox = document.getElementById("motorcycleCheckbox");
 const accessibleCheckbox = document.getElementById("accessibleCheckbox");
+const showOnMapCheckbox = document.getElementById("showOnMapCheckbox");
+const transportCheckbox = document.getElementById("transportCheckbox");
 
 
 showAllCheckbox.addEventListener("change", function () {
@@ -899,6 +922,8 @@ showAllCheckbox.addEventListener("change", function () {
     serviceCheckbox.checked = this.checked;
     motorcycleCheckbox.checked = this.checked;
     accessibleCheckbox.checked = this.checked;
+    showOnMapCheckbox.checked = this.checked;
+    transportCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -915,6 +940,7 @@ showAllCheckbox.addEventListener("change", function () {
         map.addLayer(serviceIcons);
         map.addLayer(motorcycleIcons);
         map.addLayer(accessibleIcons);
+        map.addLayer(transportIcons);
         map.addLayer(poiLayer);
     } else {
         map.removeLayer(parkingIcons);
@@ -931,6 +957,7 @@ showAllCheckbox.addEventListener("change", function () {
         map.removeLayer(serviceIcons);
         map.removeLayer(motorcycleIcons);
         map.removeLayer(accessibleIcons);
+        map.removeLayer(transportIcons);
         map.removeLayer(poiLayer);
     }
 });
@@ -981,6 +1008,18 @@ parkingCheckbox.addEventListener("change", function () {
         map.removeLayer(serviceIcons);
         map.removeLayer(motorcycleIcons);
         map.removeLayer(accessibleIcons);
+    }
+});
+
+showOnMapCheckbox.addEventListener("change", function () {
+    transportCheckbox.checked = this.checked;
+
+    if (this.checked) {
+        map.addLayer(poiLayer);
+        map.addLayer(transportIcons);
+    } else {
+        map.removeLayer(poiLayer);
+        map.removeLayer(transportIcons);
     }
 });
 
@@ -1061,22 +1100,6 @@ commercialCheckbox.addEventListener("change", function () {
     }
 });
 
-motorcycleCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(motorcycleIcons);
-    } else {
-        map.removeLayer(motorcycleIcons);
-    }
-});
-
-accessibleCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(accessibleIcons);
-    } else {
-        map.removeLayer(accessibleIcons);
-    }
-});
-
 reservedCheckbox.addEventListener("change", function () {
     if (this.checked) {
         map.addLayer(reservedIcons);
@@ -1109,6 +1132,30 @@ serviceCheckbox.addEventListener("change", function () {
     }
 });
 
+motorcycleCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(motorcycleIcons);
+    } else {
+        map.removeLayer(motorcycleIcons);
+    }
+});
+
+accessibleCheckbox.addEventListener("change", function () {
+    if (this.checked) {
+        map.addLayer(accessibleIcons);
+    } else {
+        map.removeLayer(accessibleIcons);
+    }
+});
+
+transportCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(transportIcons);
+    } else {
+        map.removeLayer(transportIcons);
+    }
+});
+
 function setupChevron(buttonID, chevronID, contentID) {
     const button = document.getElementById(buttonID);
     const chevron = document.getElementById(chevronID);
@@ -1134,6 +1181,7 @@ function setupChevron(buttonID, chevronID, contentID) {
 setupChevron("showAllExpand", "showAllChevron", "filters");
 setupChevron("parkingExpand", "parkingChevron", "parkingFilters");
 setupChevron("specialParkingExpand", "specialParkingChevron", "specialParkingFilters");
+setupChevron("showOnMapExpand", "showOnMapChevron", "showOnMapFilters");
 
 callbacktest("tsv");
 

@@ -401,7 +401,8 @@ body {
     display: none;
 }
 
-.parking-header {
+.parking-header,
+.show-on-map-header {
     width: 100%;
     box-sizing: border-box;
     border-bottom: none;
@@ -410,7 +411,8 @@ body {
     position: relative;
 }
 
-.parking-header::after {
+.parking-header::after,
+.show-on-map-header::after {
     content: "";
     position: absolute;
     left: 0;
@@ -420,7 +422,16 @@ body {
     background-color: rgba(255, 255, 255, 0.2);
 }
 
-.parking-header .filter-controls {
+.show-on-map-header {
+    margin-top: 16px;
+}
+
+.show-on-map-header::after {
+    display: none;
+}
+
+.parking-header .filter-controls,
+.show-on-map-header .filter-controls {
     position: absolute;
     right: 10px;
     top: 50%;
@@ -431,7 +442,8 @@ body {
     margin-right: 0;
 }
 
-.parking-header .filter-title {
+.parking-header .filter-title,
+.show-on-map-header .filter-title {
     font-size: 16px;
 }
 
@@ -444,7 +456,8 @@ body {
     box-sizing: border-box;
 }
 
-.parking-option {
+.parking-option,
+.show-on-the-map-option {
     width: 100%;
     box-sizing: border-box;
     display: flex;
@@ -453,7 +466,8 @@ body {
     padding: 6px 10px 6px 30px;
 }
 
-.parking-option-name {
+.parking-option-name,
+.show-on-the-map-name {
     display: flex;
     align-items: center;
     gap: 12px;
@@ -461,7 +475,8 @@ body {
     font-size: 14px;
 }
 
-.parking-option-name > i {
+.parking-option-name > i,
+.show-on-the-map-name > i {
     font-size: 18px;
     background-color: white;
     padding: 1px 2px 0;
@@ -469,14 +484,16 @@ body {
     box-shadow: 0 2px 4px 0;
 }
 
-.parking-option > .checkbox-container {
+.parking-option > .checkbox-container,
+.show-on-the-map-option > .checkbox-container {
     position: absolute;
     right: 10px;
     top: 50%;
     transform: translateY(-50%);
 }
 
-.parking-option > .filter-controls {
+.parking-option > .filter-controls,
+.show-on-the-map-option > .filter-controls {
     position: absolute;
     right: 10px;
     top: 50%;
