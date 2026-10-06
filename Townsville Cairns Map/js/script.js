@@ -52,6 +52,7 @@ async function callbacktest(campus) {
     accessibleIcons.clearLayers();
 
     transportIcons.clearLayers();
+    escooterIcons.clearLayers();
 
     campusLayers.clearLayers();
     parkingLayer.clearLayers();
@@ -499,6 +500,11 @@ async function callbacktest(campus) {
                 return;
             }
 
+            if (type === "ESCOOTER") {
+                marker.addTo(escooterIcons);
+                return;
+            }
+
             return marker;
         }
     })
@@ -606,6 +612,8 @@ async function callbacktest(campus) {
     if (!showAllCheckbox.checked || !showOnMapCheckbox.checked) {
         map.removeLayer(poiLayer);
         map.removeLayer(transportIcons);
+        map.removeLayer(escooterIcons);
+
     } else {
         map.addLayer(poiLayer);
 
@@ -613,6 +621,12 @@ async function callbacktest(campus) {
             map.addLayer(transportIcons);
         } else {
             map.removeLayer(transportIcons);
+        }
+
+        if (escooterCheckbox.checked) {
+            map.addLayer(escooterIcons);
+        } else {
+            map.removeLayer(escooterIcons);
         }
     }
 

@@ -101,6 +101,8 @@ const accessibleCheckbox = document.getElementById("accessibleCheckbox");
 
 const showOnMapCheckbox = document.getElementById("showOnMapCheckbox");
 const transportCheckbox = document.getElementById("transportCheckbox");
+const escooterCheckbox = document.getElementById("escooterCheckbox");
+
 
 
 // ------- Show All -------
@@ -123,6 +125,7 @@ showAllCheckbox.addEventListener("change", function () {
     accessibleCheckbox.checked = this.checked;
     showOnMapCheckbox.checked = this.checked;
     transportCheckbox.checked = this.checked;
+    escooterCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -140,6 +143,7 @@ showAllCheckbox.addEventListener("change", function () {
         map.addLayer(motorcycleIcons);
         map.addLayer(accessibleIcons);
         map.addLayer(transportIcons);
+        map.addLayer(escooterIcons);
         map.addLayer(poiLayer);
     } else {
         map.removeLayer(parkingIcons);
@@ -157,6 +161,7 @@ showAllCheckbox.addEventListener("change", function () {
         map.removeLayer(motorcycleIcons);
         map.removeLayer(accessibleIcons);
         map.removeLayer(transportIcons);
+        map.removeLayer(escooterIcons);
         map.removeLayer(poiLayer);
     }
 });
@@ -220,13 +225,16 @@ parkingCheckbox.addEventListener("change", function () {
 
 showOnMapCheckbox.addEventListener("change", function () {
     transportCheckbox.checked = this.checked;
+    escooterCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(poiLayer);
         map.addLayer(transportIcons);
+        map.addLayer(escooterIcons);
     } else {
         map.removeLayer(poiLayer);
         map.removeLayer(transportIcons);
+        map.removeLayer(escooterIcons);
     }
 });
 
@@ -363,13 +371,21 @@ accessibleCheckbox.addEventListener("change", function () {
 });
 
 
-// ------- Transport -------
+// ------- Show on the Map -------
 
 transportCheckbox.addEventListener("change", function () {
     if (this.checked && showOnMapCheckbox.checked) {
         map.addLayer(transportIcons);
     } else {
         map.removeLayer(transportIcons);
+    }
+});
+
+escooterCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(escooterIcons);
+    } else {
+        map.removeLayer(escooterIcons);
     }
 });
 

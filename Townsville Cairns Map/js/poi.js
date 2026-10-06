@@ -1,6 +1,7 @@
 var poiLayer = null;
 
 var transportIcons = createMarkerCluster();
+var escooterIcons = createMarkerCluster();
 
 // ------- POI Icon Function -------
 

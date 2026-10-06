@@ -547,14 +547,14 @@ body {
     transform: translateY(-50%);
 }
 
-.parking-filter-poi-icon {
+.filter-poi-icon {
     width: 26px;
     height: 26px;
     box-sizing: border-box;
     flex-shrink: 0;
 }
 
-.parking-filter-poi-icon .material-symbols-outlined,
-.parking-filter-poi-icon i {
+.filter-poi-icon .material-symbols-outlined,
+.filter-poi-icon i {
     font-size: 18px;
 }
