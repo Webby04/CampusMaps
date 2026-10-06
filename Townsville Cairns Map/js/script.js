@@ -368,15 +368,15 @@ async function callbacktest(campus) {
     let buildingsJSON = await fetch(`../data/mapsdata/${campus}_buildings.json`);
     let buildingsData = await buildingsJSON.json();
 
-    var FirstZoomBuildings;
-    var SecondZoomBuildings;
+    var Landmarks;
+    var BuildingNames;
 
     if (campus ==="tsv") {
-        FirstZoomBuildings = ["18", "26", "104", "134", "142", "500" ];
-        SecondZoomBuildings = ["18", "26", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+        Landmarks = ["18", "26", "104", "134", "142", "500" ];
+        BuildingNames = ["18", "26", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
     } else if (campus ==="cns") {
-        FirstZoomBuildings = ["B1", "D3", "F1"];
-        SecondZoomBuildings = ["B1", "D3", "D4", "F1"];
+        Landmarks = ["B1", "D3", "F1"];
+        BuildingNames = ["B1", "D3", "D4", "F1"];
     }
 
     if (generation !== campusLoadGeneration)  {
@@ -397,7 +397,7 @@ async function callbacktest(campus) {
 
         buildingLabels.forEach(function (building) {
             if (zoom <= 17) {
-                if (FirstZoomBuildings.includes(building.number)) {
+                if (Landmarks.includes(building.number)) {
                     building.label.setIcon(
                         L.divIcon({
                             className: "building-label",
@@ -413,7 +413,7 @@ async function callbacktest(campus) {
             }
 
             else if (zoom === 18) {
-                if (SecondZoomBuildings.includes(building.number)) {
+                if (BuildingNames.includes(building.number)) {
                     building.label.setIcon(
                         L.divIcon({
                             className: "building-label",
@@ -429,7 +429,7 @@ async function callbacktest(campus) {
             }
 
             else if (zoom >= 19) {
-                if (SecondZoomBuildings.includes(building.number)) {
+                if (BuildingNames.includes(building.number)) {
                     building.label.setIcon(
                         L.divIcon({
                             className: "building-label",
