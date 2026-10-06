@@ -9,22 +9,22 @@ var premiumLayer = null;
 
 // ------- Parking Icons -------
 
-var parkingIcons = L.featureGroup().addTo(map);
-var freeParkingIcons = L.featureGroup().addTo(map);
-var freevPermitIcons = L.featureGroup().addTo(map);
-var paidAllDayIcons = L.featureGroup().addTo(map);
-var paid4hrMaxIcons = L.featureGroup().addTo(map);
-var residentialIcons = L.featureGroup().addTo(map);
-var premiumIcons = L.featureGroup().addTo(map);
+var parkingIcons = createMarkerCluster();
+var freeParkingIcons = createMarkerCluster();
+var freevPermitIcons = createMarkerCluster();
+var paidAllDayIcons = createMarkerCluster();
+var paid4hrMaxIcons = createMarkerCluster();
+var residentialIcons = createMarkerCluster();
+var premiumIcons = createMarkerCluster();
 
-var commercialIcons = L.featureGroup().addTo(map);
-var reservedIcons = L.featureGroup().addTo(map);
-var loadingIcons = L.featureGroup().addTo(map);
-var visitorIcons = L.featureGroup().addTo(map);
-var serviceIcons = L.featureGroup().addTo(map);
+var commercialIcons = createMarkerCluster();
+var reservedIcons = createMarkerCluster();
+var loadingIcons = createMarkerCluster();
+var visitorIcons = createMarkerCluster();
+var serviceIcons = createMarkerCluster();
 
-var motorcycleIcons = L.featureGroup().addTo(map);
-var accessibleIcons = L.featureGroup().addTo(map);
+var motorcycleIcons = createMarkerCluster();
+var accessibleIcons = createMarkerCluster();
 
 
 // ------- Add Parking Icons -------

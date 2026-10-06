@@ -1,7 +1,6 @@
 var poiLayer = null;
 
-var transportIcons = L.featureGroup().addTo(map);
-
+var transportIcons = createMarkerCluster();
 
 // ------- POI Icon Function -------
 

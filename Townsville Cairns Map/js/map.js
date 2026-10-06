@@ -6,6 +6,28 @@ var map = L.map('map', {
 
 var campusLayers = L.featureGroup().addTo(map);
 
+
+// ------- Marker Cluster -------
+
+function createMarkerCluster() {
+    return L.markerClusterGroup({
+        maxClusterRadius: 50,
+        disableClusteringAtZoom: 18,
+        showCoverageOnHover: false,
+
+        iconCreateFunction: function(cluster) {
+            var markers = cluster.getAllChildMarkers()[0];
+
+            return L.divIcon({
+                html: markers.options.icon.options.html,
+                className: markers.options.icon.options.className,
+                iconSize: markers.options.icon.options.iconSize,
+                iconAnchor: markers.options.icon.options.iconAnchor
+            });
+        }
+    }).addTo(map);
+}
+
 // ------- Styles -------
 
 const MAP_OBJECT_COLORS = {
