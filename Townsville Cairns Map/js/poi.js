@@ -2,6 +2,19 @@ var poiLayer = null;
 
 var transportIcons = createMarkerCluster();
 var escooterIcons = createMarkerCluster();
+var evChargingIcons = createMarkerCluster();
+var bikeIcons = createMarkerCluster();
+var bikewsIcons = createMarkerCluster();
+var foodBevIcons = createMarkerCluster();
+var atmIcons = createMarkerCluster();
+var helpPhoneIcons = createMarkerCluster();
+var securityIcons = createMarkerCluster();
+var defibIcons = createMarkerCluster();
+var parentRoomIcons = createMarkerCluster();
+var infoIcons = createMarkerCluster();
+var wellnessIcons = createMarkerCluster();
+var showerIcons = createMarkerCluster();
+var pwdIcons = createMarkerCluster();
 
 // ------- POI Icon Function -------
 

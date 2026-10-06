@@ -53,6 +53,19 @@ async function callbacktest(campus) {
 
     transportIcons.clearLayers();
     escooterIcons.clearLayers();
+    evChargingIcons.clearLayers();
+    bikeIcons.clearLayers();
+    bikewsIcons.clearLayers();
+    foodBevIcons.clearLayers();
+    atmIcons.clearLayers();
+    helpPhoneIcons.clearLayers();
+    securityIcons.clearLayers();
+    defibIcons.clearLayers();
+    parentRoomIcons.clearLayers();
+    infoIcons.clearLayers();
+    wellnessIcons.clearLayers();
+    showerIcons.clearLayers();
+    pwdIcons.clearLayers();
 
     campusLayers.clearLayers();
     parkingLayer.clearLayers();
@@ -505,6 +518,71 @@ async function callbacktest(campus) {
                 return;
             }
 
+            if (type === "EV_CHARG") {
+                marker.addTo(evChargingIcons);
+                return;
+            }
+            
+            if (type === "BIKE") {
+                marker.addTo(bikeIcons);
+                return;
+            }
+            
+            if (type === "BIKEWS") {
+                marker.addTo(bikewsIcons);
+                return;
+            }
+            
+            if (type === "FOODBEV") {
+                marker.addTo(foodBevIcons);
+                return;
+            }
+            
+            if (type === "ATM") {
+                marker.addTo(atmIcons);
+                return;
+            }
+            
+            if (type === "HELPPHONE") {
+                marker.addTo(helpPhoneIcons);
+                return;
+            }
+            
+            if (type === "SECURITY") {
+                marker.addTo(securityIcons);
+                return;
+            }
+            
+            if (type === "DEFIB") {
+                marker.addTo(defibIcons);
+                return;
+            }
+            
+            if (type === "PARENT") {
+                marker.addTo(parentRoomIcons);
+                return;
+            }
+            
+            if (type === "INFO") {
+                marker.addTo(infoIcons);
+                return;
+            }
+            
+            if (type === "WELLNESS") {
+                marker.addTo(wellnessIcons);
+                return;
+            }
+            
+            if (type === "SHWR") {
+                marker.addTo(showerIcons);
+                return;
+            }
+            
+            if (type === "PWD") {
+                marker.addTo(pwdIcons);
+                return;
+            }
+
             return marker;
         }
     })
@@ -613,6 +691,19 @@ async function callbacktest(campus) {
         map.removeLayer(poiLayer);
         map.removeLayer(transportIcons);
         map.removeLayer(escooterIcons);
+        map.removeLayer(evChargingIcons);
+        map.removeLayer(bikeIcons);
+        map.removeLayer(bikewsIcons);
+        map.removeLayer(foodBevIcons);
+        map.removeLayer(atmIcons);
+        map.removeLayer(helpPhoneIcons);
+        map.removeLayer(securityIcons);
+        map.removeLayer(defibIcons);
+        map.removeLayer(parentRoomIcons);
+        map.removeLayer(infoIcons);
+        map.removeLayer(wellnessIcons);
+        map.removeLayer(showerIcons);
+        map.removeLayer(pwdIcons);
 
     } else {
         map.addLayer(poiLayer);
@@ -627,6 +718,84 @@ async function callbacktest(campus) {
             map.addLayer(escooterIcons);
         } else {
             map.removeLayer(escooterIcons);
+        }
+
+        if (evChargingCheckbox.checked) {
+            map.addLayer(evChargingIcons);
+        } else {
+            map.removeLayer(evChargingIcons);
+        }
+
+        if (bikeCheckbox.checked) {
+            map.addLayer(bikeIcons);
+        } else {
+            map.removeLayer(bikeIcons);
+        }
+
+        if (bikewsCheckbox.checked) {
+            map.addLayer(bikewsIcons);
+        } else {
+            map.removeLayer(bikewsIcons);
+        }
+
+        if (foodBevCheckbox.checked) {
+            map.addLayer(foodBevIcons);
+        } else {
+            map.removeLayer(foodBevIcons);
+        }
+
+        if (atmCheckbox.checked) {
+            map.addLayer(atmIcons);
+        } else {
+            map.removeLayer(atmIcons);
+        }
+
+        if (helpPhoneCheckbox.checked) {
+            map.addLayer(helpPhoneIcons);
+        } else {
+            map.removeLayer(helpPhoneIcons);
+        }
+
+        if (securityCheckbox.checked) {
+            map.addLayer(securityIcons);
+        } else {
+            map.removeLayer(securityIcons);
+        }
+
+        if (defibCheckbox.checked) {
+            map.addLayer(defibIcons);
+        } else {
+            map.removeLayer(defibIcons);
+        }
+
+        if (parentRoomCheckbox.checked) {
+            map.addLayer(parentRoomIcons);
+        } else {
+            map.removeLayer(parentRoomIcons);
+        }
+
+        if (infoCheckbox.checked) {
+            map.addLayer(infoIcons);
+        } else {
+            map.removeLayer(infoIcons);
+        }
+
+        if (wellnessCheckbox.checked) {
+            map.addLayer(wellnessIcons);
+        } else {
+            map.removeLayer(wellnessIcons);
+        }
+
+        if (showerCheckbox.checked) {
+            map.addLayer(showerIcons);
+        } else {
+            map.removeLayer(showerIcons);
+        }
+
+        if (pwdCheckbox.checked) {
+            map.addLayer(pwdIcons);
+        } else {
+            map.removeLayer(pwdIcons);
         }
     }
 

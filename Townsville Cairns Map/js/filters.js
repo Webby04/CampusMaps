@@ -102,6 +102,19 @@ const accessibleCheckbox = document.getElementById("accessibleCheckbox");
 const showOnMapCheckbox = document.getElementById("showOnMapCheckbox");
 const transportCheckbox = document.getElementById("transportCheckbox");
 const escooterCheckbox = document.getElementById("escooterCheckbox");
+const evChargingCheckbox = document.getElementById("evChargingCheckbox");
+const bikeCheckbox = document.getElementById("bikeCheckbox");
+const bikewsCheckbox = document.getElementById("bikewsCheckbox");
+const foodBevCheckbox = document.getElementById("foodBevCheckbox");
+const atmCheckbox = document.getElementById("atmCheckbox");
+const helpPhoneCheckbox = document.getElementById("helpPhoneCheckbox");
+const securityCheckbox = document.getElementById("securityCheckbox");
+const defibCheckbox = document.getElementById("defibCheckbox");
+const parentRoomCheckbox = document.getElementById("parentRoomCheckbox");
+const infoCheckbox = document.getElementById("infoCheckbox");
+const wellnessCheckbox = document.getElementById("wellnessCheckbox");
+const showerCheckbox = document.getElementById("showerCheckbox");
+const pwdCheckbox = document.getElementById("pwdCheckbox");
 
 
 
@@ -126,6 +139,19 @@ showAllCheckbox.addEventListener("change", function () {
     showOnMapCheckbox.checked = this.checked;
     transportCheckbox.checked = this.checked;
     escooterCheckbox.checked = this.checked;
+    evChargingCheckbox.checked = this.checked;
+    bikeCheckbox.checked = this.checked;
+    bikewsCheckbox.checked = this.checked;
+    foodBevCheckbox.checked = this.checked;
+    atmCheckbox.checked = this.checked;
+    helpPhoneCheckbox.checked = this.checked;
+    securityCheckbox.checked = this.checked;
+    defibCheckbox.checked = this.checked;
+    parentRoomCheckbox.checked = this.checked;
+    infoCheckbox.checked = this.checked;
+    wellnessCheckbox.checked = this.checked;
+    showerCheckbox.checked = this.checked;
+    pwdCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(parkingIcons);
@@ -144,6 +170,19 @@ showAllCheckbox.addEventListener("change", function () {
         map.addLayer(accessibleIcons);
         map.addLayer(transportIcons);
         map.addLayer(escooterIcons);
+        map.addLayer(evChargingIcons);
+        map.addLayer(bikeIcons);
+        map.addLayer(bikewsIcons);
+        map.addLayer(foodBevIcons);
+        map.addLayer(atmIcons);
+        map.addLayer(helpPhoneIcons);
+        map.addLayer(securityIcons);
+        map.addLayer(defibIcons);
+        map.addLayer(parentRoomIcons);
+        map.addLayer(infoIcons);
+        map.addLayer(wellnessIcons);
+        map.addLayer(showerIcons);
+        map.addLayer(pwdIcons);
         map.addLayer(poiLayer);
     } else {
         map.removeLayer(parkingIcons);
@@ -162,13 +201,25 @@ showAllCheckbox.addEventListener("change", function () {
         map.removeLayer(accessibleIcons);
         map.removeLayer(transportIcons);
         map.removeLayer(escooterIcons);
+        map.removeLayer(evChargingIcons);
+        map.removeLayer(bikeIcons);
+        map.removeLayer(bikewsIcons);
+        map.removeLayer(foodBevIcons);
+        map.removeLayer(atmIcons);
+        map.removeLayer(helpPhoneIcons);
+        map.removeLayer(securityIcons);
+        map.removeLayer(defibIcons);
+        map.removeLayer(parentRoomIcons);
+        map.removeLayer(infoIcons);
+        map.removeLayer(wellnessIcons);
+        map.removeLayer(showerIcons);
+        map.removeLayer(pwdIcons);
         map.removeLayer(poiLayer);
     }
 });
 
 
 // ------- Parking -------
-
 
 parkingCheckbox.addEventListener("change", function () {
     freeParkingCheckbox.checked = this.checked;
@@ -226,15 +277,54 @@ parkingCheckbox.addEventListener("change", function () {
 showOnMapCheckbox.addEventListener("change", function () {
     transportCheckbox.checked = this.checked;
     escooterCheckbox.checked = this.checked;
+    evChargingCheckbox.checked = this.checked;
+    bikeCheckbox.checked = this.checked;
+    bikewsCheckbox.checked = this.checked;
+    foodBevCheckbox.checked = this.checked;
+    atmCheckbox.checked = this.checked;
+    helpPhoneCheckbox.checked = this.checked;
+    securityCheckbox.checked = this.checked;
+    defibCheckbox.checked = this.checked;
+    parentRoomCheckbox.checked = this.checked;
+    infoCheckbox.checked = this.checked;
+    wellnessCheckbox.checked = this.checked;
+    showerCheckbox.checked = this.checked;
+    pwdCheckbox.checked = this.checked;
 
     if (this.checked) {
         map.addLayer(poiLayer);
         map.addLayer(transportIcons);
         map.addLayer(escooterIcons);
+        map.addLayer(evChargingIcons);
+        map.addLayer(bikeIcons);
+        map.addLayer(bikewsIcons);
+        map.addLayer(foodBevIcons);
+        map.addLayer(atmIcons);
+        map.addLayer(helpPhoneIcons);
+        map.addLayer(securityIcons);
+        map.addLayer(defibIcons);
+        map.addLayer(parentRoomIcons);
+        map.addLayer(infoIcons);
+        map.addLayer(wellnessIcons);
+        map.addLayer(showerIcons);
+        map.addLayer(pwdIcons);
     } else {
         map.removeLayer(poiLayer);
         map.removeLayer(transportIcons);
         map.removeLayer(escooterIcons);
+        map.removeLayer(evChargingIcons);
+        map.removeLayer(bikeIcons);
+        map.removeLayer(bikewsIcons);
+        map.removeLayer(foodBevIcons);
+        map.removeLayer(atmIcons);
+        map.removeLayer(helpPhoneIcons);
+        map.removeLayer(securityIcons);
+        map.removeLayer(defibIcons);
+        map.removeLayer(parentRoomIcons);
+        map.removeLayer(infoIcons);
+        map.removeLayer(wellnessIcons);
+        map.removeLayer(showerIcons);
+        map.removeLayer(pwdIcons);
     }
 });
 
@@ -386,6 +476,110 @@ escooterCheckbox.addEventListener("change", function () {
         map.addLayer(escooterIcons);
     } else {
         map.removeLayer(escooterIcons);
+    }
+});
+
+evChargingCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(evChargingIcons);
+    } else {
+        map.removeLayer(evChargingIcons);
+    }
+});
+
+bikeCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(bikeIcons);
+    } else {
+        map.removeLayer(bikeIcons);
+    }
+});
+
+bikewsCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(bikewsIcons);
+    } else {
+        map.removeLayer(bikewsIcons);
+    }
+});
+
+foodBevCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(foodBevIcons);
+    } else {
+        map.removeLayer(foodBevIcons);
+    }
+});
+
+atmCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(atmIcons);
+    } else {
+        map.removeLayer(atmIcons);
+    }
+});
+
+helpPhoneCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(helpPhoneIcons);
+    } else {
+        map.removeLayer(helpPhoneIcons);
+    }
+});
+
+securityCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(securityIcons);
+    } else {
+        map.removeLayer(securityIcons);
+    }
+});
+
+defibCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(defibIcons);
+    } else {
+        map.removeLayer(defibIcons);
+    }
+});
+
+parentRoomCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(parentRoomIcons);
+    } else {
+        map.removeLayer(parentRoomIcons);
+    }
+});
+
+infoCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(infoIcons);
+    } else {
+        map.removeLayer(infoIcons);
+    }
+});
+
+wellnessCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(wellnessIcons);
+    } else {
+        map.removeLayer(wellnessIcons);
+    }
+});
+
+showerCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(showerIcons);
+    } else {
+        map.removeLayer(showerIcons);
+    }
+});
+
+pwdCheckbox.addEventListener("change", function () {
+    if (this.checked && showOnMapCheckbox.checked) {
+        map.addLayer(pwdIcons);
+    } else {
+        map.removeLayer(pwdIcons);
     }
 });
 
