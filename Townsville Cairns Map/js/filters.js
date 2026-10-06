@@ -464,7 +464,7 @@ accessibleCheckbox.addEventListener("change", function () {
 // ------- Show on the Map -------
 
 transportCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(transportIcons);
     } else {
         map.removeLayer(transportIcons);
@@ -472,7 +472,7 @@ transportCheckbox.addEventListener("change", function () {
 });
 
 escooterCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(escooterIcons);
     } else {
         map.removeLayer(escooterIcons);
@@ -480,7 +480,7 @@ escooterCheckbox.addEventListener("change", function () {
 });
 
 evChargingCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked ) {
         map.addLayer(evChargingIcons);
     } else {
         map.removeLayer(evChargingIcons);
@@ -488,7 +488,7 @@ evChargingCheckbox.addEventListener("change", function () {
 });
 
 bikeCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(bikeIcons);
     } else {
         map.removeLayer(bikeIcons);
@@ -496,7 +496,7 @@ bikeCheckbox.addEventListener("change", function () {
 });
 
 bikewsCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(bikewsIcons);
     } else {
         map.removeLayer(bikewsIcons);
@@ -504,7 +504,7 @@ bikewsCheckbox.addEventListener("change", function () {
 });
 
 foodBevCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(foodBevIcons);
     } else {
         map.removeLayer(foodBevIcons);
@@ -512,7 +512,7 @@ foodBevCheckbox.addEventListener("change", function () {
 });
 
 atmCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(atmIcons);
     } else {
         map.removeLayer(atmIcons);
@@ -520,7 +520,7 @@ atmCheckbox.addEventListener("change", function () {
 });
 
 helpPhoneCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(helpPhoneIcons);
     } else {
         map.removeLayer(helpPhoneIcons);
@@ -528,7 +528,7 @@ helpPhoneCheckbox.addEventListener("change", function () {
 });
 
 securityCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(securityIcons);
     } else {
         map.removeLayer(securityIcons);
@@ -536,7 +536,7 @@ securityCheckbox.addEventListener("change", function () {
 });
 
 defibCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(defibIcons);
     } else {
         map.removeLayer(defibIcons);
@@ -544,7 +544,7 @@ defibCheckbox.addEventListener("change", function () {
 });
 
 parentRoomCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(parentRoomIcons);
     } else {
         map.removeLayer(parentRoomIcons);
@@ -552,7 +552,7 @@ parentRoomCheckbox.addEventListener("change", function () {
 });
 
 infoCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(infoIcons);
     } else {
         map.removeLayer(infoIcons);
@@ -560,7 +560,7 @@ infoCheckbox.addEventListener("change", function () {
 });
 
 wellnessCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(wellnessIcons);
     } else {
         map.removeLayer(wellnessIcons);
@@ -568,7 +568,7 @@ wellnessCheckbox.addEventListener("change", function () {
 });
 
 showerCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(showerIcons);
     } else {
         map.removeLayer(showerIcons);
@@ -576,7 +576,7 @@ showerCheckbox.addEventListener("change", function () {
 });
 
 pwdCheckbox.addEventListener("change", function () {
-    if (this.checked && showOnMapCheckbox.checked) {
+    if (this.checked) {
         map.addLayer(pwdIcons);
     } else {
         map.removeLayer(pwdIcons);

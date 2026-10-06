@@ -687,7 +687,7 @@ async function callbacktest(campus) {
 
     // ------- Set POI Visibility -------
     
-    if (!showAllCheckbox.checked || !showOnMapCheckbox.checked) {
+    if (!showAllCheckbox.checked) {
         map.removeLayer(poiLayer);
         map.removeLayer(transportIcons);
         map.removeLayer(escooterIcons);
