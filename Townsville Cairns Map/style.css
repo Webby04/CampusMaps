@@ -411,23 +411,24 @@ body {
     position: relative;
 }
 
-.parking-header::after,
-.show-on-map-header::after {
+.parking-section {
+    position: relative;
+    padding-bottom: 8px;
+    margin-bottom: 6px;
+}
+
+.parking-section::after {
     content: "";
     position: absolute;
     left: 0;
     right: 0;
-    bottom: -6px;
+    bottom: 0;
     height: 2px;
     background-color: rgba(255, 255, 255, 0.2);
 }
 
 .show-on-map-header {
     margin-top: 16px;
-}
-
-.show-on-map-header::after {
-    display: none;
 }
 
 .parking-header .filter-controls,
