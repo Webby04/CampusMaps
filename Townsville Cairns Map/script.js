@@ -97,7 +97,15 @@ var buildingLabels = [];
 function addBuildingLabel(feature, layer) {
     var center = layer.getBounds().getCenter();
 
-    var buildingNumber = String(feature.properties.buildingTag);
+    var buildingNumber = feature.properties.buildingTag ??
+    feature.properties.buildingNumber; 
+
+    if (buildingNumber == null) {
+        return;
+    }
+    
+    buildingNumber = String(buildingNumber);
+
     var buildingName = feature.properties.buildingName;
 
     var label = L.marker(center, {
