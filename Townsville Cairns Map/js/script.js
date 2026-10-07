@@ -518,7 +518,7 @@ async function callbacktest(campus) {
                 return;
             }
 
-            if (type === "EV_CHARG") {
+            if (type === "EV_CHG") {
                 marker.addTo(evChargingIcons);
                 return;
             }
@@ -533,7 +533,7 @@ async function callbacktest(campus) {
                 return;
             }
             
-            if (type === "FOODBEV") {
+            if (type === "CAFE" || type === "KITCHENETTES" || type === "FOODBEV") {
                 marker.addTo(foodBevIcons);
                 return;
             }
@@ -568,7 +568,7 @@ async function callbacktest(campus) {
                 return;
             }
             
-            if (type === "WELLNESS") {
+            if (type === "COMGARDEN" || type === "WELLNESS") {
                 marker.addTo(wellnessIcons);
                 return;
             }
