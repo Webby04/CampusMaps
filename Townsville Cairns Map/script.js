@@ -4,7 +4,7 @@ var map = L.map('map', {
     maxBoundsViscosity: 1.0
 }).setView([-19.328, 146.756], 16);
 
-var campusLayers = L.featureGroup();
+var campusLayers = L.featureGroup().addTo(map);
 
 // ------- Styles -------
 const MAP_OBJECT_COLORS = {
@@ -89,7 +89,7 @@ function addParkingIcon(feature, layer) {
 
     L.marker(center, {
         icon: getParkingIcon(feature.properties.parkType)
-    }).addTo(map);
+    }).addTo(campusLayers);
 }
 
 var buildingLabels = [];
@@ -97,7 +97,15 @@ var buildingLabels = [];
 function addBuildingLabel(feature, layer) {
     var center = layer.getBounds().getCenter();
 
-    var buildingNumber = String(feature.properties.buildingNumber);
+    var buildingNumber = feature.properties.buildingTag ??
+    feature.properties.buildingNumber; 
+
+    if (buildingNumber == null) {
+        return;
+    }
+    
+    buildingNumber = String(buildingNumber);
+
     var buildingName = feature.properties.buildingName;
 
     var label = L.marker(center, {
@@ -116,64 +124,140 @@ function addBuildingLabel(feature, layer) {
     });
 }
 
-async function callbacktest() {
-    let creekJSON = await fetch("../data/mapsdata/tsv_creeks.json");
-    var creekLayer = L.geoJSON(await creekJSON.json(), {
+let campusLoadGeneration = 0;
+let zoomEndHandler = null;
+
+async function callbacktest(campus) {
+    const generation = ++campusLoadGeneration;
+
+    campusLayers.clearLayers();
+
+    buildingLabels.forEach(function(building) {
+        if (map.hasLayer(building.label)) {
+            map.removeLayer(building.label);
+        }
+    });
+
+    buildingLabels = [];
+
+    let creekJSON = await fetch(`../data/mapsdata/${campus}_creeks.json`);
+    let creekData = await creekJSON.json();
+    
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+    
+    var creekLayer = L.geoJSON(creekData, {
         style: MAP_OBJECT_STYLES.CREEK
-    }).addTo(map)
+    })
     campusLayers.addLayer(creekLayer)
 
-    let sportsfieldsJSON = await fetch("../data/mapsdata/tsv_sports_fields.json");
-    var sportsfieldsLayer = L.geoJSON(await sportsfieldsJSON.json(), {
+    let sportsfieldsJSON = await fetch(`../data/mapsdata/${campus}_sports_fields.json`);
+    let sportsfieldsData = await sportsfieldsJSON.json();
+    
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+    var sportsfieldsLayer = L.geoJSON(sportsfieldsData, {
         style: MAP_OBJECT_STYLES.SPORTS_FIELD
-    }).addTo(map)
+    })
     campusLayers.addLayer(sportsfieldsLayer)
 
-    let fencesJSON = await fetch("../data/mapsdata/tsv_fences.json");
-    var fencesLayer = L.geoJSON(await fencesJSON.json(), {
+    let fencesJSON = await fetch(`../data/mapsdata/${campus}_fences.json`);
+    let fencesData = await fencesJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var fencesLayer = L.geoJSON(fencesData, {
         style: MAP_OBJECT_STYLES.FENCE
-    }).addTo(map)
+    })
     campusLayers.addLayer(fencesLayer)
 
-    let roadareasJSON = await fetch("../data/mapsdata/tsv_road_areas.json");
-    var roadareasLayer = L.geoJSON(await roadareasJSON.json(), {
+    let roadareasJSON = await fetch(`../data/mapsdata/${campus}_road_areas.json`);
+    let roadareasData = await roadareasJSON.json();
+    
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var roadareasLayer = L.geoJSON(roadareasData, {
         style: MAP_OBJECT_STYLES.ROAD_AREA
-    }).addTo(map)
+    })
     campusLayers.addLayer(roadareasLayer)
 
-    let pathareasJSON = await fetch("../data/mapsdata/tsv_path_areas.json");
-    var pathareasLayer = L.geoJSON(await pathareasJSON.json(), {
+    let pathareasJSON = await fetch(`../data/mapsdata/${campus}_path_areas.json`);
+    let pathareasData = await pathareasJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var pathareasLayer = L.geoJSON(pathareasData, {
         style: MAP_OBJECT_STYLES.PATH_AREA
-    }).addTo(map)
+    })
     campusLayers.addLayer(pathareasLayer)
 
-    let pathcenterlinesJSON = await fetch("../data/mapsdata/tsv_path_center_lines.json");
-    var pathcenterlinesLayer = L.geoJSON(await pathcenterlinesJSON.json(), {
+    let pathcenterlinesJSON = await fetch(`../data/mapsdata/${campus}_path_center_lines.json`);
+    let pathcenterlinesData = await pathcenterlinesJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var pathcenterlinesLayer = L.geoJSON(pathcenterlinesData, {
         style: MAP_OBJECT_STYLES.PATH_CENTER_LINE
-    }).addTo(map)
+    })
     campusLayers.addLayer(pathcenterlinesLayer)
 
-    let parkingJSON = await fetch("../data/mapsdata/tsv_parking.json");
-    var parkingLayer = L.geoJSON(await parkingJSON.json(), {
+    let parkingJSON = await fetch(`../data/mapsdata/${campus}_parking.json`);
+    let parkingData = await parkingJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var parkingLayer = L.geoJSON(parkingData, {
         style: MAP_OBJECT_STYLES.PARKING,
         onEachFeature: addParkingIcon
-    }).addTo(map)
+    })
     campusLayers.addLayer(parkingLayer)
 
-    let naturepathsJSON = await fetch("../data/mapsdata/tsv_nature_paths.json");
-    var naturepathsLayer = L.geoJSON(await naturepathsJSON.json(), {
+    let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
+    let naturepathsData = await naturepathsJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var naturepathsLayer = L.geoJSON(naturepathsData, {
         style: MAP_OBJECT_STYLES.NATURE_PATH
-    }).addTo(map)
+    })
     campusLayers.addLayer(naturepathsLayer)
 
-    let buildingsJSON = await fetch("../data/mapsdata/tsv_buildings.json");
-    var FirstZoomBuildings = ["018", "026", "104", "134", "142", "500" ];
-    var SecondZoomBuildings = ["018", "026", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+    let buildingsJSON = await fetch(`../data/mapsdata/${campus}_buildings.json`);
+    let buildingsData = await buildingsJSON.json();
 
-    var buildingsLayer = L.geoJSON(await buildingsJSON.json(), {
+    var FirstZoomBuildings;
+    var SecondZoomBuildings;
+
+    if (campus ==="tsv") {
+        FirstZoomBuildings = ["18", "26", "104", "134", "142", "500" ];
+        SecondZoomBuildings = ["18", "26", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
+    } else if (campus ==="cns") {
+        FirstZoomBuildings = ["B1", "D3", "F1"];
+        SecondZoomBuildings = ["B1", "D3", "D4", "F1"];
+    }
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+
+    var buildingsLayer = L.geoJSON(buildingsData, {
         style: MAP_OBJECT_STYLES.BUILDING,
         onEachFeature: addBuildingLabel
-    }).addTo(map)
+    })
     campusLayers.addLayer(buildingsLayer)
 
     function updateBuildingLabels() {
@@ -238,10 +322,20 @@ async function callbacktest() {
     }
     updateBuildingLabels();
     
-    map.on("zoomend", updateBuildingLabels);
+    if (zoomEndHandler) {
+        map.off("zoomend", zoomEndHandler);
+    }
 
-    let poiJSON = await fetch("../data/mapsdata/tsv_poi.json");
-    var poiLayer = L.geoJSON(await poiJSON.json(), {
+    zoomEndHandler = updateBuildingLabels;
+    map.on("zoomend", zoomEndHandler);
+
+    let poiJSON = await fetch(`../data/mapsdata/${campus}_poi.json`);
+    let poiData = await poiJSON.json();
+
+    if (generation !== campusLoadGeneration)  {
+        return;
+    }
+    var poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
             var icon = getPOIIcon(feature.properties.type);
 
@@ -253,7 +347,7 @@ async function callbacktest() {
                 icon: icon
             });
         }
-    }).addTo(map);
+    })
     campusLayers.addLayer(poiLayer);
 
     var campusBounds = campusLayers.getBounds().pad(0.05);
@@ -263,7 +357,9 @@ async function callbacktest() {
     map.setMaxBounds(campusBounds);
 }
 
-callbacktest();
+callbacktest("tsv");
+
+document.querySelector('[data-campus="tsv"]').classList.add("selected");
 
 function getParkingIcon(parkType) {
     let iconClass;
@@ -390,3 +486,67 @@ function getPOIIcon(type) {
         iconAnchor: [15, 15]
     });
 }
+
+const mapSidebar = document.getElementById("map-sidebar");
+const menuButton = document.getElementById("menu-button");
+const closeButton = document.getElementById("close-button");
+const campusButtons = document.querySelectorAll(".campus-button");
+const campusOptions = document.querySelectorAll('input[name="campus"]');
+
+campusButtons.forEach(function(button) {
+    button.addEventListener("click", function() {
+        const campus = button.dataset.campus;
+
+        callbacktest(campus);
+
+        campusButtons.forEach(function(campusButton) {
+            campusButton.classList.remove("selected");
+            campusButton.setAttribute("aria-pressed", "false");
+        });
+
+        button.classList.add("selected");
+        button.setAttribute("aria-pressed", "true");
+
+        const radioButton = document.querySelector(
+            `input[name="campus"][value="${campus}"]`
+        );
+
+        if (radioButton) {
+            radioButton.checked = true;
+        }
+
+        mapSidebar.classList.remove("expanded");
+    });
+});
+
+campusOptions.forEach(function(option) {
+    option.addEventListener("click", function() {
+        const campus = option.value;
+
+        callbacktest(campus);
+
+        campusButtons.forEach(function(campusButton) {
+            campusButton.classList.remove("selected");
+            campusButton.setAttribute("aria-pressed", "false");
+        });
+
+        const selectedButton = document.querySelector(
+            `.campus-button[data-campus="${campus}"]`
+        );
+
+        if (selectedButton) {
+            selectedButton.classList.add("selected");
+            selectedButton.setAttribute("aria-pressed", "true");
+        }
+    });
+}); 
+
+menuButton.addEventListener("click", function () {
+    mapSidebar.classList.toggle("expanded");
+    map.invalidateSize();
+});
+
+closeButton.addEventListener("click", function () {
+    mapSidebar.classList.remove("expanded");
+    map.invalidateSize();
+});

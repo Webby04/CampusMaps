@@ -13,6 +13,52 @@
 
     </head>
     <body>
+        <div class="map-sidebar" id="map-sidebar">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Map Filters</span>
+                
+                <button class="sidebar-button menu-button" id="menu-button" aria-label="Open map filters">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+
+                
+                <button class="sidebar-button close-button" id="close-button" aria-label="Close map filters">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <button class="sidebar-button campus-button" data-campus="tsv" aria-pressed="true">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Townsville</span>
+            </button>
+
+            <button class="sidebar-button campus-button" data-campus="cns" aria-pressed="false">
+                <i class="fa-solid fa-location-dot"></i>
+                <span>Cairns</span>
+            </button>
+
+            <div class="campus-filter">
+                <h3>Campus</h3>
+
+                <label class="campus-option">
+                    <input type="radio" name="campus" value="tsv" checked>
+                    <span class="radio-custom"></span>
+                    <span>Townsville</span>
+                </label>
+                <label class="campus-option">
+                    <input type="radio" name="campus" value="cns">
+                    <span class="radio-custom"></span>
+                    <span>Cairns</span>
+                </label>
+
+                <hr>
+            </div>
+
+            <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">
+                <i class="fa-solid fa-gear"></i>
+            </button> -->
+        </div>
+    
         <div id="map"></div>
 
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
