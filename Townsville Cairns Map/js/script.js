@@ -48,37 +48,37 @@ function updateFilterVisibility() {
         map.removeLayer(parkingIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && freeParkingCheckbox.checked) {
+    if (showAllCheckbox.checked && freeParkingCheckbox.checked) {
         map.addLayer(freeParkingIcons);
     } else {
         map.removeLayer(freeParkingIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && freevPermitCheckbox.checked) {
+    if (showAllCheckbox.checked && freevPermitCheckbox.checked) {
         map.addLayer(freevPermitIcons);
     } else {
         map.removeLayer(freevPermitIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && paidAllDayCheckbox.checked) {
+    if (showAllCheckbox.checked && paidAllDayCheckbox.checked) {
         map.addLayer(paidAllDayIcons);
     } else {
         map.removeLayer(paidAllDayIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && paid4hrMaxCheckbox.checked) {
+    if (showAllCheckbox.checked && paid4hrMaxCheckbox.checked) {
         map.addLayer(paid4hrMaxIcons);
     } else {
         map.removeLayer(paid4hrMaxIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && residentialCheckbox.checked) {
+    if (showAllCheckbox.checked && residentialCheckbox.checked) {
         map.addLayer(residentialIcons);
     } else {
         map.removeLayer(residentialIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && premiumCheckbox.checked) {
+    if (showAllCheckbox.checked && premiumCheckbox.checked) {
         map.addLayer(premiumIcons);
     } else {
         map.removeLayer(premiumIcons);
@@ -86,31 +86,31 @@ function updateFilterVisibility() {
 
     // ------- Special Parking -------
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && commercialCheckbox.checked) {
+    if (showAllCheckbox.checked && commercialCheckbox.checked) {
         map.addLayer(commercialIcons);
     } else {
         map.removeLayer(commercialIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && reservedCheckbox.checked) {
+    if (showAllCheckbox.checked && reservedCheckbox.checked) {
         map.addLayer(reservedIcons);
     } else {
         map.removeLayer(reservedIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && loadingCheckbox.checked) {
+    if (showAllCheckbox.checked && loadingCheckbox.checked) {
         map.addLayer(loadingIcons);
     } else {
         map.removeLayer(loadingIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && visitorCheckbox.checked) {
+    if (showAllCheckbox.checked && visitorCheckbox.checked) {
         map.addLayer(visitorIcons);
     } else {
         map.removeLayer(visitorIcons);
     }
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && serviceCheckbox.checked) {
+    if (showAllCheckbox.checked && serviceCheckbox.checked) {
         map.addLayer(serviceIcons);
     } else {
         map.removeLayer(serviceIcons);
@@ -118,13 +118,13 @@ function updateFilterVisibility() {
 
     // ------- Motorcycle / Accessible -------
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked && motorcycleCheckbox.checked) {
+    if (showAllCheckbox.checked && motorcycleCheckbox.checked) {
         map.addLayer(motorcycleIcons);
     } else {
         map.removeLayer(motorcycleIcons);
     }
     
-    if (showAllCheckbox.checked && parkingCheckbox.checked && accessibleCheckbox.checked) {
+    if (showAllCheckbox.checked && accessibleCheckbox.checked) {
         map.addLayer(accessibleIcons);
     } else {
         map.removeLayer(accessibleIcons);
@@ -229,6 +229,48 @@ function updateFilterVisibility() {
         map.removeLayer(pwdIcons);
     }
 }
+
+// ------- Parent / Child Checkbox Synchronisation -------
+
+function updateParentCheckbox(parent, children) {
+    const checkedChildren = children.filter(child => child.checked).length;
+
+    if (checkedChildren === 0) {
+        parent.checked = false;
+        parent.indeterminate = false;
+    } else if (checkedChildren === children.length) {
+        parent.checked = true;
+        parent.indeterminate = false;
+    } else {
+        parent.checked = false;
+        parent.indeterminate = true;
+    }
+}
+
+const parkingChildren = [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, residentialCheckbox, premiumCheckbox];
+const specialParkingChildren = [commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox];
+const poiChildren = [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox, foodBevCheckbox, atmCheckbox, helpPhoneCheckbox, securityCheckbox, defibCheckbox, parentRoomCheckbox, infoCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox];
+
+parkingChildren.forEach(child => {
+    child.addEventListener('change', () => {
+        updateParentCheckbox(parkingCheckbox, parkingChildren);
+        updateFilterVisibility();
+    });
+});
+
+specialParkingChildren.forEach(child => {
+    child.addEventListener('change', () => {
+        updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
+        updateFilterVisibility();
+    });
+});
+
+poiChildren.forEach(child => {
+    child.addEventListener('change', () => {
+        updateParentCheckbox(poiCheckbox, poiChildren);
+        updateFilterVisibility();
+    });
+});
 
 // ------- Load Campus Data -------
 
