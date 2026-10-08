@@ -4,6 +4,12 @@ var map = L.map('map', {
     maxBoundsViscosity: 1.0
 }).setView([-19.328, 146.756], 16);
 
+// ------- User Location Pane -------
+
+map.createPane('accuracyPane');
+map.getPane('accuracyPane').style.zIndex = 450;
+map.getPane('accuracyPane').style.pointerEvents = 'none';
+
 var campusLayers = L.featureGroup().addTo(map);
 
 
