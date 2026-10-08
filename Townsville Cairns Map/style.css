@@ -568,3 +568,18 @@ body {
 .filter-poi-icon i {
     font-size: 18px;
 }
+
+/* ------- User Location ------- */
+
+.user-location-icon {
+    background: transparent;
+    border: none;
+}
+
+.user-location-dot {
+    width: 14px;
+    height: 14px;
+    background: #4285F4;
+    border-radius: 50%;
+    box-sizing: border-box;
+}
