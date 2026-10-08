@@ -5,10 +5,47 @@ var map = L.map('map', {
     zoomControl: false,
 }).setView([-19.328, 146.756], 16);
 
+
 // ------- Zoom Controls -------
 L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
+
+
+// ------- User Location Control -------
+
+const locateControl = L.control({
+    position: 'bottomright'
+});
+
+locateControl.onAdd = function() {
+    const button = L.DomUtil.create('button', 'user-location-button');
+
+    button.type = 'button';
+    button.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+    button.title = 'Centre map on your location';
+    button.setAttribute('aria-label', 'Centre map on your location');
+
+    L.DomEvent.disableClickPropagation(button);
+    L.DomEvent.disableScrollPropagation(button);
+
+
+    L.DomEvent.on(button, 'click', function() {
+        if (userLocationMarker) {
+            map.flyTo(userLocationMarker.getLatLng(), map.getZoom(), {
+                animate: true,
+                duration: 1
+            });
+        } else {
+            console.log("User location is not available yet.");
+        } 
+    });
+
+    return button;  
+};
+
+locateControl.addTo(map);
+
 
 // ------- User Location Pane -------
 

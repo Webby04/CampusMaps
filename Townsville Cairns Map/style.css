@@ -41,6 +41,31 @@ body {
     background: #005588;
 }
 
+/* ------- User Location Control ------- */
+
+.leaflet-container .user-location-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    background: #0069AA;
+    color: white;
+    border: none;
+    border-radius: 0;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.leaflet-container .user-location-button:hover {
+    background: #005588;
+}
+
+.leaflet-bottom.leaflet-right .user-location-button {
+    margin-bottom: 12px;
+}
+
 .map-sidebar.expanded + #map {
     margin-left: 350px;
 }
