@@ -17,23 +17,29 @@ function showUserLocation(latitude, longitude) {
     }
 }
 
-function getUserLocation() {
+function watchUserLocation() {
     if (!navigator.geolocation) {
         console.log("Geolocation is not supported by this browser.");
         return;
     }
 
-    navigator.geolocation.getCurrentPosition(
+    navigator.geolocation.watchPosition(
         (position) => {
             const latitude = position.coords.latitude;
             const longitude = position.coords.longitude;
 
             showUserLocation(latitude, longitude);
+
+            console.log("User location updated:", latitude, longitude);
         },
         (error) => {
             console.log("Error getting user location:", error);
+        },
+        {
+            enableHighAccuracy: true,
+            maximumAge: 0
         }
     );
 }
 
-getUserLocation();
+watchUserLocation();
