@@ -369,7 +369,15 @@ body {
 }
 
 .checkbox-container input {
-    display: none;
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+}
+
+.checkbox-container input:focus-visible + .checkmark {
+    outline: 2px solid white;
+    outline-offset: 2px;
 }
 
 .checkmark {
