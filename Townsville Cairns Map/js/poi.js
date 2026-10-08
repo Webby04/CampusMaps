@@ -1,4 +1,4 @@
-var poiLayer = null;
+var poiLayer = L.geoJSON();
 
 var transportIcons = createMarkerCluster();
 var escooterIcons = createMarkerCluster();
