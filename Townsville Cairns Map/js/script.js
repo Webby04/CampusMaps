@@ -36,6 +36,199 @@ function addBuildingLabel(feature, layer) {
     });
 }
 
+// ------- Filter Visibility -------
+
+function updateFilterVisibility() {
+    
+    // ------- Parking -------
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked) {
+        map.addLayer(parkingIcons);
+    } else {
+        map.removeLayer(parkingIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && freeParkingCheckbox.checked) {
+        map.addLayer(freeParkingIcons);
+    } else {
+        map.removeLayer(freeParkingIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && freevPermitCheckbox.checked) {
+        map.addLayer(freevPermitIcons);
+    } else {
+        map.removeLayer(freevPermitIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && paidAllDayCheckbox.checked) {
+        map.addLayer(paidAllDayIcons);
+    } else {
+        map.removeLayer(paidAllDayIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && paid4hrMaxCheckbox.checked) {
+        map.addLayer(paid4hrMaxIcons);
+    } else {
+        map.removeLayer(paid4hrMaxIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && residentialCheckbox.checked) {
+        map.addLayer(residentialIcons);
+    } else {
+        map.removeLayer(residentialIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && premiumCheckbox.checked) {
+        map.addLayer(premiumIcons);
+    } else {
+        map.removeLayer(premiumIcons);
+    }
+
+    // ------- Special Parking -------
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && commercialCheckbox.checked) {
+        map.addLayer(commercialIcons);
+    } else {
+        map.removeLayer(commercialIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && reservedCheckbox.checked) {
+        map.addLayer(reservedIcons);
+    } else {
+        map.removeLayer(reservedIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && loadingCheckbox.checked) {
+        map.addLayer(loadingIcons);
+    } else {
+        map.removeLayer(loadingIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && visitorCheckbox.checked) {
+        map.addLayer(visitorIcons);
+    } else {
+        map.removeLayer(visitorIcons);
+    }
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && specialParkingCheckbox.checked && serviceCheckbox.checked) {
+        map.addLayer(serviceIcons);
+    } else {
+        map.removeLayer(serviceIcons);
+    }
+
+    // ------- Motorcycle / Accessible -------
+
+    if (showAllCheckbox.checked && parkingCheckbox.checked && motorcycleCheckbox.checked) {
+        map.addLayer(motorcycleIcons);
+    } else {
+        map.removeLayer(motorcycleIcons);
+    }
+    
+    if (showAllCheckbox.checked && parkingCheckbox.checked && accessibleCheckbox.checked) {
+        map.addLayer(accessibleIcons);
+    } else {
+        map.removeLayer(accessibleIcons);
+    }
+
+    // ------- POIs -------
+
+    if (!showAllCheckbox.checked) {
+        map.removeLayer(poiLayer);
+    } else {
+        map.addLayer(poiLayer);
+    }
+    
+
+    if (showAllCheckbox.checked && transportCheckbox.checked) {
+        map.addLayer(transportIcons);
+    } else {
+        map.removeLayer(transportIcons);
+    }
+
+    if (showAllCheckbox.checked && escooterCheckbox.checked) {
+        map.addLayer(escooterIcons);
+    } else {
+        map.removeLayer(escooterIcons);
+    }
+
+    if (showAllCheckbox.checked && evChargingCheckbox.checked) {
+        map.addLayer(evChargingIcons);
+    } else {
+        map.removeLayer(evChargingIcons);
+    }
+
+    if (showAllCheckbox.checked && bikeCheckbox.checked) {
+        map.addLayer(bikeIcons);
+    } else {
+        map.removeLayer(bikeIcons);
+    }
+
+    if (showAllCheckbox.checked && bikewsCheckbox.checked) {
+        map.addLayer(bikewsIcons);
+    } else {
+        map.removeLayer(bikewsIcons);
+    }
+
+    if (showAllCheckbox.checked && foodBevCheckbox.checked) {
+        map.addLayer(foodBevIcons);
+    } else {
+        map.removeLayer(foodBevIcons);
+    }
+
+    if (showAllCheckbox.checked && atmCheckbox.checked) {
+        map.addLayer(atmIcons);
+    } else {
+        map.removeLayer(atmIcons);
+    }
+
+    if (showAllCheckbox.checked && helpPhoneCheckbox.checked) {
+        map.addLayer(helpPhoneIcons);
+    } else {
+        map.removeLayer(helpPhoneIcons);
+    }
+
+    if (showAllCheckbox.checked && securityCheckbox.checked) {
+        map.addLayer(securityIcons);
+    } else {
+        map.removeLayer(securityIcons);
+    }
+
+    if (showAllCheckbox.checked && defibCheckbox.checked) {
+        map.addLayer(defibIcons);
+    } else {
+        map.removeLayer(defibIcons);
+    }
+
+    if (showAllCheckbox.checked && parentRoomCheckbox.checked) {
+        map.addLayer(parentRoomIcons);
+    } else {
+        map.removeLayer(parentRoomIcons);
+    }
+
+    if (showAllCheckbox.checked && infoCheckbox.checked) {
+        map.addLayer(infoIcons);
+    } else {
+        map.removeLayer(infoIcons);
+    }
+
+    if (showAllCheckbox.checked && wellnessCheckbox.checked) {
+        map.addLayer(wellnessIcons);
+    } else {
+        map.removeLayer(wellnessIcons);
+    }
+
+    if (showAllCheckbox.checked && showerCheckbox.checked) {
+        map.addLayer(showerIcons);
+    } else {
+        map.removeLayer(showerIcons);
+    }
+
+    if (showAllCheckbox.checked && pwdCheckbox.checked) {
+        map.addLayer(pwdIcons);
+    } else {
+        map.removeLayer(pwdIcons);
+    }
+}
 
 // ------- Load Campus Data -------
 
@@ -607,215 +800,13 @@ async function callbacktest(campus) {
     map.setView(campusCenter, 16);
     map.setMaxBounds(campusBounds);
 
+    // ------- Update Filter Visibility -------
 
-    // ------- Set Parking Visibility -------
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked) {
-        map.removeLayer(parkingIcons);
-    } else {
-        map.addLayer(parkingIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !freeParkingCheckbox.checked) {
-        map.removeLayer(freeParkingIcons);
-    } else {
-        map.addLayer(freeParkingIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !freevPermitCheckbox.checked) {
-        map.removeLayer(freevPermitIcons);
-    } else {
-        map.addLayer(freevPermitIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !paidAllDayCheckbox.checked) {
-        map.removeLayer(paidAllDayIcons);
-    } else {
-        map.addLayer(paidAllDayIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !paid4hrMaxCheckbox.checked) {
-        map.removeLayer(paid4hrMaxIcons);
-    } else {
-        map.addLayer(paid4hrMaxIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !residentialCheckbox.checked) {
-        map.removeLayer(residentialIcons);
-    } else {
-        map.addLayer(residentialIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !premiumCheckbox.checked) {
-        map.removeLayer(premiumIcons);
-    } else {
-        map.addLayer(premiumIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!commercialCheckbox.checked) {
-        map.removeLayer(commercialIcons);
-    } else {
-        map.addLayer(commercialIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!reservedCheckbox.checked) {
-        map.removeLayer(reservedIcons);
-    } else {
-        map.addLayer(reservedIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!loadingCheckbox.checked) {
-        map.removeLayer(loadingIcons);
-    } else {
-        map.addLayer(loadingIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked ||!visitorCheckbox.checked) {
-        map.removeLayer(visitorIcons);
-    } else {
-        map.addLayer(visitorIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !specialParkingCheckbox.checked || !serviceCheckbox.checked) {
-        map.removeLayer(serviceIcons);
-    } else {
-        map.addLayer(serviceIcons);
-    }
-
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !motorcycleCheckbox.checked) {
-        map.removeLayer(motorcycleIcons);
-    } else {
-        map.addLayer(motorcycleIcons);
-    }
-    
-    if (!showAllCheckbox.checked || !parkingCheckbox.checked || !accessibleCheckbox.checked) {
-        map.removeLayer(accessibleIcons);
-    } else {
-        map.addLayer(accessibleIcons);
-    }
-
-
-    // ------- Set POI Visibility -------
-    
-    if (!showAllCheckbox.checked) {
-        map.removeLayer(poiLayer);
-        map.removeLayer(transportIcons);
-        map.removeLayer(escooterIcons);
-        map.removeLayer(evChargingIcons);
-        map.removeLayer(bikeIcons);
-        map.removeLayer(bikewsIcons);
-        map.removeLayer(foodBevIcons);
-        map.removeLayer(atmIcons);
-        map.removeLayer(helpPhoneIcons);
-        map.removeLayer(securityIcons);
-        map.removeLayer(defibIcons);
-        map.removeLayer(parentRoomIcons);
-        map.removeLayer(infoIcons);
-        map.removeLayer(wellnessIcons);
-        map.removeLayer(showerIcons);
-        map.removeLayer(pwdIcons);
-
-    } else {
-        map.addLayer(poiLayer);
-
-        if (transportCheckbox.checked) {
-            map.addLayer(transportIcons);
-        } else {
-            map.removeLayer(transportIcons);
-        }
-
-        if (escooterCheckbox.checked) {
-            map.addLayer(escooterIcons);
-        } else {
-            map.removeLayer(escooterIcons);
-        }
-
-        if (evChargingCheckbox.checked) {
-            map.addLayer(evChargingIcons);
-        } else {
-            map.removeLayer(evChargingIcons);
-        }
-
-        if (bikeCheckbox.checked) {
-            map.addLayer(bikeIcons);
-        } else {
-            map.removeLayer(bikeIcons);
-        }
-
-        if (bikewsCheckbox.checked) {
-            map.addLayer(bikewsIcons);
-        } else {
-            map.removeLayer(bikewsIcons);
-        }
-
-        if (foodBevCheckbox.checked) {
-            map.addLayer(foodBevIcons);
-        } else {
-            map.removeLayer(foodBevIcons);
-        }
-
-        if (atmCheckbox.checked) {
-            map.addLayer(atmIcons);
-        } else {
-            map.removeLayer(atmIcons);
-        }
-
-        if (helpPhoneCheckbox.checked) {
-            map.addLayer(helpPhoneIcons);
-        } else {
-            map.removeLayer(helpPhoneIcons);
-        }
-
-        if (securityCheckbox.checked) {
-            map.addLayer(securityIcons);
-        } else {
-            map.removeLayer(securityIcons);
-        }
-
-        if (defibCheckbox.checked) {
-            map.addLayer(defibIcons);
-        } else {
-            map.removeLayer(defibIcons);
-        }
-
-        if (parentRoomCheckbox.checked) {
-            map.addLayer(parentRoomIcons);
-        } else {
-            map.removeLayer(parentRoomIcons);
-        }
-
-        if (infoCheckbox.checked) {
-            map.addLayer(infoIcons);
-        } else {
-            map.removeLayer(infoIcons);
-        }
-
-        if (wellnessCheckbox.checked) {
-            map.addLayer(wellnessIcons);
-        } else {
-            map.removeLayer(wellnessIcons);
-        }
-
-        if (showerCheckbox.checked) {
-            map.addLayer(showerIcons);
-        } else {
-            map.removeLayer(showerIcons);
-        }
-
-        if (pwdCheckbox.checked) {
-            map.addLayer(pwdIcons);
-        } else {
-            map.removeLayer(pwdIcons);
-        }
-    }
-
-    if (!showAllCheckbox.checked) {
-        map.removeLayer(poiLayer);
-    }
+    updateFilterVisibility();
 }
 
 
-// ------- Campus Filter Visibility -------
+    // ------- Campus Filter Visibility -------
 
     function updateCampusFilters(parkingData, poiData) {
 

@@ -153,69 +153,7 @@ showAllCheckbox.addEventListener("change", function () {
     showerCheckbox.checked = this.checked;
     pwdCheckbox.checked = this.checked;
 
-    if (this.checked) {
-        map.addLayer(parkingIcons);
-        map.addLayer(freeParkingIcons);
-        map.addLayer(freevPermitIcons);
-        map.addLayer(paidAllDayIcons);
-        map.addLayer(paid4hrMaxIcons);
-        map.addLayer(residentialIcons);
-        map.addLayer(premiumIcons);
-        map.addLayer(commercialIcons);
-        map.addLayer(reservedIcons);
-        map.addLayer(loadingIcons);
-        map.addLayer(visitorIcons);
-        map.addLayer(serviceIcons);
-        map.addLayer(motorcycleIcons);
-        map.addLayer(accessibleIcons);
-        map.addLayer(transportIcons);
-        map.addLayer(escooterIcons);
-        map.addLayer(evChargingIcons);
-        map.addLayer(bikeIcons);
-        map.addLayer(bikewsIcons);
-        map.addLayer(foodBevIcons);
-        map.addLayer(atmIcons);
-        map.addLayer(helpPhoneIcons);
-        map.addLayer(securityIcons);
-        map.addLayer(defibIcons);
-        map.addLayer(parentRoomIcons);
-        map.addLayer(infoIcons);
-        map.addLayer(wellnessIcons);
-        map.addLayer(showerIcons);
-        map.addLayer(pwdIcons);
-        map.addLayer(poiLayer);
-    } else {
-        map.removeLayer(parkingIcons);
-        map.removeLayer(freeParkingIcons);  
-        map.removeLayer(freevPermitIcons);
-        map.removeLayer(paidAllDayIcons);
-        map.removeLayer(paid4hrMaxIcons);
-        map.removeLayer(residentialIcons);
-        map.removeLayer(premiumIcons);
-        map.removeLayer(commercialIcons);
-        map.removeLayer(reservedIcons);
-        map.removeLayer(loadingIcons);
-        map.removeLayer(visitorIcons);
-        map.removeLayer(serviceIcons);
-        map.removeLayer(motorcycleIcons);
-        map.removeLayer(accessibleIcons);
-        map.removeLayer(transportIcons);
-        map.removeLayer(escooterIcons);
-        map.removeLayer(evChargingIcons);
-        map.removeLayer(bikeIcons);
-        map.removeLayer(bikewsIcons);
-        map.removeLayer(foodBevIcons);
-        map.removeLayer(atmIcons);
-        map.removeLayer(helpPhoneIcons);
-        map.removeLayer(securityIcons);
-        map.removeLayer(defibIcons);
-        map.removeLayer(parentRoomIcons);
-        map.removeLayer(infoIcons);
-        map.removeLayer(wellnessIcons);
-        map.removeLayer(showerIcons);
-        map.removeLayer(pwdIcons);
-        map.removeLayer(poiLayer);
-    }
+    updateFilterVisibility();
 });
 
 
@@ -237,37 +175,7 @@ parkingCheckbox.addEventListener("change", function () {
     motorcycleCheckbox.checked = this.checked;
     accessibleCheckbox.checked = this.checked;
 
-    if (this.checked) {
-        map.addLayer(parkingIcons);
-        map.addLayer(freeParkingIcons);
-        map.addLayer(freevPermitIcons);
-        map.addLayer(paidAllDayIcons);
-        map.addLayer(paid4hrMaxIcons);
-        map.addLayer(residentialIcons);
-        map.addLayer(premiumIcons);
-        map.addLayer(commercialIcons);
-        map.addLayer(reservedIcons);
-        map.addLayer(loadingIcons);
-        map.addLayer(visitorIcons);
-        map.addLayer(serviceIcons);
-        map.addLayer(motorcycleIcons);
-        map.addLayer(accessibleIcons);
-    } else {
-        map.removeLayer(parkingIcons);
-        map.removeLayer(freeParkingIcons);
-        map.removeLayer(freevPermitIcons);
-        map.removeLayer(paidAllDayIcons);
-        map.removeLayer(paid4hrMaxIcons);
-        map.removeLayer(residentialIcons);
-        map.removeLayer(premiumIcons);
-        map.removeLayer(commercialIcons);
-        map.removeLayer(reservedIcons);
-        map.removeLayer(loadingIcons);
-        map.removeLayer(visitorIcons);
-        map.removeLayer(serviceIcons);
-        map.removeLayer(motorcycleIcons);
-        map.removeLayer(accessibleIcons);
-    }
+    updateFilterVisibility();
 });
 
 
@@ -291,90 +199,32 @@ showOnMapCheckbox.addEventListener("change", function () {
     showerCheckbox.checked = this.checked;
     pwdCheckbox.checked = this.checked;
 
-    if (this.checked) {
-        map.addLayer(poiLayer);
-        map.addLayer(transportIcons);
-        map.addLayer(escooterIcons);
-        map.addLayer(evChargingIcons);
-        map.addLayer(bikeIcons);
-        map.addLayer(bikewsIcons);
-        map.addLayer(foodBevIcons);
-        map.addLayer(atmIcons);
-        map.addLayer(helpPhoneIcons);
-        map.addLayer(securityIcons);
-        map.addLayer(defibIcons);
-        map.addLayer(parentRoomIcons);
-        map.addLayer(infoIcons);
-        map.addLayer(wellnessIcons);
-        map.addLayer(showerIcons);
-        map.addLayer(pwdIcons);
-    } else {
-        map.removeLayer(poiLayer);
-        map.removeLayer(transportIcons);
-        map.removeLayer(escooterIcons);
-        map.removeLayer(evChargingIcons);
-        map.removeLayer(bikeIcons);
-        map.removeLayer(bikewsIcons);
-        map.removeLayer(foodBevIcons);
-        map.removeLayer(atmIcons);
-        map.removeLayer(helpPhoneIcons);
-        map.removeLayer(securityIcons);
-        map.removeLayer(defibIcons);
-        map.removeLayer(parentRoomIcons);
-        map.removeLayer(infoIcons);
-        map.removeLayer(wellnessIcons);
-        map.removeLayer(showerIcons);
-        map.removeLayer(pwdIcons);
-    }
+    updateFilterVisibility();
 });
 
 // ------- Individual Parking Filters -------
 
 freeParkingCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(freeParkingIcons);
-    } else {
-        map.removeLayer(freeParkingIcons);
-    }
+    updateFilterVisibility();
 });
 
 freevPermitCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(freevPermitIcons);
-    } else {
-        map.removeLayer(freevPermitIcons);
-    }
+    updateFilterVisibility();
 });
 
 paidAllDayCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(paidAllDayIcons);
-    } else {
-        map.removeLayer(paidAllDayIcons);
-    }
+    updateFilterVisibility();
 });
 
 paid4hrMaxCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(paid4hrMaxIcons);
-    } else {
-        map.removeLayer(paid4hrMaxIcons);
-    }
+    updateFilterVisibility();
 });
 residentialCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(residentialIcons);
-    } else {
-        map.removeLayer(residentialIcons);
-    }
+    updateFilterVisibility();
 });
 
 premiumCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(premiumIcons);
-    } else {
-        map.removeLayer(premiumIcons);
-    }
+    updateFilterVisibility();
 });
 
 // ------- Special Parking -------
@@ -386,201 +236,101 @@ specialParkingCheckbox.addEventListener("change", function () {
     visitorCheckbox.checked = this.checked;
     serviceCheckbox.checked = this.checked;
 
-    if (this.checked) {
-        map.addLayer(commercialIcons);
-        map.addLayer(reservedIcons);
-        map.addLayer(loadingIcons);
-        map.addLayer(visitorIcons);
-        map.addLayer(serviceIcons);
-    } else {
-        map.removeLayer(commercialIcons);
-        map.removeLayer(reservedIcons);
-        map.removeLayer(loadingIcons);
-        map.removeLayer(visitorIcons);
-        map.removeLayer(serviceIcons);
-    }
+    updateFilterVisibility();
 });
 
 commercialCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(commercialIcons);
-    } else {
-        map.removeLayer(commercialIcons);
-    }
+    updateFilterVisibility();
 });
 
 reservedCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(reservedIcons);
-    } else {
-        map.removeLayer(reservedIcons);
-    }
+    updateFilterVisibility();
 });
 
 loadingCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(loadingIcons);
-    } else {
-        map.removeLayer(loadingIcons);
-    }
+    updateFilterVisibility();
 });
 
 visitorCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(visitorIcons);
-    } else {
-        map.removeLayer(visitorIcons);
-    }
+    updateFilterVisibility();
 });
 
 serviceCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(serviceIcons);
-    } else {
-        map.removeLayer(serviceIcons);
-    }
+    updateFilterVisibility();
 });
 
 
 // ------- Motorcycle and Accessible -------
 
 motorcycleCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(motorcycleIcons);
-    } else {
-        map.removeLayer(motorcycleIcons);
-    }
+    updateFilterVisibility();
 });
 
 accessibleCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(accessibleIcons);
-    } else {
-        map.removeLayer(accessibleIcons);
-    }
+    updateFilterVisibility();
 });
 
 
 // ------- Show on the Map -------
 
 transportCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(transportIcons);
-    } else {
-        map.removeLayer(transportIcons);
-    }
+    updateFilterVisibility();
 });
 
 escooterCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(escooterIcons);
-    } else {
-        map.removeLayer(escooterIcons);
-    }
+    updateFilterVisibility();
 });
 
 evChargingCheckbox.addEventListener("change", function () {
-    if (this.checked ) {
-        map.addLayer(evChargingIcons);
-    } else {
-        map.removeLayer(evChargingIcons);
-    }
+    updateFilterVisibility();
 });
 
 bikeCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(bikeIcons);
-    } else {
-        map.removeLayer(bikeIcons);
-    }
+    updateFilterVisibility();
 });
 
 bikewsCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(bikewsIcons);
-    } else {
-        map.removeLayer(bikewsIcons);
-    }
+    updateFilterVisibility();
 });
 
 foodBevCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(foodBevIcons);
-    } else {
-        map.removeLayer(foodBevIcons);
-    }
+    updateFilterVisibility();
 });
 
 atmCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(atmIcons);
-    } else {
-        map.removeLayer(atmIcons);
-    }
+    updateFilterVisibility();
 });
 
 helpPhoneCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(helpPhoneIcons);
-    } else {
-        map.removeLayer(helpPhoneIcons);
-    }
+    updateFilterVisibility();
 });
 
 securityCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(securityIcons);
-    } else {
-        map.removeLayer(securityIcons);
-    }
+    updateFilterVisibility();
 });
 
 defibCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(defibIcons);
-    } else {
-        map.removeLayer(defibIcons);
-    }
+    updateFilterVisibility();
 });
 
 parentRoomCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(parentRoomIcons);
-    } else {
-        map.removeLayer(parentRoomIcons);
-    }
+    updateFilterVisibility();
 });
 
 infoCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(infoIcons);
-    } else {
-        map.removeLayer(infoIcons);
-    }
+    updateFilterVisibility();
 });
 
 wellnessCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(wellnessIcons);
-    } else {
-        map.removeLayer(wellnessIcons);
-    }
+    updateFilterVisibility();
 });
 
 showerCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(showerIcons);
-    } else {
-        map.removeLayer(showerIcons);
-    }
+    updateFilterVisibility();
 });
 
 pwdCheckbox.addEventListener("change", function () {
-    if (this.checked) {
-        map.addLayer(pwdIcons);
-    } else {
-        map.removeLayer(pwdIcons);
-    }
+    updateFilterVisibility();
 });
 
 
