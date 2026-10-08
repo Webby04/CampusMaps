@@ -7,6 +7,40 @@ body {
     margin-left: 60px;
 }
 
+.leaflet-container .leaflet-control-zoom {
+    border: none;
+    box-shadow: none;
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.leaflet-container .leaflet-control-zoom a {
+    display: block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    font-size: 26px;
+    font-weight: normal;
+    color: white;
+    background: #0069AA;
+    border: none;
+    border-radius: 0;
+}
+
+.leaflet-container .leaflet-control-zoom-in {
+    margin-bottom: 4px;
+}
+
+.leaflet-container .leaflet-control-zoom a.leaflet-disabled {
+    background: #8C9199;
+    color: white;
+    cursor: default;
+}
+
+.leaflet-container .leaflet-control-zoom a:not(.leaflet-disabled):hover {
+    background: #005588;
+}
+
 .map-sidebar.expanded + #map {
     margin-left: 350px;
 }

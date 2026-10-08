@@ -1,8 +1,14 @@
 var map = L.map('map', {
     minZoom: 16,
     maxZoom: 19,
-    maxBoundsViscosity: 1.0
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
 }).setView([-19.328, 146.756], 16);
+
+// ------- Zoom Controls -------
+L.control.zoom({
+    position: 'bottomright'
+}).addTo(map);
 
 // ------- User Location Pane -------
 
