@@ -485,6 +485,8 @@ async function callbacktest(campus) {
         return;
     }
 
+    updateCampusFilters(parkingData, poiData);
+
     poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
             var type = feature.properties.type;
@@ -804,6 +806,82 @@ async function callbacktest(campus) {
     }
 }
 
+
+// ------- Campus Filter Visibility -------
+
+    function updateCampusFilters(parkingData, poiData) {
+
+        const parkingTypes = new Set(
+            parkingData.features.map(feature => feature.properties.parkType)
+        );
+
+        const poiTypes = new Set(
+            poiData.features.map(feature => feature.properties.type)
+        );
+
+        function updateFilter(checkbox, available) {
+            
+            const filterElement = checkbox.closest(
+                ".parking-option, .special-parking-option, .show-on-the-map-option"
+            );
+
+            if (filterElement) {
+                filterElement.style.display = available ? "" : "none";
+            }
+
+            checkbox.disabled = !available;
+        }
+
+        // ------- Parking Filters -------
+
+        updateFilter(freeParkingCheckbox, parkingTypes.has("FREE"));
+        updateFilter(freevPermitCheckbox, parkingTypes.has("FREEVPERMIT"));
+        updateFilter(paidAllDayCheckbox, parkingTypes.has("PAID-ALL"));
+        updateFilter(paid4hrMaxCheckbox, parkingTypes.has("PAID-4HR"));
+        updateFilter(residentialCheckbox, parkingTypes.has("RESIDENTIAL"));
+        updateFilter(premiumCheckbox, parkingTypes.has("CEL-PREM"));
+
+        // ------- Special Parking Filters -------
+
+        updateFilter(commercialCheckbox, parkingTypes.has("COMMERCIAL"));
+        updateFilter(reservedCheckbox, parkingTypes.has("RESERVED"));
+        updateFilter(loadingCheckbox, parkingTypes.has("LOADING"));
+        updateFilter(visitorCheckbox, parkingTypes.has("VISITOR"));
+        updateFilter(serviceCheckbox, parkingTypes.has("SERVICE"));
+
+        // ------- Motorcycle and Accessible -------
+
+        updateFilter(motorcycleCheckbox, poiTypes.has("MOTORC"));
+        updateFilter(accessibleCheckbox, poiTypes.has("ACCPARK"));
+
+        // ------- POI Filters -------
+
+        updateFilter(transportCheckbox, poiTypes.has("TRANS"));
+        updateFilter(escooterCheckbox, poiTypes.has("ESCOOTER"));
+        updateFilter(evChargingCheckbox, poiTypes.has("EV_CHG"));
+        updateFilter(bikeCheckbox, poiTypes.has("BIKE"));
+        updateFilter(bikewsCheckbox, poiTypes.has("BIKEWS"));
+
+        updateFilter(
+            foodBevCheckbox,
+            ["CAFE", "KITCHENETTES", "FOODBEV"].some(type => poiTypes.has(type))
+        );
+
+        updateFilter(atmCheckbox, poiTypes.has("ATM"));
+        updateFilter(helpPhoneCheckbox, poiTypes.has("HELPPHONE"));
+        updateFilter(securityCheckbox, poiTypes.has("SECURITY"));
+        updateFilter(defibCheckbox, poiTypes.has("DEFIB"));
+        updateFilter(parentRoomCheckbox, poiTypes.has("PARENT"));
+        updateFilter(infoCheckbox, poiTypes.has("INFO"));
+
+        updateFilter(
+            wellnessCheckbox,
+            ["COMGARDEN", "WELLNESS"].some(type => poiTypes.has(type))
+        );
+
+        updateFilter(showerCheckbox, poiTypes.has("SHWR"));
+        updateFilter(pwdCheckbox, poiTypes.has("PWD"));
+    }
 
 // ------- Load Initial Campus -------
 
