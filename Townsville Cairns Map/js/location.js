@@ -27,7 +27,7 @@ function showLocationPopup() {
     overlay.id = "location-warning-overlay";
     overlay.className = "location-warning-overlay";
     
-    overlay.innerHTML = `<div class="location-warning-popup" role="dialog" aria-modal="true" aria-labelledby="location-warning-title">
+    overlay.innerHTML = `<div class="location-warning-popup" role="dialog" aria-modal="true" aria-labelledby="location-warning-title" tabindex="-1">
         <button class="location-warning-close" type="button" aria-label="Close popup">&times;</button>
         <h2 id="location-warning-title">Location unavailable</h2>
         <p>Your current location is outside the selected campus boundaries. Location features are only available within the campus map area.</p>
@@ -35,13 +35,47 @@ function showLocationPopup() {
 
     document.body.appendChild(overlay);
     
-    overlay.querySelector(".location-warning-close").addEventListener("click", () => {
-        overlay.remove();
-    });
+    const dialog = overlay.querySelector(".location-warning-popup");
+    const closeButton = dialog.querySelector(".location-warning-close");
+    const locateButton = document.querySelector(".user-location-button");
+    const mapElement = document.getElementById("map");
 
+    // Move keyboard focus into the popup
+    dialog.focus();
+
+    function closeLocationPopup() {
+        overlay.remove();
+        outsidePopupShown = false;
+
+        // Return focus to a visible element
+        if (locateButton && locateButton.getClientRects().length > 0) {
+            locateButton.focus();
+        } else if (mapElement) {
+            mapElement.setAttribute("tabindex", "-1");
+            mapElement.focus();
+        }
+    }
+
+    // Close when the close button is clicked
+    closeButton.addEventListener("click", closeLocationPopup);
+
+    // Close on Escape and keep focus inside the dialog
+    dialog.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            event.preventDefault();
+            closeLocationPopup();
+        }
+
+        if (event.key === "Tab") {
+            event.preventDefault();
+            closeButton.focus();
+        }
+    });
+    
+    // Close when clicking the overlay outside the popup
     overlay.addEventListener("click", (event) => {
         if (event.target === overlay) {
-            overlay.remove();
+            closeLocationPopup();
         }
     });
 }
