@@ -29,6 +29,8 @@ function showUserLocation(latitude, longitude, accuracy) {
             interactive: false
         }).addTo(map);
     }
+
+    updateLocateButton();
 }
 
 function watchUserLocation() {

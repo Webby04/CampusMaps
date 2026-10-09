@@ -18,11 +18,36 @@ const locateControl = L.control({
     position: 'bottomright'
 });
 
+function updateLocateButton() {
+    const button = document.querySelector('.user-location-button');
+
+    if (!button) return;
+
+    if (!userLocationMarker) {
+        button.classList.add('not-centered');
+        button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
+        return;
+    }
+
+    const mapCenter = map.getCenter();
+    const userLocation = userLocationMarker.getLatLng();
+
+    const isCentered = mapCenter.distanceTo(userLocation) <= 10;
+    
+    if (isCentered) {
+        button.classList.remove('not-centered');
+        button.innerHTML = '<span class="material-symbols-outlined">my_location</span>';
+    } else {
+        button.classList.add('not-centered');
+        button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
+    }
+}
+
 locateControl.onAdd = function() {
     const button = L.DomUtil.create('button', 'user-location-button');
 
     button.type = 'button';
-    button.innerHTML = '<i class="fa-solid fa-location-crosshairs"></i>';
+    button.innerHTML = '<span class="material-symbols-outlined">my_location</span>';
     button.title = 'Centre map on your location';
     button.setAttribute('aria-label', 'Centre map on your location');
 
@@ -31,20 +56,24 @@ locateControl.onAdd = function() {
 
 
     L.DomEvent.on(button, 'click', function() {
-        if (userLocationMarker) {
-            map.flyTo(userLocationMarker.getLatLng(), map.getZoom(), {
-                animate: true,
-                duration: 1
-            });
-        } else {
+        if (!userLocationMarker) {
             console.log("User location is not available yet.");
-        } 
+            return;
+        }
+
+        map.stop();
+
+        map.setView(userLocationMarker.getLatLng(), 18, {
+            animate: true
+        });
     });
 
     return button;  
 };
 
 locateControl.addTo(map);
+
+map.on('moveend zoomend', updateLocateButton);
 
 
 // ------- User Location Pane -------

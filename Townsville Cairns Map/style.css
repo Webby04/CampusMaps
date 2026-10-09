@@ -66,6 +66,22 @@ body {
     margin-bottom: 12px;
 }
 
+.leaflet-container .user-location-button.not-centered {
+    background: #8C9199;
+}
+
+.leaflet-container .user-location-button.not-centered:hover {
+    background: #737982;
+}
+
+.leaflet-container .user-location-button.not-centered i {
+    display: none;
+}
+
+.leaflet-container .user-location-button.not-centered {
+    position: relative;
+}
+
 .map-sidebar.expanded + #map {
     margin-left: 350px;
 }
