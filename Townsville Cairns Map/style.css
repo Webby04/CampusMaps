@@ -397,13 +397,27 @@ body {
     border-color: #fff1a6;
 }
 
-.checkbox-container input:checked +.checkmark::after {
+.checkbox-container input:checked + .checkmark::after {
     content: "";
     width: 5px;
     height: 10px;
     border: solid #0072b8;
     border-width: 0 4px 4px 0;
     transform: rotate(45deg);
+}
+
+.checkbox-container input:indeterminate + .checkmark {
+    background-color: #fff1a6;
+    border-color: #fff1a6;
+}
+
+.checkbox-container input:indeterminate + .checkmark::after {
+    content: "";
+    width: 10px;
+    height: 3px;
+    background-color: #0072b8;
+    border: none;
+    transform: none;
 }
 
 .hidden {
