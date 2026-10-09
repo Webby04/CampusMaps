@@ -71,7 +71,7 @@ function showLocationPopup() {
             closeButton.focus();
         }
     });
-    
+
     // Close when clicking the overlay outside the popup
     overlay.addEventListener("click", (event) => {
         if (event.target === overlay) {
@@ -170,6 +170,7 @@ function watchUserLocation() {
         },
         (error) => {
             console.log("Error getting user location:", error);
+            navigator.geolocation.clearWatch(locationWatcherId);
             locationWatcherId = null;
         },
         {
