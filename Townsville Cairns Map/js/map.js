@@ -83,6 +83,7 @@ map.getPane('accuracyPane').style.zIndex = 450;
 map.getPane('accuracyPane').style.pointerEvents = 'none';
 
 var campusLayers = L.featureGroup().addTo(map);
+var campusBounds = null;
 
 
 // ------- Marker Cluster -------

@@ -836,11 +836,15 @@ async function callbacktest(campus) {
 
     // ------- Campus Bounds -------
 
-    var campusBounds = campusLayers.getBounds().pad(0.05);
+    campusBounds = campusLayers.getBounds().pad(0.05);
     var campusCenter = campusBounds.getCenter();
 
     map.setView(campusCenter, 16);
     map.setMaxBounds(campusBounds);
+
+    if (typeof checkUserLocationAgainstCampus === "function") {
+        checkUserLocationAgainstCampus();
+    }
 
     // ------- Update Filter Visibility -------
 
