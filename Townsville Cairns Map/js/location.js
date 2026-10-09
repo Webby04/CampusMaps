@@ -46,7 +46,6 @@ function showLocationPopup() {
 
     function closeLocationPopup() {
         overlay.remove();
-        outsidePopupShown = false;
 
         // Return focus to a visible element
         if (locateButton && locateButton.getClientRects().length > 0) {
