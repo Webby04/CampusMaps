@@ -180,6 +180,11 @@ function watchUserLocation() {
             console.log("Error getting user location:", error);
             navigator.geolocation.clearWatch(locationWatcherId);
             locationWatcherId = null;
+
+            centerMapLocationFound = false;
+            updateLocateButton();
+
+            alert("Unable to access your location. Please check your browser permissions and try again.");
         },
         {
             enableHighAccuracy: true,
