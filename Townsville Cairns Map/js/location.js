@@ -6,6 +6,8 @@ let userAccuracyCircle = null;
 let lastUserPosition = null;
 let outsidePopupShown = false;
 
+let locationWatcherId = null;
+
 function updateLocateButtonVisibility(isInsideCampus) {
     const locateButton = document.querySelector(".user-location-button");
 
@@ -113,13 +115,16 @@ function showUserLocation(latitude, longitude, accuracy) {
     updateLocateButton();
 }
 
+
 function watchUserLocation() {
     if (!navigator.geolocation) {
         console.log("Geolocation is not supported by this browser.");
         return;
     }
 
-    navigator.geolocation.watchPosition(
+    if (locationWatcherId !== null) return;
+
+    locationWatcherId = navigator.geolocation.watchPosition(
         (position) => {
             lastUserPosition = {
                 latitude: position.coords.latitude,
@@ -131,6 +136,7 @@ function watchUserLocation() {
         },
         (error) => {
             console.log("Error getting user location:", error);
+            locationWatcherId = null;
         },
         {
             enableHighAccuracy: true,
@@ -138,5 +144,3 @@ function watchUserLocation() {
         }
     );
 }
-
-watchUserLocation();
