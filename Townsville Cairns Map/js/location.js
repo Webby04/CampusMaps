@@ -6,6 +6,14 @@ let userAccuracyCircle = null;
 let lastUserPosition = null;
 let outsidePopupShown = false;
 
+function updateLocateButtonVisibility(isInsideCampus) {
+    const locateButton = document.querySelector(".user-location-button");
+
+    if (!locateButton) return;
+
+    locateButton.style.display = isInsideCampus ? "" : "none";
+}
+
 function showLocationPopup() {
     if (outsidePopupShown) return;
 
@@ -59,9 +67,12 @@ function checkUserLocationAgainstCampus() {
 
     if (!isInsideCampus) {
         removeUserLocation();
+        updateLocateButtonVisibility(false);
         showLocationPopup();
-        return
+        return;
     }
+
+    updateLocateButtonVisibility(true);
 
     outsidePopupShown = false;
 
