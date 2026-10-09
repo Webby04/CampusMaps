@@ -182,7 +182,9 @@ function watchUserLocation() {
             locationWatcherId = null;
 
             centerMapLocationFound = false;
-            updateLocateButton();
+            lastUserPosition = null;
+            removeUserLocation();
+            updateLocateButtonVisibility(true);
 
             alert("Unable to access your location. Please check your browser permissions and try again.");
         },
