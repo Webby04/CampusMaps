@@ -7,6 +7,7 @@ let lastUserPosition = null;
 let outsidePopupShown = false;
 
 let locationWatcherId = null;
+let centerMapLocationFound = false;
 
 function updateLocateButtonVisibility(isInsideCampus) {
     const locateButton = document.querySelector(".user-location-button");
@@ -167,6 +168,14 @@ function watchUserLocation() {
             };
             
             checkUserLocationAgainstCampus();
+
+            if (centerMapLocationFound && userLocationMarker) {
+                centerMapLocationFound = false;
+
+                map.setView(userLocationMarker.getLatLng(), 18, {
+                    animate: true
+                });
+            }
         },
         (error) => {
             console.log("Error getting user location:", error);

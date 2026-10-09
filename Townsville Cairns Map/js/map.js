@@ -46,10 +46,6 @@ function updateLocateButton() {
 locateControl.onAdd = function() {
     const button = L.DomUtil.create('button', 'user-location-button not-centered');
 
-    button.addEventListener('click', () => {
-        watchUserLocation();
-    });
-
     button.type = 'button';
     button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
     button.title = 'Centre map on your location';
@@ -61,7 +57,8 @@ locateControl.onAdd = function() {
 
     L.DomEvent.on(button, 'click', function() {
         if (!userLocationMarker) {
-            console.log("User location is not available yet.");
+            centerMapLocationFound = true;
+            watchUserLocation();
             return;
         }
 
