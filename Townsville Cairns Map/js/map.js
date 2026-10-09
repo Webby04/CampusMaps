@@ -44,14 +44,14 @@ function updateLocateButton() {
 }
 
 locateControl.onAdd = function() {
-    const button = L.DomUtil.create('button', 'user-location-button');
+    const button = L.DomUtil.create('button', 'user-location-button not-centered');
 
     button.addEventListener('click', () => {
         watchUserLocation();
     });
 
     button.type = 'button';
-    button.innerHTML = '<span class="material-symbols-outlined">my_location</span>';
+    button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
     button.title = 'Centre map on your location';
     button.setAttribute('aria-label', 'Centre map on your location');
 
