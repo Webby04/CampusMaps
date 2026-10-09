@@ -267,7 +267,7 @@ specialParkingChildren.forEach(child => {
 
 poiChildren.forEach(child => {
     child.addEventListener('change', () => {
-        updateParentCheckbox(poiCheckbox, poiChildren);
+        updateParentCheckbox(showOnMapCheckbox, poiChildren);
         updateFilterVisibility();
     });
 });
