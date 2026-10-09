@@ -247,11 +247,11 @@ function updateParentCheckbox(parent, children) {
     }
 }
 
-const parkingChildren = [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, residentialCheckbox, premiumCheckbox];
 const specialParkingChildren = [commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox];
+const parkingChildren = [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, residentialCheckbox, premiumCheckbox, ...specialParkingChildren, motorcycleCheckbox, accessibleCheckbox];
 const poiChildren = [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox, foodBevCheckbox, atmCheckbox, helpPhoneCheckbox, securityCheckbox, defibCheckbox, parentRoomCheckbox, infoCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox];
 
-parkingChildren.forEach(child => {
+[...parkingChildren, specialParkingCheckbox].forEach(child => {
     child.addEventListener('change', () => {
         updateParentCheckbox(parkingCheckbox, parkingChildren);
         updateFilterVisibility();
@@ -267,7 +267,7 @@ specialParkingChildren.forEach(child => {
 
 poiChildren.forEach(child => {
     child.addEventListener('change', () => {
-        updateParentCheckbox(poiCheckbox, poiChildren);
+        updateParentCheckbox(showOnMapCheckbox, poiChildren);
         updateFilterVisibility();
     });
 });
