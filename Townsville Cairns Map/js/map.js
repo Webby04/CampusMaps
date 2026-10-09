@@ -45,6 +45,7 @@ function updateLocateButton() {
 
 locateControl.onAdd = function() {
     const button = L.DomUtil.create('button', 'user-location-button');
+    button.style.display = 'none';
 
     button.type = 'button';
     button.innerHTML = '<span class="material-symbols-outlined">my_location</span>';
