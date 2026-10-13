@@ -17,67 +17,81 @@ function updateLocateButtonVisibility(isInsideCampus) {
     locateButton.style.display = isInsideCampus ? "" : "none";
 }
 
-function showLocationPopup() {
-    if (outsidePopupShown) return;
-
-    outsidePopupShown = true;
-
+function showLocationPopup(title, message) {
     document.getElementById("location-warning-overlay")?.remove();
+
+    const button = document.querySelector(".user-location-button");
+
+    if (!button) return;
 
     const overlay = document.createElement("div");
     overlay.id = "location-warning-overlay";
     overlay.className = "location-warning-overlay";
     
-    overlay.innerHTML = `<div class="location-warning-popup" role="dialog" aria-modal="true" aria-labelledby="location-warning-title" tabindex="-1">
+    overlay.innerHTML = `<div class="location-warning-popup" role="dialog" aria-modal="false" aria-labelledby="location-warning-title" tabindex="-1">
         <button class="location-warning-close" type="button" aria-label="Close popup">&times;</button>
-        <h2 id="location-warning-title">Location unavailable</h2>
-        <p>Your current location is outside the selected campus boundaries. Location features are only available within the campus map area.</p>
+        <h2 id="location-warning-title"></h2>
+        <p></p>
     </div>`;
 
     document.body.appendChild(overlay);
     
-    const dialog = overlay.querySelector(".location-warning-popup");
-    const closeButton = dialog.querySelector(".location-warning-close");
-    const locateButton = document.querySelector(".user-location-button");
-    const mapElement = document.getElementById("map");
+    const popup = overlay.querySelector(".location-warning-popup");
+    const closeButton = popup.querySelector(".location-warning-close");
 
-    // Move keyboard focus into the popup
-    dialog.focus();
+    popup.querySelector("h2").textContent = title;
+    popup.querySelector("p").textContent = message;
 
-    function closeLocationPopup() {
+    function positionPopup() {
+        popup.classList.remove("callout-right", "callout-above");
+
+        const buttonRect = button.getBoundingClientRect();
+        const popupRect = popup.getBoundingClientRect();
+        const gap = 12;
+        const margin = 12;
+
+        let left = buttonRect.left - popupRect.width - gap;
+        let top = buttonRect.top + (buttonRect.height - popupRect.height) / 2;
+
+        if (left < margin) {
+            const rightPosition = buttonRect.right + gap;
+
+            if (rightPosition + popupRect.width <= window.innerWidth - margin) {
+                left = rightPosition;
+                popup.classList.add("callout-right");
+            } else {
+                left = Math.max(margin, Math.min(buttonRect.left, window.innerWidth - popupRect.width - margin));
+                top = buttonRect.top - popupRect.height - gap;
+                popup.classList.add("callout-above");
+            }
+        }
+
+        top = Math.max(margin, Math.min(top, window.innerHeight - popupRect.height - margin));
+        popup.style.left = `${left}px`;
+        popup.style.top = `${top}px`;
+    }
+
+    function closePopup() {
+        document.removeEventListener("keydown", handleKeyDown);
+        window.removeEventListener("resize", positionPopup);
         overlay.remove();
+        button.focus();
+    }
 
-        // Return focus to a visible element
-        if (locateButton && locateButton.getClientRects().length > 0) {
-            locateButton.focus();
-        } else if (mapElement) {
-            mapElement.setAttribute("tabindex", "-1");
-            mapElement.focus();
+    function handleKeyDown(event) {
+        if (event.key === "Escape") {
+            closePopup();
         }
     }
 
     // Close when the close button is clicked
-    closeButton.addEventListener("click", closeLocationPopup);
+    closeButton.addEventListener("click", closePopup);
+    document.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("resize", positionPopup);
 
-    // Close on Escape and keep focus inside the dialog
-    dialog.addEventListener("keydown", (event) => {
-        if (event.key === "Escape") {
-            event.preventDefault();
-            closeLocationPopup();
-        }
-
-        if (event.key === "Tab") {
-            event.preventDefault();
-            closeButton.focus();
-        }
-    });
-
-    // Close when clicking the overlay outside the popup
-    overlay.addEventListener("click", (event) => {
-        if (event.target === overlay) {
-            closeLocationPopup();
-        }
-    });
+    positionPopup();
+    closeButton.focus();
+    
 }
 
 function removeUserLocation() {
@@ -119,15 +133,11 @@ function checkUserLocationAgainstCampus() {
     }
 
     locationButtonState = 'onCampus';
-
-    updateLocateButtonVisibility(true);
-
     outsidePopupShown = false;
 
-    const popup = document.getElementById("location-warning-overlay");
+    document.getElementById("location-warning-overlay")?.remove();
 
-    if (popup) popup.remove();
-
+    updateLocateButtonVisibility(true);
     updateLocateButton();
 
     showUserLocation(latitude, longitude, lastUserPosition.accuracy);
