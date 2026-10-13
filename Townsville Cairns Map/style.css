@@ -50,36 +50,60 @@ body {
     width: 40px;
     height: 40px;
     padding: 0;
-    background: #0069AA;
-    color: white;
     border: none;
     border-radius: 0;
     font-size: 22px;
     cursor: pointer;
+    transition: background-color 0.2s, color 0.2s;
 }
 
-.leaflet-container .user-location-button:hover {
+.leaflet-container .user-location-button
+.material-symbols-outlined {
+    font-size: 24px;
+}
+
+/* Default: Location not yet found */
+.leaflet-container .user-location-button.location-default {
+    background: #8C9199;
+    color: white;
+}
+
+.leaflet-container .user-location-button.location-default:hover {
+    background: #737982;
+}
+
+/* Browser permission denied */
+.leaflet-container .user-location-button.location-permission-denied {
+    background: #8C9199;
+    color: white;
+}
+
+.leaflet-container .user-location-button.location-permission-denied:hover {
+    background: #737982;
+}
+
+/* Location found, but outside campus boundaries */
+.leaflet-container .user-location-button.location-off-campus {
+    background: #0069AA;
+    color: white;
+}
+
+.leaflet-container .user-location-button.location-off-campus:hover {
+    background: #005588;
+}
+
+/* Location found within campus boundaries */
+.leaflet-container .user-location-button.location-on-campus {
+    background: #0069AA;
+    color: white;
+}
+
+.leaflet-container .user-location-button.location-on-campus:hover {
     background: #005588;
 }
 
 .leaflet-bottom.leaflet-right .user-location-button {
     margin-bottom: 4px;
-}
-
-.leaflet-container .user-location-button.not-centered {
-    background: #8C9199;
-}
-
-.leaflet-container .user-location-button.not-centered:hover {
-    background: #737982;
-}
-
-.leaflet-container .user-location-button.not-centered i {
-    display: none;
-}
-
-.leaflet-container .user-location-button.not-centered {
-    position: relative;
 }
 
 /* ------- Location Warning Popup ------- */
