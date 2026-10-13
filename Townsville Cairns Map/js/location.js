@@ -191,20 +191,63 @@ function watchUserLocation() {
             }
         },
         (error) => {
-            console.log("Error getting user location:", error);
-            navigator.geolocation.clearWatch(locationWatcherId);
-            locationWatcherId = null;
+            if (locationWatcherId !== null) {
+                navigator.geolocation.clearWatch(locationWatcherId);
+            }
 
+            locationWatcherId = null;
             centerMapLocationFound = false;
             lastUserPosition = null;
             removeUserLocation();
-            updateLocateButtonVisibility(true);
+            
+            if (error.code === 1) {
+                locationButtonState = "permissionDenied";
+                updateLocateButton();
 
-            alert("Unable to access your location. Please check your browser permissions and try again.");
+                showLocationPopup(
+                    "Location permission denied",
+                    "Please enable location permissions in your browser settings."
+                );
+            } else {
+                locationButtonState = "default";
+                updateLocateButton();
+            }
         },
         {
             enableHighAccuracy: true,
             maximumAge: 0
         }
     );
+}
+
+if (!navigator.geolocation) {
+    updateLocateButtonVisibility(false);
+} else {
+    updateLocateButtonVisibility(true);
+    updateLocateButton();
+
+    if (navigator.permissions?.query) {
+        navigator.permissions.query({ name: 'geolocation' }).then((permissionStatus) => {
+            if (permissionStatus.state === 'denied') {
+                locationButtonState = "permissionDenied";
+                updateLocateButton();
+            }
+
+            permissionStatus.onchange = () => {
+                if (permissionStatus.state === 'denied') {
+                    locationButtonState = "permissionDenied";
+                    updateLocateButton();
+                } else if (
+                    locationButtonState === "permissionDenied"
+                ) {
+                    locationButtonState = "default";
+                }
+
+                updateLocateButton();
+            };
+        })
+        .catch(() => {
+            // Fall back to requesting location normallu.
+        });
+    }
 }
