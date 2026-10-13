@@ -14,6 +14,8 @@ L.control.zoom({
 
 // ------- User Location Control -------
 
+let locationButtonState = "default";
+
 const locateControl = L.control({
     position: 'bottomright'
 });
@@ -23,39 +25,69 @@ function updateLocateButton() {
 
     if (!button) return;
 
-    if (!userLocationMarker) {
-        button.classList.add('not-centered');
-        button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
-        return;
-    }
+    const states = {
+        default: {
+            icon: 'location_searching',
+            title: "Find my location",
+            className: 'location-default'
+        },
+        permissionDenied: {
+            icon: 'location_disabled',
+            title: "Location permission denied",
+            className: 'location-permission-denied'
+        },
+        offCampus: {
+            icon: 'location_searching',
+            title: "Location is beyond map bounds",
+            className: 'location-off-campus'
+        },
+        onCampus: {
+            icon: 'my_location',
+            title: "Centre map on my location",
+            className: 'location-on-campus'
+        }
+    };
 
-    const mapCenter = map.getCenter();
-    const userLocation = userLocationMarker.getLatLng();
+    const state = states[locationButtonState];
 
-    const isCentered = mapCenter.distanceTo(userLocation) <= 10;
+    if (!state) return;
+
+    button.classList.remove('location-default', 'location-permission-denied', 'location-off-campus', 'location-on-campus', 'not-centered');
+
+    button.classList.add(state.className);
+
+    button.innerHTML = `<span class="material-symbols-outlined">${state.icon}</span>`;
     
-    if (isCentered) {
-        button.classList.remove('not-centered');
-        button.innerHTML = '<span class="material-symbols-outlined">my_location</span>';
-    } else {
-        button.classList.add('not-centered');
-        button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
-    }
+    button.title = state.title;
+    button.setAttribute('aria-label', state.title);
 }
 
 locateControl.onAdd = function() {
-    const button = L.DomUtil.create('button', 'user-location-button not-centered');
+    const button = L.DomUtil.create('button', 'user-location-button');
 
     button.type = 'button';
-    button.innerHTML = '<span class="material-symbols-outlined">location_searching</span>';
-    button.title = 'Centre map on your location';
-    button.setAttribute('aria-label', 'Centre map on your location');
-
+    
     L.DomEvent.disableClickPropagation(button);
     L.DomEvent.disableScrollPropagation(button);
 
 
     L.DomEvent.on(button, 'click', function() {
+        if (locationButtonState === 'permissionDenied') {
+            showLocationPopup(
+                "Location permission denied",
+                "Please enable location permissions in your browser settings."
+            );
+            return;
+        }
+
+        if (locationButtonState === 'offCampus') {
+            showLocationPopup(
+                "Location is beyond map bounds",
+                "You're outside the selected campus bounds. Location features are currently unavailable."
+            );
+            return;
+        }
+
         if (!userLocationMarker) {
             centerMapLocationFound = true;
             watchUserLocation();
@@ -73,7 +105,7 @@ locateControl.onAdd = function() {
 };
 
 locateControl.addTo(map);
-
+updateLocateButton();
 map.on('moveend zoomend', updateLocateButton);
 
 

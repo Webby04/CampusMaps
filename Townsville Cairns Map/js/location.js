@@ -97,16 +97,28 @@ function removeUserLocation() {
 function checkUserLocationAgainstCampus() {
     if (!lastUserPosition || !campusBounds) return;
 
-    const { latitude, longitude } = lastUserPosition;
+    const { latitude, longitude, accuracy } = lastUserPosition;
 
     const isInsideCampus = campusBounds.contains([latitude, longitude]);
 
     if (!isInsideCampus) {
+        locationButtonState = 'offCampus';
+
         removeUserLocation();
-        updateLocateButtonVisibility(false);
-        showLocationPopup();
+        updateLocateButtonVisibility(true);
+        updateLocateButton();
+
+        if (!outsidePopupShown) {
+            outsidePopupShown = true;
+            showLocationPopup(
+                "Location is beyond map bounds",
+                "You're outside the selected campus bounds. Location features are currently unavailable."
+            );
+        }
         return;
     }
+
+    locationButtonState = 'onCampus';
 
     updateLocateButtonVisibility(true);
 
@@ -115,6 +127,8 @@ function checkUserLocationAgainstCampus() {
     const popup = document.getElementById("location-warning-overlay");
 
     if (popup) popup.remove();
+
+    updateLocateButton();
 
     showUserLocation(latitude, longitude, lastUserPosition.accuracy);
 }
