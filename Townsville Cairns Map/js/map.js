@@ -73,10 +73,8 @@ locateControl.onAdd = function() {
 
     L.DomEvent.on(button, 'click', function() {
         if (locationButtonState === 'permissionDenied') {
-            showLocationPopup(
-                "Location permission denied",
-                "Please enable location permissions in your browser settings."
-            );
+            centerMapLocationFound = true;
+            watchUserLocation();
             return;
         }
 
