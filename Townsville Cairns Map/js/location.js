@@ -8,6 +8,7 @@ let outsidePopupShown = false;
 
 let locationWatcherId = null;
 let centerMapLocationFound = false;
+let closeLocationPopup = null;
 
 function updateLocateButtonVisibility(isInsideCampus) {
     const locateButton = document.querySelector(".user-location-button");
@@ -18,7 +19,8 @@ function updateLocateButtonVisibility(isInsideCampus) {
 }
 
 function showLocationPopup(title, message) {
-    document.getElementById("location-warning-overlay")?.remove();
+    // Clean up any existing popup before replacing it
+    closeLocationPopup?.();
 
     const button = document.querySelector(".user-location-button");
 
@@ -71,18 +73,29 @@ function showLocationPopup(title, message) {
         popup.style.top = `${top}px`;
     }
 
-    function closePopup() {
-        document.removeEventListener("keydown", handleKeyDown);
-        window.removeEventListener("resize", positionPopup);
-        overlay.remove();
-        button.focus();
-    }
-
     function handleKeyDown(event) {
         if (event.key === "Escape") {
             closePopup();
         }
     }
+
+    function closePopup() {
+        document.removeEventListener("keydown", handleKeyDown);
+        window.removeEventListener("resize", positionPopup);
+        closeButton.removeEventListener("click", closePopup);
+        overlay.remove();
+
+        if (closeLocationPopup === closePopup) {
+            closeLocationPopup = null;
+        }
+
+        // Return focus only if the location button is still available
+        if (button.isConnected) {
+            button.focus();
+        }
+    }
+
+    closeLocationPopup = closePopup;
 
     // Close when the close button is clicked
     closeButton.addEventListener("click", closePopup);
@@ -135,7 +148,7 @@ function checkUserLocationAgainstCampus() {
     locationButtonState = 'onCampus';
     outsidePopupShown = false;
 
-    document.getElementById("location-warning-overlay")?.remove();
+    closeLocationPopup?.();
 
     updateLocateButtonVisibility(true);
     updateLocateButton();
