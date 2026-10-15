@@ -221,6 +221,7 @@ function watchUserLocation() {
             locationWatcherId = null;
             centerMapLocationFound = false;
             lastUserPosition = null;
+            outsidePopupShown = false;
             removeUserLocation();
             
             if (error.code === 1) {
