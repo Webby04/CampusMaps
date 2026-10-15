@@ -102,6 +102,16 @@ body {
     background: #005588;
 }
 
+/* Location found on campus, but map is not centered */
+.leaflet-container .user-location-button.location-on-campus.not-centered {
+    background: #8C9199;
+    color: white;
+}
+
+.leaflet-container .user-location-button.location-on-campus.not-centered:hover {
+    background: #737982;
+}
+
 .leaflet-bottom.leaflet-right .user-location-button {
     margin-bottom: 4px;
 }

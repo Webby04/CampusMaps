@@ -52,14 +52,32 @@ function updateLocateButton() {
 
     if (!state) return;
 
+    let icon = state.icon;
+    let title = state.title;
+    let isNotCentered = false;
+
+    // Check whether the map is centered on the user's location
+    if (locationButtonState === 'onCampus' && userLocationMarker) {
+        const distance = map.distance(map.getCenter(), userLocationMarker.getLatLng());
+        isNotCentered = distance > 10;
+        if (isNotCentered) {
+            icon = "location_searching";
+            title = "Centre map on my location";
+        }
+    }
+
     button.classList.remove('location-default', 'location-permission-denied', 'location-off-campus', 'location-on-campus', 'not-centered');
 
     button.classList.add(state.className);
 
-    button.innerHTML = `<span class="material-symbols-outlined">${state.icon}</span>`;
+    if (isNotCentered) {
+        button.classList.add('not-centered');
+    }
+
+    button.innerHTML = `<span class="material-symbols-outlined">${icon}</span>`;
     
-    button.title = state.title;
-    button.setAttribute('aria-label', state.title);
+    button.title = title;
+    button.setAttribute('aria-label', title);
 }
 
 locateControl.onAdd = function() {
