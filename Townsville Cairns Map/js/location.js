@@ -270,7 +270,7 @@ if (!navigator.geolocation) {
             };
         })
         .catch(() => {
-            // Fall back to requesting location normallu.
+            // Fall back to requesting location normally.
         });
     }
 }
