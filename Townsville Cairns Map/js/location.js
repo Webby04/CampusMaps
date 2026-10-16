@@ -155,8 +155,8 @@ function checkUserLocationAgainstCampus() {
 
     showUserLocation(latitude, longitude, lastUserPosition.accuracy);
 
-    if (centeredMapLocationFound && userLocationMarker) {
-        centeredMapLocationFound = false;
+    if (centerMapLocationFound && userLocationMarker) {
+        centerMapLocationFound = false;
         map.setView(userLocationMarker.getLatLng(), 18, {
             animate: true
         });
