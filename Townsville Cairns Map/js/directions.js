@@ -118,6 +118,24 @@ function clearDirectionsRoute() {
     }
 }
 
+function drawDirectionsRoute(coordinates) {
+    clearDirectionsRoute();
+
+    if (!coordinates || coordinates.length < 2) {
+        return;
+    }
+
+    const latLngs = coordinates.map(coordinate => L.latLng(coordinate[1], coordinate[0]));
+
+    directionsRouteLayer = L.polyline(latLngs, {
+        className: "directions-route-line"
+    }).addTo(map);
+
+    map.fitBounds(directionsRouteLayer.getBounds(), {
+        padding: [50, 50]
+    });
+}
+
 function projectLatLng(latLng) {
     const projected = L.CRS.EPSG3857.project(latLng);
     const scale = Math.cos(latLng.lat * Math.PI / 180);
@@ -280,6 +298,68 @@ function pathNodesAreConnected(startNodeId, endNodeId) {
     return false;
 }
 
+function findShortestPath(startNodeId, endNodeId) {
+    const nodes = directionsPathGraph.nodes;
+    const distances = new Array(nodes.length).fill(Infinity);
+    const previous = new Array(nodes.length).fill(null);
+    const unvisited = new Set(nodes.map(node => node.id));
+
+    distances[startNodeId] = 0;
+
+    while (unvisited.size > 0) {
+        let currentNodeId = null;
+        let shortestDistance = Infinity;
+
+        for (const nodeId of unvisited) {
+            if (distances[nodeId] < shortestDistance) {
+                shortestDistance = distances[nodeId];
+                currentNodeId = nodeId;
+            }
+        }
+
+        if (currentNodeId === null) break;
+        if (currentNodeId === endNodeId) break;
+
+        unvisited.delete(currentNodeId);
+
+        const currentNode = nodes[currentNodeId];
+
+        for (const neighbourId of currentNode.neighbours) {
+            if (!unvisited.has(neighbourId)) continue;
+
+            const neighbour = nodes[neighbourId];
+            const edgeDistance = distanceBetweenProjectedPoints(currentNode.projected, neighbour.projected);
+
+            const alternativeDistance = distances[currentNodeId] + edgeDistance;
+
+            if (alternativeDistance < distances[neighbourId]) {
+                distances[neighbourId] = alternativeDistance;
+                previous[neighbourId] = currentNodeId;
+            }
+        }
+    }
+
+    if (!Number.isFinite(distances[endNodeId])) {
+        return null;
+    }
+
+    const path = [];
+    let currentNodeId = endNodeId;
+    while (currentNodeId !== null) {
+        path.unshift(currentNodeId);
+
+        if (currentNodeId === startNodeId) break;
+
+        currentNodeId = previous[currentNodeId];
+    }
+
+    if (path[0] !== startNodeId) {
+        return null;
+    }
+
+    return path.map(nodeId => nodes[nodeId].coordinate);
+}
+
 function handleBuildingDirections(feature, layer) {
     clearDirectionsRoute();
 
@@ -290,7 +370,7 @@ function handleBuildingDirections(feature, layer) {
 
     if (frontDoor) {
         // GeoJSON coordinates are [longitude, latitude]
-        destination = L.latLng(
+        destination = L.latLng( 
             frontDoor.geometry.coordinates[1],
             frontDoor.geometry.coordinates[0]
         );
@@ -306,6 +386,8 @@ function handleBuildingDirections(feature, layer) {
     const routeResult = generatePathUsingCentreLines(destination);
 
     if (routeResult.success) {
+        drawDirectionsRoute(routeResult.coordinates);
+
         console.log("Route generated:", {
             buildingNumber,
             destination,
@@ -366,7 +448,17 @@ function generatePathUsingCentreLines(destination) {
         connected
     })
 
-    return { success: connected, connected, reason: connected ? null : "DISCONNECTED_PATH" };
+    if (!connected) {
+        return { success: false, reason: "DISCONNECTED_PATH" };
+    }
+
+    const coordinates = findShortestPath(startPath.nodeId, destinationPath.nodeId);
+
+    if (!coordinates || coordinates.length < 2) {
+        return { success: false, reason: "NO_ROUTE_FOUND" };
+    }
+
+    return { success: true, coordinates };
 }
 
 loadDirectionsData()
