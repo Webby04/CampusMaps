@@ -154,6 +154,13 @@ function checkUserLocationAgainstCampus() {
     updateLocateButton();
 
     showUserLocation(latitude, longitude, lastUserPosition.accuracy);
+
+    if (centeredMapLocationFound && userLocationMarker) {
+        centeredMapLocationFound = false;
+        map.setView(userLocationMarker.getLatLng(), 18, {
+            animate: true
+        });
+    }
 }
 
 function showUserLocation(latitude, longitude, accuracy) {
