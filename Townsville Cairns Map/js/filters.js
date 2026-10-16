@@ -14,7 +14,9 @@ campusButtons.forEach(function(button) {
     button.addEventListener("click", function() {
         const campus = button.dataset.campus;
 
-        callbacktest(campus);
+        reloadDirections(campus).catch(error => {
+            console.error("Directions reload failed:", error);
+        });
 
         campusButtons.forEach(function(campusButton) {
             campusButton.classList.remove("selected");
@@ -40,7 +42,9 @@ campusOptions.forEach(function(option) {
     option.addEventListener("click", function() {
         const campus = option.value;
 
-        callbacktest(campus);
+        reloadDirections(campus).catch(error => {
+            console.error("Directions reload failed:", error);
+        });
 
         campusButtons.forEach(function(campusButton) {
             campusButton.classList.remove("selected");

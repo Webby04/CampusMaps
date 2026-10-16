@@ -194,25 +194,126 @@ function buildPathGraph() {
 
     const pathFeatures = directionsData.paths?.features || [];
 
+    const originalSegments = [];
+
+    // First pass: collect all original segments.
     pathFeatures.forEach(feature => {
         const coordinateGroups = getPathCoordinateGroups(feature);
 
         coordinateGroups.forEach(coordinates => {
-            if (coordinates.length < 2) {
-                return;
-            }
+            if (coordinates.length < 2) return;
 
             for (let index = 0; index < coordinates.length - 1; index++) {
                 const startCoordinate = coordinates[index];
                 const endCoordinate = coordinates[index + 1];
                 const startNodeId = findOrCreateGraphNode(graph, startCoordinate);
                 const endNodeId = findOrCreateGraphNode(graph, endCoordinate);
-                
-                graph.nodes[startNodeId].neighbours.add(endNodeId);
-                graph.nodes[endNodeId].neighbours.add(startNodeId);
-                graph.segments.push({ startNodeId, endNodeId, start: graph.nodes[startNodeId].projected, end: graph.nodes[endNodeId].projected, startCoordinate, endCoordinate });
+
+                originalSegments.push({ startNodeId, endNodeId, start: graph.nodes[startNodeId].projected, end: graph.nodes[endNodeId].projected });
             }
         });
+    });
+
+    // Find intersections between segments and add shared graph nodes.
+    originalSegments.forEach((segmentA, indexA) => {
+        originalSegments.forEach((segmentB, indexB) => {
+            if (indexB <= indexA) return;
+
+            const intersection = getSegmentIntersection(
+                segmentA.start,
+                segmentA.end,
+                segmentB.start,
+                segmentB.end
+            );
+
+            if (!intersection) return;
+
+            const { amountA, amountB } = intersection;
+
+            // Ignore intersections that are only at segment endpoints.
+            if (
+                (amountA <= 0.000001 || amountA >= 0.999999) &&
+                (amountB <= 0.000001 || amountB >= 0.999999)
+            ) {
+                return;
+            }
+
+            const coordinate = [
+                graph.nodes[segmentA.startNodeId].coordinate[0] +
+                    amountA * (
+                        graph.nodes[segmentA.endNodeId].coordinate[0] -
+                        graph.nodes[segmentA.startNodeId].coordinate[0]
+                    ),
+                graph.nodes[segmentA.startNodeId].coordinate[1] +
+                    amountA * (
+                        graph.nodes[segmentA.endNodeId].coordinate[1] -
+                        graph.nodes[segmentA.startNodeId].coordinate[1]
+                    )
+            ];
+
+            const nodeId = findOrCreateGraphNode(graph, coordinate);
+
+            // Make the intersection available to the existing split pass.
+            segmentA.intersectionNodeIds ??= [];
+            segmentB.intersectionNodeIds ??= [];
+
+            segmentA.intersectionNodeIds.push(nodeId);
+            segmentB.intersectionNodeIds.push(nodeId);
+        });
+    });
+
+    // Second pass: split segments at existing nodes along their interiors.
+    originalSegments.forEach(segment => {
+        const startNode = graph.nodes[segment.startNodeId];
+        const endNode = graph.nodes[segment.endNodeId];
+
+        const splitPoints = [{ id: startNode.id, amount: 0 }, { id: endNode.id, amount: 1 }];
+
+        (segment.intersectionNodeIds || []).forEach(nodeId => {
+            const result = distancePointToSegment(
+                graph.nodes[nodeId].projected,
+                startNode.projected,
+                endNode.projected
+            );
+
+            splitPoints.push({
+                id: nodeId,
+                amount: result.amount
+            });
+        });
+
+        graph.nodes.forEach(node => {
+            if (node.id === startNode.id || node.id === endNode.id) return;
+
+            const result = distancePointToSegment(node.projected, startNode.projected, endNode.projected);
+            if (result.distance <= PATH_JOIN_TOLERANCE_METERS && result.amount > 0 && result.amount < 1) {
+                splitPoints.push({ id: node.id, amount: result.amount });
+            }
+        });
+
+        splitPoints.sort((a, b) => a.amount - b.amount);
+
+        for (let index = 0; index < splitPoints.length - 1; index++) {
+            const first = splitPoints[index];
+            const second = splitPoints[index + 1];
+
+            if (first.id === second.id) continue;
+
+            const firstNode = graph.nodes[first.id];
+            const secondNode = graph.nodes[second.id];
+
+            firstNode.neighbours.add(second.id);
+            secondNode.neighbours.add(first.id);
+
+            graph.segments.push({
+                startNodeId: first.id,
+                endNodeId: second.id,
+                start: firstNode.projected,
+                end: secondNode.projected,
+                startCoordinate: firstNode.coordinate,
+                endCoordinate: secondNode.coordinate
+            });
+        }
     });
 
     console.log("Path graph created:", {
@@ -241,6 +342,32 @@ function distancePointToSegment(point, start, end) {
     };
 
     return { distance: distanceBetweenProjectedPoints(point, nearestPoint), amount };
+}
+
+function getSegmentIntersection(a, b, c, d) {
+    const rx = b.x - a.x;
+    const ry = b.y - a.y;
+    const sx = d.x - c.x;
+    const sy = d.y - c.y;
+
+    const denominator = rx * sy - ry * sx;
+
+    if (Math.abs(denominator) < 1e-9) return null;
+
+    const qpx = c.x - a.x;
+    const qpy = c.y - a.y;
+
+    const amountA = (qpx * sy - qpy * sx) / denominator;
+    const amountB = (qpx * ry - qpy * rx) / denominator;
+
+    if (
+        amountA < 0 || amountA > 1 ||
+        amountB < 0 || amountB > 1
+    ) {
+        return null;
+    }
+
+    return { amountA, amountB };
 }
 
 function findNearestPathNode(latLng) {
