@@ -6,16 +6,24 @@ let zoomEndHandler = null;
 
 // ------- Building Labels -------
 
+
 function addBuildingLabel(feature, layer) {
+    // Handle clicks on the existing building layer.
+    layer.on("click", function () {
+        if (typeof handleBuildingDirections === "function") {
+            handleBuildingDirections(feature, layer);
+        }
+    });
+
     var center = layer.getBounds().getCenter();
 
     var buildingNumber = feature.properties.buildingTag ??
-    feature.properties.buildingNumber; 
+        feature.properties.buildingNumber;
 
     if (buildingNumber == null) {
         return;
     }
-    
+
     buildingNumber = String(buildingNumber);
 
     var buildingName = feature.properties.buildingName;
@@ -35,6 +43,7 @@ function addBuildingLabel(feature, layer) {
         label: label
     });
 }
+
 
 // ------- Filter Visibility -------
 
