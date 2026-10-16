@@ -297,6 +297,10 @@ poiChildren.forEach(child => {
 async function callbacktest(campus) {
     const generation = ++campusLoadGeneration;
 
+    reloadDirections(campus).catch(error => {
+        console.error("Directions reload failed:", error);
+    });
+
     parkingIcons.clearLayers();
     freeParkingIcons.clearLayers();
     freevPermitIcons.clearLayers();

@@ -20,6 +20,7 @@ let directionsData = {};
 let directionsClickLayer = null;
 let directionsRouteLayer = null;
 let directionsPathGraph = null;
+let directionsLoadGeneration = 0;
 
 function normaliseBuildingNumber(value) {
     if (value === null || value === undefined) return "";
@@ -461,11 +462,29 @@ function generatePathUsingCentreLines(destination) {
     return { success: true, coordinates };
 }
 
-loadDirectionsData()
-    .then(() => {
-        directionsPathGraph = buildPathGraph();
-        createBuildingClickLayer();
-    })
-    .catch(error => {
-        console.error("Directions initialisation failed:", error);
-    });
+async function reloadDirections(campus) {
+    const generation = ++directionsLoadGeneration;
+
+    clearDirectionsRoute();
+
+    if (directionsClickLayer) {
+        map.removeLayer(directionsClickLayer);
+        directionsClickLayer = null;
+    }
+
+    directionsPathGraph = null;
+
+    await loadDirectionsData(campus);
+
+    // Ignore an outdated load if the campus changed again.
+    if (generation !== directionsLoadGeneration) {
+        return;
+    }
+
+    directionsPathGraph = buildPathGraph();
+    createBuildingClickLayer();
+}
+
+reloadDirections("tsv").catch(error => {
+    console.error("Directions initialisation failed:", error);
+});
