@@ -34,7 +34,18 @@ function addBuildingLabel(feature, layer) {
             html: buildingNumber,
             iconSize: [40, 20],
             iconAnchor: [20, 10]
-        })
+        }),
+        interactive: true,
+        bubblingMouseEvents: false,
+    });
+
+    // Handle clicks directly on the building number/name Label.
+    label.on("click", function () {
+        if (typeof handleBuildingDirections === "function") {
+            handleBuildingDirections(feature, layer);
+        } else {
+            console.error("handleBuildingDirections() is not defined.");
+        }
     });
 
     buildingLabels.push({
