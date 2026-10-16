@@ -27,9 +27,10 @@ function normaliseBuildingNumber(value) {
     
     const valueAsText = String(value).trim();
 
-    return /^\d+$/.test(valueAsText)
-        ? String(Number(valueAsText))
-        : valueAsText.toUpperCase();
+    return valueAsText.toUpperCase().replace(
+         /^([A-Z]*)(\d+)$/,
+         (_, prefix, digits) => prefix + String(Number(digits))
+     );
 }
 
 function getBuildingNumber(feature) {
