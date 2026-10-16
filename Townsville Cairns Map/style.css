@@ -807,7 +807,7 @@ body {
     pointer-events: auto;
 }
 
-.path.directions-building-click-layer {
+path.directions-building-click-layer {
     fill: #000;
     fill-opacity: 0.001;
     stroke: transparent;
