@@ -139,7 +139,9 @@ function drawDirectionsRoute(coordinates) {
 
 function projectLatLng(latLng) {
     const projected = L.CRS.EPSG3857.project(latLng);
-    const scale = Math.cos(latLng.lat * Math.PI / 180);
+
+    const referenceLat = 19.328;
+    const scale = Math.cos(referenceLat * Math.PI / 180);
     
     return { x: projected.x * scale, y: projected.y * scale };
 }
