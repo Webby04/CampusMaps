@@ -79,9 +79,11 @@ async function loadDirectionsData(campus = DIRECTIONS_CAMPUS) {
         loadFile(files.path)
     ]);
 
-    directionsData = { buildings: building, pois: pois, paths: paths };
+    const loadedData = { buildings: building, pois: pois, paths: paths };
 
     console.log("Directions data loaded:", {campus, buildings: building.features?.length ?? 0, pois: pois.features?.length ?? 0, path: paths.features?.length ?? 0 });
+
+    return loadedData;
 }
 
 function createBuildingClickLayer() {
@@ -140,7 +142,7 @@ function drawDirectionsRoute(coordinates) {
 function projectLatLng(latLng) {
     const projected = L.CRS.EPSG3857.project(latLng);
 
-    const referenceLat = 19.328;
+    const referenceLat = -19.328;
     const scale = Math.cos(referenceLat * Math.PI / 180);
     
     return { x: projected.x * scale, y: projected.y * scale };
@@ -208,7 +210,7 @@ function buildPathGraph() {
                 
                 graph.nodes[startNodeId].neighbours.add(endNodeId);
                 graph.nodes[endNodeId].neighbours.add(startNodeId);
-                graph.segments.push({ startNodeId, endNodeId, start: graph.nodes[startNodeId].projected, end: graph.nodes[endNodeId].projected });
+                graph.segments.push({ startNodeId, endNodeId, start: graph.nodes[startNodeId].projected, end: graph.nodes[endNodeId].projected, startCoordinate, endCoordinate });
             }
         });
     });
@@ -250,20 +252,27 @@ function findNearestPathNode(latLng) {
 
     let nearestResult = null;
 
-    directionsPathGraph.segments.forEach(segment => {
+    directionsPathGraph.segments.forEach((segment, segmentIndex) => {
         const result = distancePointToSegment(point, segment.start, segment.end);
 
         if (nearestResult === null || result.distance < nearestResult.distance) {
-            // Both ends belong to the same connected segment.
-            // Choose the closest end for the graph search.
-            const startDistance = distanceBetweenProjectedPoints(point, segment.start);
-            const endDistance = distanceBetweenProjectedPoints(point, segment.end);
+            
+            const amount = result.amount;
+            const snappedProjected = {
+                x: segment.start.x + amount * (segment.end.x - segment.start.x),
+                y: segment.start.y + amount * (segment.end.y - segment.start.y)
+            };
+
+            const snappedCoordinate = [
+                segment.startCoordinate[0] + amount * (segment.endCoordinate[0] - segment.startCoordinate[0]),
+                segment.startCoordinate[1] + amount * (segment.endCoordinate[1] - segment.startCoordinate[1])
+            ];
 
             nearestResult = {
-                nodeId:
-                    startDistance <= endDistance
-                        ? segment.startNodeId
-                        : segment.endNodeId,
+                segmentIndex,
+                segment,
+                snappedProjected,
+                snappedCoordinate,
                 distance: result.distance
             };
         }
@@ -301,8 +310,8 @@ function pathNodesAreConnected(startNodeId, endNodeId) {
     return false;
 }
 
-function findShortestPath(startNodeId, endNodeId) {
-    const nodes = directionsPathGraph.nodes;
+function findShortestPath(startNodeId, endNodeId, graph = directionsPathGraph) {
+    const nodes = graph.nodes;
     const distances = new Array(nodes.length).fill(Infinity);
     const previous = new Array(nodes.length).fill(null);
     const unvisited = new Set(nodes.map(node => node.id));
@@ -420,42 +429,64 @@ function generatePathUsingCentreLines(destination) {
         return { success: false, reason: "NO_USER_LOCATION" };
     }
 
-    const userLocation = L.latLng(
-        lastUserPosition.latitude,
-        lastUserPosition.longitude
-    );
-
     if (!directionsPathGraph) {
         console.warn("The path graph has not been created.");
         return { success: false, reason: "NO_PATH_GRAPH" };
     }
 
+    const userLocation = L.latLng(
+        lastUserPosition.latitude,
+        lastUserPosition.longitude
+    );
+
     const startPath = findNearestPathNode(userLocation);
     const destinationPath = findNearestPathNode(destination);
 
     if (!startPath) {
-        console.warn("The user is not close enough to a path centre line.");
         return { success: false, reason: "NO_START_PATH" };
     }
 
     if (!destinationPath) {
-        console.warn("The building is not close enough to a path centre line.");
         return { success: false, reason: "NO_DESTINATION_PATH" };
     }
 
-    const connected = pathNodesAreConnected(startPath.nodeId, destinationPath.nodeId);
+    const graph = {
+        nodes: directionsPathGraph.nodes.map(node => ({ ...node, neighbours: new Set(node.neighbours) })),
+        segments: directionsPathGraph.segments
+    };
 
-    console.log("Path connectivity check:", {
-        startDistance: startPath.distance,
-        destinationDistance: destinationPath.distance,
-        connected
-    })
+    function addTemporaryNode(snap) {
+        const nodeId = graph.nodes.length;
+        graph.nodes.push({id: nodeId, coordinate: snap.snappedCoordinate, projected: snap.snappedProjected, neighbours: new Set()});
 
-    if (!connected) {
-        return { success: false, reason: "DISCONNECTED_PATH" };
+        const segment = snap.segment;
+        const node = graph.nodes[nodeId];
+
+        // Connect the snapped point to both ends of its segment.
+        for (const endpointId of [ segment.startNodeId, segment.endNodeId ]) {
+            node.neighbours.add(endpointId);
+            graph.nodes[endpointId].neighbours.add(node.id);
+        }
+
+        return nodeId;
     }
 
-    const coordinates = findShortestPath(startPath.nodeId, destinationPath.nodeId);
+    const startNodeId = addTemporaryNode(startPath);
+    const destinationNodeId = addTemporaryNode(destinationPath);
+
+    // If both snapped points lie on the same segment, connect them directly along the segment.
+    if (startPath.segmentIndex === destinationPath.segmentIndex) {
+        graph.nodes[startNodeId].neighbours.add(destinationNodeId);
+        graph.nodes[destinationNodeId].neighbours.add(startNodeId);
+    }
+
+    console.log("Path snapping:", {
+        startDistance: startPath.distance,
+        destinationDistance: destinationPath.distance,
+        sameSegment: startPath.segmentIndex === destinationPath.segmentIndex
+    });
+
+    const coordinates = findShortestPath(startNodeId, destinationNodeId, graph);
 
     if (!coordinates || coordinates.length < 2) {
         return { success: false, reason: "NO_ROUTE_FOUND" };
@@ -476,13 +507,14 @@ async function reloadDirections(campus) {
 
     directionsPathGraph = null;
 
-    await loadDirectionsData(campus);
+    const loadedData = await loadDirectionsData(campus);
 
     // Ignore an outdated load if the campus changed again.
     if (generation !== directionsLoadGeneration) {
         return;
     }
 
+    directionsData = loadedData;
     directionsPathGraph = buildPathGraph();
     createBuildingClickLayer();
 }
