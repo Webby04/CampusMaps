@@ -48,37 +48,37 @@ function updateFilterVisibility() {
         map.removeLayer(parkingIcons);
     }
 
-    if (showAllCheckbox.checked && freeParkingCheckbox.checked) {
+    if (freeParkingCheckbox.checked) {
         map.addLayer(freeParkingIcons);
     } else {
         map.removeLayer(freeParkingIcons);
     }
 
-    if (showAllCheckbox.checked && freevPermitCheckbox.checked) {
+    if (freevPermitCheckbox.checked) {
         map.addLayer(freevPermitIcons);
     } else {
         map.removeLayer(freevPermitIcons);
     }
 
-    if (showAllCheckbox.checked && paidAllDayCheckbox.checked) {
+    if (paidAllDayCheckbox.checked) {
         map.addLayer(paidAllDayIcons);
     } else {
         map.removeLayer(paidAllDayIcons);
     }
 
-    if (showAllCheckbox.checked && paid4hrMaxCheckbox.checked) {
+    if (paid4hrMaxCheckbox.checked) {
         map.addLayer(paid4hrMaxIcons);
     } else {
         map.removeLayer(paid4hrMaxIcons);
     }
 
-    if (showAllCheckbox.checked && residentialCheckbox.checked) {
+    if (residentialCheckbox.checked) {
         map.addLayer(residentialIcons);
     } else {
         map.removeLayer(residentialIcons);
     }
 
-    if (showAllCheckbox.checked && premiumCheckbox.checked) {
+    if (premiumCheckbox.checked) {
         map.addLayer(premiumIcons);
     } else {
         map.removeLayer(premiumIcons);
@@ -86,31 +86,31 @@ function updateFilterVisibility() {
 
     // ------- Special Parking -------
 
-    if (showAllCheckbox.checked && commercialCheckbox.checked) {
+    if (commercialCheckbox.checked) {
         map.addLayer(commercialIcons);
     } else {
         map.removeLayer(commercialIcons);
     }
 
-    if (showAllCheckbox.checked && reservedCheckbox.checked) {
+    if (reservedCheckbox.checked) {
         map.addLayer(reservedIcons);
     } else {
         map.removeLayer(reservedIcons);
     }
 
-    if (showAllCheckbox.checked && loadingCheckbox.checked) {
+    if (loadingCheckbox.checked) {
         map.addLayer(loadingIcons);
     } else {
         map.removeLayer(loadingIcons);
     }
 
-    if (showAllCheckbox.checked && visitorCheckbox.checked) {
+    if (visitorCheckbox.checked) {
         map.addLayer(visitorIcons);
     } else {
         map.removeLayer(visitorIcons);
     }
 
-    if (showAllCheckbox.checked && serviceCheckbox.checked) {
+    if (serviceCheckbox.checked) {
         map.addLayer(serviceIcons);
     } else {
         map.removeLayer(serviceIcons);
@@ -118,13 +118,13 @@ function updateFilterVisibility() {
 
     // ------- Motorcycle / Accessible -------
 
-    if (showAllCheckbox.checked && motorcycleCheckbox.checked) {
+    if (motorcycleCheckbox.checked) {
         map.addLayer(motorcycleIcons);
     } else {
         map.removeLayer(motorcycleIcons);
     }
     
-    if (showAllCheckbox.checked && accessibleCheckbox.checked) {
+    if (accessibleCheckbox.checked) {
         map.addLayer(accessibleIcons);
     } else {
         map.removeLayer(accessibleIcons);
@@ -139,91 +139,91 @@ function updateFilterVisibility() {
     }
     
 
-    if (showAllCheckbox.checked && transportCheckbox.checked) {
+    if (transportCheckbox.checked) {
         map.addLayer(transportIcons);
     } else {
         map.removeLayer(transportIcons);
     }
 
-    if (showAllCheckbox.checked && escooterCheckbox.checked) {
+    if (escooterCheckbox.checked) {
         map.addLayer(escooterIcons);
     } else {
         map.removeLayer(escooterIcons);
     }
 
-    if (showAllCheckbox.checked && evChargingCheckbox.checked) {
+    if (evChargingCheckbox.checked) {
         map.addLayer(evChargingIcons);
     } else {
         map.removeLayer(evChargingIcons);
     }
 
-    if (showAllCheckbox.checked && bikeCheckbox.checked) {
+    if (bikeCheckbox.checked) {
         map.addLayer(bikeIcons);
     } else {
         map.removeLayer(bikeIcons);
     }
 
-    if (showAllCheckbox.checked && bikewsCheckbox.checked) {
+    if (bikewsCheckbox.checked) {
         map.addLayer(bikewsIcons);
     } else {
         map.removeLayer(bikewsIcons);
     }
 
-    if (showAllCheckbox.checked && foodBevCheckbox.checked) {
+    if (foodBevCheckbox.checked) {
         map.addLayer(foodBevIcons);
     } else {
         map.removeLayer(foodBevIcons);
     }
 
-    if (showAllCheckbox.checked && atmCheckbox.checked) {
+    if (atmCheckbox.checked) {
         map.addLayer(atmIcons);
     } else {
         map.removeLayer(atmIcons);
     }
 
-    if (showAllCheckbox.checked && helpPhoneCheckbox.checked) {
+    if (helpPhoneCheckbox.checked) {
         map.addLayer(helpPhoneIcons);
     } else {
         map.removeLayer(helpPhoneIcons);
     }
 
-    if (showAllCheckbox.checked && securityCheckbox.checked) {
+    if (securityCheckbox.checked) {
         map.addLayer(securityIcons);
     } else {
         map.removeLayer(securityIcons);
     }
 
-    if (showAllCheckbox.checked && defibCheckbox.checked) {
+    if (defibCheckbox.checked) {
         map.addLayer(defibIcons);
     } else {
         map.removeLayer(defibIcons);
     }
 
-    if (showAllCheckbox.checked && parentRoomCheckbox.checked) {
+    if (parentRoomCheckbox.checked) {
         map.addLayer(parentRoomIcons);
     } else {
         map.removeLayer(parentRoomIcons);
     }
 
-    if (showAllCheckbox.checked && infoCheckbox.checked) {
+    if (infoCheckbox.checked) {
         map.addLayer(infoIcons);
     } else {
         map.removeLayer(infoIcons);
     }
 
-    if (showAllCheckbox.checked && wellnessCheckbox.checked) {
+    if (wellnessCheckbox.checked) {
         map.addLayer(wellnessIcons);
     } else {
         map.removeLayer(wellnessIcons);
     }
 
-    if (showAllCheckbox.checked && showerCheckbox.checked) {
+    if (showerCheckbox.checked) {
         map.addLayer(showerIcons);
     } else {
         map.removeLayer(showerIcons);
     }
 
-    if (showAllCheckbox.checked && pwdCheckbox.checked) {
+    if (pwdCheckbox.checked) {
         map.addLayer(pwdIcons);
     } else {
         map.removeLayer(pwdIcons);
@@ -836,11 +836,15 @@ async function callbacktest(campus) {
 
     // ------- Campus Bounds -------
 
-    var campusBounds = campusLayers.getBounds().pad(0.05);
+    campusBounds = campusLayers.getBounds().pad(0.05);
     var campusCenter = campusBounds.getCenter();
 
     map.setView(campusCenter, 16);
     map.setMaxBounds(campusBounds);
+
+    if (typeof checkUserLocationAgainstCampus === "function") {
+        checkUserLocationAgainstCampus();
+    }
 
     // ------- Update Filter Visibility -------
 

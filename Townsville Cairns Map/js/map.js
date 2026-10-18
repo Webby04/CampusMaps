@@ -1,10 +1,138 @@
 var map = L.map('map', {
     minZoom: 16,
     maxZoom: 19,
-    maxBoundsViscosity: 1.0
+    maxBoundsViscosity: 1.0,
+    zoomControl: false,
 }).setView([-19.328, 146.756], 16);
 
+
+// ------- Zoom Controls -------
+L.control.zoom({
+    position: 'bottomright'
+}).addTo(map);
+
+
+// ------- User Location Control -------
+
+let locationButtonState = "default";
+
+const locateControl = L.control({
+    position: 'bottomright'
+});
+
+function updateLocateButton() {
+    const button = document.querySelector('.user-location-button');
+
+    if (!button) return;
+
+    const states = {
+        default: {
+            icon: 'location_searching',
+            title: "Find my location",
+            className: 'location-default'
+        },
+        permissionDenied: {
+            icon: 'location_disabled',
+            title: "Location permission denied",
+            className: 'location-permission-denied'
+        },
+        offCampus: {
+            icon: 'location_searching',
+            title: "Location is beyond map bounds",
+            className: 'location-off-campus'
+        },
+        onCampus: {
+            icon: 'my_location',
+            title: "Centre map on my location",
+            className: 'location-on-campus'
+        }
+    };
+
+    const state = states[locationButtonState];
+
+    if (!state) return;
+
+    let icon = state.icon;
+    let title = state.title;
+    let isNotCentered = false;
+
+    // Check whether the map is centered on the user's location
+    if (locationButtonState === 'onCampus' && userLocationMarker) {
+        const distance = map.distance(map.getCenter(), userLocationMarker.getLatLng());
+        isNotCentered = distance > 10;
+        if (isNotCentered) {
+            icon = "location_searching";
+            title = "Centre map on my location";
+        }
+    }
+
+    button.classList.remove('location-default', 'location-permission-denied', 'location-off-campus', 'location-on-campus', 'not-centered');
+
+    button.classList.add(state.className);
+
+    if (isNotCentered) {
+        button.classList.add('not-centered');
+    }
+
+    button.innerHTML = `<span class="material-symbols-outlined">${icon}</span>`;
+    
+    button.title = title;
+    button.setAttribute('aria-label', title);
+}
+
+locateControl.onAdd = function() {
+    const button = L.DomUtil.create('button', 'user-location-button');
+
+    button.type = 'button';
+    
+    L.DomEvent.disableClickPropagation(button);
+    L.DomEvent.disableScrollPropagation(button);
+
+
+    L.DomEvent.on(button, 'click', function() {
+        if (locationButtonState === 'permissionDenied') {
+            centerMapLocationFound = true;
+            watchUserLocation();
+            return;
+        }
+
+        if (locationButtonState === 'offCampus') {
+            showLocationPopup(
+                "Location is beyond map bounds",
+                "You're outside the selected campus bounds. Location features are currently unavailable."
+            );
+            return;
+        }
+
+        if (!userLocationMarker) {
+            centerMapLocationFound = true;
+            watchUserLocation();
+            return;
+        }
+
+        map.stop();
+
+        map.setView(userLocationMarker.getLatLng(), 18, {
+            animate: true
+        });
+    });
+
+    return button;  
+};
+
+locateControl.addTo(map);
+updateLocateButton();
+map.on('moveend zoomend', updateLocateButton);
+
+
+// ------- User Location Pane -------
+
+map.createPane('accuracyPane');
+map.getPane('accuracyPane').style.zIndex = 450;
+map.getPane('accuracyPane').style.pointerEvents = 'none';
+
 var campusLayers = L.featureGroup().addTo(map);
+var campusBounds = null;
 
 
 // ------- Marker Cluster -------
