@@ -104,7 +104,7 @@ body {
 
 /* Location found on campus, but map is not centered */
 .leaflet-container .user-location-button.location-on-campus.not-centered {
-    background: #8C9199;
+    background: #0069AA;
     color: white;
 }
 
