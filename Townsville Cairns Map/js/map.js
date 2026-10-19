@@ -1,6 +1,6 @@
 var map = L.map('map', {
     minZoom: 16,
-    maxZoom: 19,
+    maxZoom: 20,
     maxBoundsViscosity: 1.0,
     zoomControl: false,
 }).setView([-19.328, 146.756], 16);
