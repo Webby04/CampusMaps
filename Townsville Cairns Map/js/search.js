@@ -83,7 +83,7 @@ function getSearchMatches(query) {
 
             return a.name.localeCompare(b.name);
         })
-        .slice(0, 15);
+        .slice(0, 5);
 }
 
 // ------- Render Suggestions -------
@@ -96,7 +96,7 @@ function renderSearchResults() {
     matchingResults = [];
     activeResultIndex = -1;
 
-    if (query.length < 2) {
+    if (query.length < 3) {
         closeSearchResults();
         return;
     }
