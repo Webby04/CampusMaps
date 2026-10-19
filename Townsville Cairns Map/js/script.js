@@ -297,6 +297,13 @@ poiChildren.forEach(child => {
 async function callbacktest(campus) {
     const generation = ++campusLoadGeneration;
 
+    // Reset search results whenever the selected campus changes.
+    window.jcuSearchIndex = {
+        campus: "tsv",
+        buildings: [],
+        pois: []
+    };
+
     reloadDirections(campus).catch(error => {
         console.error("Directions reload failed:", error);
     });
@@ -370,7 +377,7 @@ async function callbacktest(campus) {
     let creekJSON = await fetch(`../data/mapsdata/${campus}_creeks.json`);
     let creekData = await creekJSON.json();
     
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
     
@@ -385,7 +392,7 @@ async function callbacktest(campus) {
     let sportsfieldsJSON = await fetch(`../data/mapsdata/${campus}_sports_fields.json`);
     let sportsfieldsData = await sportsfieldsJSON.json();
     
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
     var sportsfieldsLayer = L.geoJSON(sportsfieldsData, {
@@ -398,7 +405,7 @@ async function callbacktest(campus) {
     let fencesJSON = await fetch(`../data/mapsdata/${campus}_fences.json`);
     let fencesData = await fencesJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -412,7 +419,7 @@ async function callbacktest(campus) {
     let roadareasJSON = await fetch(`../data/mapsdata/${campus}_road_areas.json`);
     let roadareasData = await roadareasJSON.json();
     
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -426,7 +433,7 @@ async function callbacktest(campus) {
     let pathareasJSON = await fetch(`../data/mapsdata/${campus}_path_areas.json`);
     let pathareasData = await pathareasJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -440,7 +447,7 @@ async function callbacktest(campus) {
     let pathcenterlinesJSON = await fetch(`../data/mapsdata/${campus}_path_center_lines.json`);
     let pathcenterlinesData = await pathcenterlinesJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -454,7 +461,7 @@ async function callbacktest(campus) {
     let parkingJSON = await fetch(`../data/mapsdata/${campus}_parking.json`);
     let parkingData = await parkingJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -634,7 +641,7 @@ async function callbacktest(campus) {
     let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
     let naturepathsData = await naturepathsJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -660,9 +667,11 @@ async function callbacktest(campus) {
         BuildingNames = ["B1", "D3", "D4", "F1"];
     }
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
+
+    window.jcuSearchIndex.buildings = buildingsData.features || [];
 
     var buildingsLayer = L.geoJSON(buildingsData, {
         style: MAP_OBJECT_STYLES.BUILDING,
@@ -748,9 +757,11 @@ async function callbacktest(campus) {
     let poiJSON = await fetch(`../data/mapsdata/${campus}_poi.json`);
     let poiData = await poiJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
+
+    window.jcuSearchIndex.pois = poiData.features || [];
 
     updateCampusFilters(parkingData, poiData);
 

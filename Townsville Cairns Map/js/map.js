@@ -11,6 +11,13 @@ L.control.zoom({
     position: 'bottomright'
 }).addTo(map);
 
+// ------- Search Index -------
+window.jcuSearchIndex = {
+    campus: "tsv",
+    buildings: [],
+    pois: []
+}
+
 
 // ------- User Location Control -------
 

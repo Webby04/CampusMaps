@@ -838,6 +838,7 @@ path.directions-building-click-layer {
     background: white;
     border-radius: 8px;
     gap: 8px;
+    overflow: visible;
 }
 
 .map-search-bar input {
@@ -868,8 +869,6 @@ body:has(.map-sidebar.expanded) .map-search-bar {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    width: 40px;
-    height: 40px;
     padding: 0;
     border: none;
     border-radius: 50%;
@@ -885,4 +884,101 @@ body:has(.map-sidebar.expanded) .map-search-bar {
 
 .map-search-bar .search-icon {
     font-size: 17px;
+}
+
+.map-search-results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    max-height: min(420px, calc(100vh - 100px));
+    overflow-y: auto;
+    box-sizing: border-box;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.22);
+    color: #202124;
+    font-family: Arial, sans-serif;
+    z-index: 1001;
+}
+
+.map-search-results[hidden] {
+    display: none;
+}
+
+.map-search-result {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    margin-bottom: 4px;
+    padding: 10px 16px;
+    min-height: 52px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #eee;
+    border-radius: 0;
+    background: white;
+    color: #202124;
+    text-align: left;
+    cursor: pointer;
+    font-family: inherit;
+    appearance: none;
+}
+
+.map-search-result:last-child {
+    border-bottom: none;
+}
+
+.map-search-result:hover,
+.map-search-result:focus-visible,
+.map-search-result:active {
+    background: #f1f3f4;
+    border-radius: 0;
+    outline: none;
+}
+
+.map-search-result-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #e8f0fe;
+    color: #0069aa;
+    font-size: 16px;
+}
+
+.map-search-result-text {
+    display: flex;
+    flex-direction: row;
+    gap: 4px;
+    min-width: 0;
+    flex: 1;
+
+}
+
+.map-search-result-name {
+    font-size: 14px;
+    font-weight: 600;
+    min-width: 0;
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.map-search-result-type {
+    color: #5f6368;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.map-search-message {
+    padding: 16px;
+    color: #5f6368;
+    font-size: 14px;
+    line-height: 1.5;
 }
