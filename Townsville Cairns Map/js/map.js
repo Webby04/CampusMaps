@@ -120,7 +120,7 @@ locateControl.onAdd = function() {
 
         map.stop();
 
-        map.setView(userLocationMarker.getLatLng(), 18, {
+        map.setView(userLocationMarker.getLatLng(), 19, {
             animate: true
         });
     });

@@ -329,10 +329,36 @@ function setActiveResult(index) {
 function selectSearchResult(index) {
     const result = matchingResults[index];
 
-    if (!result) return;
+    if (!result || !result.feature?.geometry) return;
+
+    const feature = result.feature;
+    const geometry = feature.geometry;
+
+    // Fly to point features
+    if (geometry.type === 'Point') {
+        const [lng, lat] = geometry.coordinates;
+        map.flyTo([lat, lng], Math.max(map.getZoom(), 19), {
+            duration: 1
+        });
+    } else {
+        // Fit buildings and parking areas within the map.
+        const bounds = L.geoJSON(feature).getBounds();
+
+        if (bounds.isValid()) {
+            map.flyToBounds(bounds, {
+                padding: [50, 50],
+                maxZoom: 19,
+                duration: 1
+            });
+        }
+    }
 
     // Only update the search input.
     searchInput.value = result.name;
+
+    if (clearSearchButton) {
+        clearSearchButton.hidden = false;
+    }
 
     closeSearchResults();
 }
