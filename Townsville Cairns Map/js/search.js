@@ -266,7 +266,9 @@ function renderSearchResults() {
     matchingResults = [];
     activeResultIndex = -1;
 
-    if (query.length < 3) {
+    const isNumericSearch = /^\d+$/.test(query);
+
+    if (query.length < 3 && !isNumericSearch) {
         closeSearchResults();
         return;
     }
