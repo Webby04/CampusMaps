@@ -151,8 +151,10 @@ function getSearchMatches(query) {
             includeScore: true,
         });
 
-        // Exclude FRONTDOOR POIs, as in the original search.
-        const searchablePois = (index.pois || []).filter(feature => normaliseText(feature.properties?.type) !== 'frontdoor');
+        // Only include POIs with a supported icon.
+        const searchablePois = (index.pois || []).filter(feature => 
+            getPOIIcon(feature.properties?.type) !== null
+        );
         
         poiFuse = new Fuse(searchablePois, { keys: ['properties.description', 'properties.keywords'],
             threshold: 0.35,
