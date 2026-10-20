@@ -945,6 +945,7 @@ body:has(.map-sidebar.expanded) .map-search-bar {
     flex-shrink: 0;
     width: 36px;
     height: 36px;
+    margin-left: 8px;
     border-radius: 50%;
     background: #e8f0fe;
     color: #0069aa;
