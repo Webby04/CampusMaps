@@ -53,27 +53,47 @@ function getSearchMatches(query) {
 
     if (!index) return [];
 
-    // Search buidlings by buildingName only.
+    // Search buildings by number, name, and keywords.
     const buildings = (index.buildings || [])
         .filter(feature => {
-            const name = feature.properties?.buildingName;
+            const properties = feature.properties || {};
 
-            return name && normaliseText(name).includes(query);
+            const searchableText = [
+                properties.buildingNumber,
+                properties.buildingName,
+                properties.keywords || ''
+            ].filter(Boolean).map(normaliseText);
+
+            return searchableText.some(text => text.includes(query));
         })
-        .map(feature => ({ feature, name: String(feature.properties?.buildingName), type: 'Building', icon: 'fa-solid fa-building', resultType: 'building' })
+        .map(feature => { 
+            const properties = feature.properties || {};
+            const buildingNumber = properties.buildingNumber;
+            const buildingName = properties.buildingName;
+
+            const name = buildingNumber ? `${buildingNumber} - ${buildingName}` : String(buildingName || '');
+            return { feature, name, type: 'Building', icon: 'fa-solid fa-building', resultType: 'building' };
+        }
     );
 
-    // Search points of interest by description only.
+    // Search POIs by descriptions and keywords, excluding FRONTDOOR.
     const pois = (index.pois || [])
         .filter(feature => {
-            const description = feature.properties?.description;
+            const properties = feature.properties || {};
+            
+            if (normaliseText(properties.type) === 'frontdoor') return false;
 
-            return description && normaliseText(description).includes(query);
+            const searchableText = [
+                properties.description,
+                properties.keywords || ''
+            ].filter(Boolean).map(normaliseText);
+
+            return searchableText.some(text => text.includes(query));
         })
-        .map(feature => ({ feature, name: String(feature.properties?.description), type: 'Point of Interest', icon: 'fa-solid fa-location-dot', resultType: 'poi' })
+        .map(feature => ({ feature, name: String(feature.properties?.description || ''), type: 'Point of Interest', icon: 'fa-solid fa-location-dot', resultType: 'poi' })
     );
 
-    // Prioritise names that start with the query, then sort alphabetically.
+    // Prioritise names starting with the query, then sort alphabetically.
     return [...buildings, ...pois]
         .sort((a, b) => {
             const aStarts = normaliseText(a.name).startsWith(query);
