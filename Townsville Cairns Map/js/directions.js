@@ -21,6 +21,7 @@ let directionsClickLayer = null;
 let directionsRouteLayer = null;
 let directionsPathGraph = null;
 let directionsLoadGeneration = 0;
+let selectedBuildingHighlightLayer = null;
 
 function normaliseBuildingNumber(value) {
     if (value === null || value === undefined) return "";
@@ -120,6 +121,26 @@ function clearDirectionsRoute() {
         map.removeLayer(directionsRouteLayer);
         directionsRouteLayer = null;
     }
+}
+
+// ------- Building Highlight -------
+
+function highlightBuilding(feature) {
+    if (selectedBuildingHighlightLayer) {
+        map.removeLayer(selectedBuildingHighlightLayer);
+        selectedBuildingHighlightLayer = null;
+    }
+
+    if (!feature?.geometry) return;
+
+    selectedBuildingHighlightLayer = L.geoJSON(feature, {
+        interactive: false,
+        style: {
+            className: "directions-building-highlight-layer"
+        }
+    }).addTo(map);
+
+    selectedBuildingHighlightLayer.bringToFront();
 }
 
 function drawDirectionsRoute(coordinates) {
@@ -501,6 +522,7 @@ function findShortestPath(startNodeId, endNodeId, graph = directionsPathGraph) {
 }
 
 function handleBuildingDirections(feature, layer) {
+    highlightBuilding(feature);
     clearDirectionsRoute();
 
     const buildingNumber = getBuildingNumber(feature);

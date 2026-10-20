@@ -823,6 +823,14 @@ path.directions-building-click-layer {
     fill: none;
 }
 
+.directions-building-highlight-layer {
+    stroke: #1f5497;
+    stroke-width: 5;
+    stroke-opacity: 1;
+    fill: #1f5497;
+    fill-opacity: 0.12;
+}
+
 .map-search-bar {
     position:absolute;
     top: 16px;

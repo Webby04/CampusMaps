@@ -334,6 +334,10 @@ function selectSearchResult(index) {
     const feature = result.feature;
     const geometry = feature.geometry;
 
+    if (result.resultType === 'building') {
+        highlightBuilding(feature);
+    }
+
     // Fly to point features
     if (geometry.type === 'Point') {
         const [lng, lat] = geometry.coordinates;
