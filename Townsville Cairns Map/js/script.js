@@ -301,7 +301,8 @@ async function callbacktest(campus) {
     window.jcuSearchIndex = {
         campus: "tsv",
         buildings: [],
-        pois: []
+        pois: [],
+        parking: []
     };
 
     reloadDirections(campus).catch(error => {
@@ -464,6 +465,8 @@ async function callbacktest(campus) {
     if (generation !== campusLoadGeneration) {
         return;
     }
+
+    window.jcuSearchIndex.parking = parkingData.features || [];
 
     var otherParkingLayer = L.geoJSON(
         {

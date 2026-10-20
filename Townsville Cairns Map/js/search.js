@@ -46,6 +46,69 @@ function normaliseText(value) {
         .trim();
 }
 
+// ------- Parking Display Names -------
+
+function getParkingDisplayName(parkType) {
+    switch (normaliseText(parkType).toUpperCase()) {
+        case 'FREE':
+            return 'Free Parking';
+            
+        case 'FREEVPERMIT':
+            return 'Free with vPermit';
+
+        case 'PAID-ALL':
+            return 'Paid All Day Parking';
+            
+        case 'PAID-4HR':
+            return 'Paid 4 Hour Max Parking';
+
+        case 'RESIDENTIAL':
+            return 'Residential Parking';
+            
+        case 'CEL-PREM':
+            return 'Premium Parking';
+            
+        case 'COMMERCIAL':
+        case 'RESERVED':
+        case 'LOADING':
+        case 'VISITOR':
+        case 'SERVICE': {
+            const subtype = normaliseText(parkType).replace(/-/g, '');
+            const formattedSubType = subtype.replace(/\b\w/g, character => character.toUpperCase());
+            return `Special Parking - ${formattedSubType}`;
+        }
+        default:
+            return null;
+    }
+}
+
+// ------- Parking Icon Colour -------
+
+function getParkingIconClass(parkType) {
+    switch (normaliseText(parkType).toUpperCase()) {
+        case 'FREE':
+            return 'parking-free';
+        case 'FREEVPERMIT':
+            return 'parking-freevpermit';
+        case 'PAID-ALL':
+            return 'parking-paid-all';
+        case 'PAID-4HR':
+            return 'parking-paid-4hr';
+        case 'RESIDENTIAL':
+            return 'parking-residential';
+        case 'CEL-PREM':
+            return 'parking-cel-prem';
+        case 'COMMERCIAL':
+        case 'RESERVED':
+        case 'LOADING':
+        case 'VISITOR':
+        case 'SERVICE':
+            return 'parking-special';
+        default:
+            return 'parking-unknown';
+    }
+}
+
 // ------- Search Data -------
 
 function getSearchMatches(query) {
@@ -93,8 +156,27 @@ function getSearchMatches(query) {
         .map(feature => ({ feature, name: String(feature.properties?.description || ''), type: 'Point of Interest', icon: 'fa-solid fa-location-dot', resultType: 'poi' })
     );
 
+    // Search Parking by parkType and the word "parking".
+    const parking = (index.parking || [])
+        .filter(feature => {
+            const parkType = feature.properties?.parkType;
+            const displayName = getParkingDisplayName(parkType);
+
+            if (!displayName) return false;
+
+            const searchableText = [
+                'parking',
+                parkType,
+                displayName
+            ].filter(Boolean).map(normaliseText);
+
+            return searchableText.some(text => text.includes(query));
+        })
+        .map(feature => ({ feature, name: getParkingDisplayName(feature.properties?.parkType), type: 'Parking', icon: `fa-solid fa-square-parking ${getParkingIconClass(feature.properties?.parkType)}`, resultType: 'parking' })
+    );
+
     // Prioritise names starting with the query, then sort alphabetically.
-    return [...buildings, ...pois]
+    return [...buildings, ...pois, ...parking]
         .sort((a, b) => {
             const aStarts = normaliseText(a.name).startsWith(query);
             const bStarts = normaliseText(b.name).startsWith(query);

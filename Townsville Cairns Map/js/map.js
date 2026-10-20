@@ -15,7 +15,8 @@ L.control.zoom({
 window.jcuSearchIndex = {
     campus: "tsv",
     buildings: [],
-    pois: []
+    pois: [],
+    parking: []
 }
 
 
