@@ -10,6 +10,24 @@ let buildingFuse = null;
 let poiFuse = null;
 let parkingFuse = null;
 
+const clearSearchButton = document.querySelector('.map-search-clear');
+
+// ------- Clear Search -------
+
+if (searchInput && clearSearchButton) {
+    searchInput.addEventListener('input', () => {
+        clearSearchButton.hidden = searchInput.value.length === 0;
+    });
+
+    clearSearchButton.addEventListener('click', () => {
+        searchInput.value = '';
+        clearSearchButton.hidden = true;
+
+        closeSearchResults();
+        searchInput.focus();
+    });
+}
+
 // ------- Search Placeholder -------
 
 function updateSearchPlaceholder(campus) {
@@ -375,6 +393,10 @@ document.querySelectorAll('input[name="campus"]').forEach(campusInput => {
             searchInput.value = '';
         }
 
+        if (clearSearchButton) {
+            clearSearchButton.hidden = true;
+        }
+
         closeSearchResults();
     });
 });
@@ -386,6 +408,9 @@ document.querySelectorAll('.campus-button').forEach(campusButton => {
             searchInput.value = '';
         }
         
+        if (clearSearchButton) {
+            clearSearchButton.hidden = true;
+        }
         closeSearchResults();
     });
 });
