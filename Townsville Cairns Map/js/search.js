@@ -201,7 +201,26 @@ function getSearchMatches(query) {
     }
 
     // Search buildings.
-    const buildings = [...new Map(buildingFuse.search(query).map(result => {
+    let buildingResults;
+
+    // For numeric searches, prioritize exact building numbers.
+    if (/^\d+$/.test(query)) {
+        // Match the full building number, ignoring leading zeros, or a standalone number in the building name
+        buildingResults = (index.buildings || [])
+            .filter(feature => {
+                const properties = feature.properties || {};
+                const buildingNumber = String(properties.buildingNumber ?? '').trim();
+                const buildingName = String(properties.buildingName ?? '').trim();
+
+                const numberMatches = /^\d+$/.test(buildingNumber) && Number(buildingNumber) === Number(query);
+                const nameMatches = new RegExp(`(?:^|\\D)${query}(?:\\D|$)`).test(buildingName);
+                return numberMatches || nameMatches;
+            })
+            .map(feature => ({ item: feature, score: 0 }));
+    } else {
+        buildingResults = buildingFuse.search(query);
+    }
+    const buildings = [...new Map(buildingResults.map(result => {
         const feature = result.item;
         const properties = feature.properties || {};
         const buildingNumber = properties.buildingNumber;
@@ -282,7 +301,7 @@ function renderSearchResults() {
     searchResults.replaceChildren();
 
     if (matchingResults.length === 0) {
-        showSearchMessage("No matching buildings, points of interest, or parking    .");
+        showSearchMessage("No matching buildings, points of interest, or parking.");
         return;
     }
 
