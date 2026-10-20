@@ -5,6 +5,11 @@ const searchResults = document.querySelector('#map-search-results');
 let matchingResults = [];
 let activeResultsIndex = -1;
 
+let cachedSearchData = null;
+let buildingFuse = null;
+let poiFuse = null;
+let parkingFuse = null;
+
 // ------- Search Placeholder -------
 
 function updateSearchPlaceholder(campus) {
@@ -114,68 +119,74 @@ function getParkingIconClass(parkType) {
 function getSearchMatches(query) {
     const index = window.jcuSearchIndex;
 
-    if (!index) return [];
+    if (!index || typeof Fuse === 'undefined') {
+        console.warn('Search data or Fuse.js unavailable.');
+        return [];
+    }
 
-    // Search buildings by number, name, and keywords.
-    const buildings = (index.buildings || [])
-        .filter(feature => {
-            const properties = feature.properties || {};
+    // Build the indexes only when the campus search data changes.
+    if (cachedSearchData !== index) {
+        cachedSearchData = index;
+        buildingFuse = new Fuse(index.buildings || [], { keys: ['properties.buildingNumber', 'properties.buildingName', 'properties.keywords'],
+            threshold: 0.35,
+            ignoreLocation: true,
+            includeScore: true,
+        });
 
-            const searchableText = [
-                properties.buildingNumber,
-                properties.buildingName,
-                properties.keywords || ''
-            ].filter(Boolean).map(normaliseText);
+        // Exclude FRONTDOOR POIs, as in the original search.
+        const searchablePois = (index.pois || []).filter(feature => normaliseText(feature.properties?.type) !== 'frontdoor');
+        
+        poiFuse = new Fuse(searchablePois, { keys: ['properties.description', 'properties.keywords'],
+            threshold: 0.35,
+            ignoreLocation: true,
+            includeScore: true,
+        });
 
-            return searchableText.some(text => text.includes(query));
-        })
-        .map(feature => { 
-            const properties = feature.properties || {};
-            const buildingNumber = properties.buildingNumber;
-            const buildingName = properties.buildingName;
-
-            const name = buildingNumber ? `${buildingNumber} - ${buildingName}` : String(buildingName || '');
-            return { feature, name, type: 'Building', icon: 'fa-solid fa-building', resultType: 'building' };
-        }
-    );
-
-    // Search POIs by descriptions and keywords, excluding FRONTDOOR.
-    const pois = (index.pois || [])
-        .filter(feature => {
-            const properties = feature.properties || {};
-            
-            if (normaliseText(properties.type) === 'frontdoor') return false;
-
-            const searchableText = [
-                properties.description,
-                properties.keywords || ''
-            ].filter(Boolean).map(normaliseText);
-
-            return searchableText.some(text => text.includes(query));
-        })
-        .map(feature => ({ feature, name: String(feature.properties?.description || ''), type: 'Point of Interest', icon: 'fa-solid fa-location-dot', resultType: 'poi' })
-    );
-
-    // Search Parking by parkType and the word "parking".
-    const parking = (index.parking || [])
-        .filter(feature => {
+        // Prepare parking entries using the existing display names.
+        const searchableParking = (index.parking || []).map(feature => { 
             const parkType = feature.properties?.parkType;
-            const displayName = getParkingDisplayName(parkType);
+            const name = getParkingDisplayName(parkType);
+            return { feature, name, parkType, searchText: name ? `parking ${name} ${parkType || ''}` : '' };
+        }).filter(item => item.name);
+        
+        parkingFuse = new Fuse(searchableParking, { 
+            keys: ['name', 'parkType', 'searchText'],
+            threshold: 0.35,
+            ignoreLocation: true,
+            includeScore: true,
+        });
+    }
 
-            if (!displayName) return false;
+    // Search buildings.
+    const buildings = buildingFuse.search(query).map(result => {
+        const feature = result.item;
+        const properties = feature.properties || {};
+        const buildingNumber = properties.buildingNumber;
+        const buildingName = properties.buildingName;
+        const name = buildingNumber ? `${buildingNumber} - ${buildingName}` : String(buildingName || '');
 
-            const searchableText = [
-                'parking',
-                parkType,
-                displayName
-            ].filter(Boolean).map(normaliseText);
+        return { feature, name, type: 'Building', icon: 'fa-solid fa-building', resultType: 'building' , score: result.score ?? 1 };
+    });
 
-            return searchableText.some(text => text.includes(query));
-        })
-        .map(feature => ({ feature, name: getParkingDisplayName(feature.properties?.parkType), type: 'Parking', icon: `fa-solid fa-square-parking ${getParkingIconClass(feature.properties?.parkType)}`, resultType: 'parking' })
-    );
+    // Search points of interest (POIs).
+    const pois = poiFuse.search(query).map(result => ({
+        feature: result.item,
+        name: String(result.item.properties?.description || ''),
+        type: 'Point of Interest',
+        icon: 'fa-solid fa-location-dot',
+        resultType: 'poi',
+        score: result.score ?? 1
+    }));
 
-    // Prioritise names starting with the query, then sort alphabetically.
+    // Search Parking.
+    const parking = parkingFuse.search(query).map(result => {
+        const feature = result.item.feature;
+        const parkType = feature.properties?.parkType;
+
+        return { feature, name: result.item.name, type: 'Parking', icon: `fa-solid fa-square-parking ${getParkingIconClass(parkType)}`, resultType: 'parking', score: result.score ?? 1 };
+    });
+
+    // Prefer names starting with the query, then better fuzzy matches.
     return [...buildings, ...pois, ...parking]
         .sort((a, b) => {
             const aStarts = normaliseText(a.name).startsWith(query);
@@ -183,7 +194,7 @@ function getSearchMatches(query) {
 
             if (aStarts !== bStarts) return aStarts ? -1 : 1;
 
-            return a.name.localeCompare(b.name);
+            return a.score - b.score || a.name.localeCompare(b.name);
         })
         .slice(0, 5);
 }
