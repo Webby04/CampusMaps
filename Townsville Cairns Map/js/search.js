@@ -12,6 +12,29 @@ let parkingFuse = null;
 
 const clearSearchButton = document.querySelector('.map-search-clear');
 
+// ------- Recent Searches -------
+
+const RECENT_SEARCHES_KEY = 'jcu-map-recent-searches';
+const MAX_RECENT_SEARCHES = 5;
+
+function getRecentSearches() {
+    try {
+        return JSON.parse(localStorage.getItem(RECENT_SEARCHES_KEY)) || [];
+    } catch {
+        return [];
+    }
+}
+
+function saveRecentSearch(result) {
+    const recentSearches = getRecentSearches().filter(
+        item => item.name.toLowerCase() !== result.name.toLowerCase()
+    );
+
+    recentSearches.unshift({name: result.name, type: result.type, resultType: result.resultType });
+    
+    localStorage.setItem(RECENT_SEARCHES_KEY, JSON.stringify(recentSearches.slice(0, MAX_RECENT_SEARCHES)));
+}
+
 // ------- Clear Search -------
 
 if (searchInput && clearSearchButton) {
@@ -23,8 +46,8 @@ if (searchInput && clearSearchButton) {
         searchInput.value = '';
         clearSearchButton.hidden = true;
 
-        closeSearchResults();
         searchInput.focus();
+        renderRecentSearches();
     });
 }
 
@@ -305,6 +328,75 @@ function renderSearchResults() {
     searchInput.setAttribute('aria-expanded', 'true');
 }
 
+// ------- Render Recent Searches -------
+
+function renderRecentSearches() {
+    if (!searchInput || !searchResults) return;
+
+    const recentSearches = getRecentSearches();
+    matchingResults = [];
+    activeResultIndex = -1;
+    searchResults.replaceChildren();
+
+    if (recentSearches.length === 0) {
+        closeSearchResults();
+        return;
+    }
+
+    recentSearches.forEach(recent => {
+        // Find the matching feature in the current campus data.
+        const result = getSearchMatches(recent.name).find(item => item.name === recent.name && item.resultType === recent.resultType);
+        
+        if (!result) return;
+
+        const index = matchingResults.push(result) - 1;
+        const button = document.createElement('button');
+
+        button.type = 'button';
+        button.className = 'map-search-result';
+
+        // Result icon.
+        const icon = document.createElement('span');
+        icon.className = 'map-search-result-icon';
+
+        const iconElement = document.createElement('i');
+        iconElement.className = result.icon;
+        iconElement.setAttribute('aria-hidden', 'true');
+        icon.appendChild(iconElement);
+
+        // Result text.
+        const text = document.createElement('span');
+        text.className = 'map-search-result-text';
+
+        const name = document.createElement('span');
+        name.className = 'map-search-result-name';
+        name.textContent = result.name;
+        text.append(name);
+
+        button.append(icon, text);
+
+        // Prevent the input from losing focus before selection.
+        button.addEventListener('mousedown', (event) => {
+            event.preventDefault();
+        });
+
+        // Selecting a suggestion does not interact with the map.
+        button.addEventListener('click', () => {
+            selectSearchResult(index);
+        });
+
+        searchResults.appendChild(button);
+    });
+
+    if (matchingResults.length === 0) {
+        closeSearchResults();
+        return;
+    }
+
+    searchResults.hidden = false;
+    searchInput.setAttribute('aria-expanded', 'true');
+}
+
 // ------- Keyboard Navigation -------
 
 function setActiveResult(index) {
@@ -332,6 +424,8 @@ function selectSearchResult(index) {
     const result = matchingResults[index];
 
     if (!result || !result.feature?.geometry) return;
+
+    saveRecentSearch(result);
 
     const feature = result.feature;
     const geometry = feature.geometry;
@@ -373,6 +467,12 @@ function selectSearchResult(index) {
 
 if (searchInput && searchResults && searchBar) {
     searchInput.addEventListener('input', renderSearchResults);
+
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim() === '') {
+            renderRecentSearches();
+        }
+    });
 
     searchInput.addEventListener('keydown', event => {
         if (event.key === 'ArrowDown') {
@@ -453,7 +553,12 @@ const searchButton = searchBar?.querySelector('button');
 
 searchButton?.addEventListener('click', () => {
     searchInput.focus();
-    renderSearchResults();
+
+    if (searchInput.value.trim() === '') {
+        renderRecentSearches();
+    } else {
+        renderSearchResults();
+    }
 });
 
 // ------- Initial State -------
