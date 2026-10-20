@@ -3,7 +3,7 @@ const searchBar = document.querySelector('.map-search-bar');
 const searchResults = document.querySelector('#map-search-results');
 
 let matchingResults = [];
-let activeResultsIndex = -1;
+let activeResultIndex = -1;
 
 let cachedSearchData = null;
 let buildingFuse = null;
@@ -30,7 +30,7 @@ function closeSearchResults() {
     searchResults.hidden = true;
     searchInput.setAttribute('aria-expanded', 'false');
     searchInput.removeAttribute('aria-activedescendant');
-    activeResultsIndex = -1;
+    activeResultIndex = -1;
 }
 
 function showSearchMessage(message) {
@@ -158,33 +158,47 @@ function getSearchMatches(query) {
     }
 
     // Search buildings.
-    const buildings = buildingFuse.search(query).map(result => {
+    const buildings = [...new Map(buildingFuse.search(query).map(result => {
         const feature = result.item;
         const properties = feature.properties || {};
         const buildingNumber = properties.buildingNumber;
         const buildingName = properties.buildingName;
         const name = buildingNumber ? `${buildingNumber} - ${buildingName}` : String(buildingName || '');
+        const uniqueKey = normaliseText(buildingNumber || buildingName);
 
-        return { feature, name, type: 'Building', icon: 'fa-solid fa-building', resultType: 'building' , score: result.score ?? 1 };
-    });
+        return [uniqueKey, { feature, name, type: 'Building', icon: 'fa-solid fa-building', resultType: 'building' , score: result.score ?? 1 }];
+    })).values()];
+
+    const pois = [];
+    const seenPois = new Set();
 
     // Search points of interest (POIs).
-    const pois = poiFuse.search(query).map(result => ({
-        feature: result.item,
-        name: String(result.item.properties?.description || ''),
-        type: 'Point of Interest',
-        icon: 'fa-solid fa-location-dot',
-        resultType: 'poi',
-        score: result.score ?? 1
-    }));
+    for (const result of poiFuse.search(query)) {
+        const feature = result.item;
+        const name = String(feature.properties?.description || '');
+        const key = normaliseText(name);
+
+        if (seenPois.has(key)) continue;
+        seenPois.add(key);
+
+        pois.push({
+            feature,
+            name,
+            type: 'Point of Interest',
+            icon: 'fa-solid fa-location-dot',
+            resultType: 'poi',
+            score: result.score ?? 1
+        });
+    }
 
     // Search Parking.
-    const parking = parkingFuse.search(query).map(result => {
+    const parking = [...new Map(parkingFuse.search(query).map(result => {
         const feature = result.item.feature;
         const parkType = feature.properties?.parkType;
+        const name = result.item.name;
 
-        return { feature, name: result.item.name, type: 'Parking', icon: `fa-solid fa-square-parking ${getParkingIconClass(parkType)}`, resultType: 'parking', score: result.score ?? 1 };
-    });
+        return [normaliseText(name), { feature, name, type: 'Parking', icon: `fa-solid fa-square-parking ${getParkingIconClass(parkType)}`, resultType: 'parking', score: result.score ?? 1 }];
+    })).values()];
 
     // Prefer names starting with the query, then better fuzzy matches.
     return [...buildings, ...pois, ...parking]
@@ -223,7 +237,7 @@ function renderSearchResults() {
     searchResults.replaceChildren();
 
     if (matchingResults.length === 0) {
-        showSearchMessage("No matching buildings or points of interest.");
+        showSearchMessage("No matching buildings, points of interest, or parking    .");
         return;
     }
 
@@ -251,10 +265,6 @@ function renderSearchResults() {
         const name = document.createElement('span');
         name.className = 'map-search-result-name';
         name.textContent = result.name;
-        
-        const type = document.createElement('span');
-        type.className = 'map-search-result-type';
-        type.textContent = result.type;
         text.append(name);
         button.append(icon, text);
 
