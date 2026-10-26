@@ -478,18 +478,8 @@ function selectSearchResult(index) {
             return;
         }
     } else {
-        restoreOriginalClusters();
+        restoreSearchableClusters();
     }
-
-    // ------- Toggle POI and Parking Layers -------
-
-    // if (result.resultType === 'poi') {
-    //     map.addLayer(poiLayer);
-    //     map.removeLayer(parkingLayer);
-    // } else if (result.resultType === 'parking') {
-    //     map.addLayer(parkingLayer);
-    //     map.removeLayer(poiLayer);
-    // }
 
     if (result.resultType === 'building') {
         highlightBuilding(feature);
