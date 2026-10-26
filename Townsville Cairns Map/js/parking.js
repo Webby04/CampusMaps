@@ -50,6 +50,8 @@ function addParkingIcon(feature, layer) {
     } else {
         marker.addTo(parkingIcons);
     }
+
+    marker.feature = feature;
 }
 
 

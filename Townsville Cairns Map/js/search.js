@@ -1,6 +1,7 @@
 const searchInput = document.querySelector('.map-search-input');
 const searchBar = document.querySelector('.map-search-bar');
 const searchResults = document.querySelector('#map-search-results');
+const clearSearchButton = document.querySelector('.map-search-clear');
 
 let matchingResults = [];
 let activeResultIndex = -1;
@@ -9,8 +10,6 @@ let cachedSearchData = null;
 let buildingFuse = null;
 let poiFuse = null;
 let parkingFuse = null;
-
-const clearSearchButton = document.querySelector('.map-search-clear');
 
 // ------- Recent Searches -------
 
@@ -45,6 +44,7 @@ if (searchInput && clearSearchButton) {
     clearSearchButton.addEventListener('click', () => {
         searchInput.value = '';
         clearSearchButton.hidden = true;
+        restoreSearchableClusters();
 
         searchInput.focus();
         renderRecentSearches();
@@ -450,6 +450,46 @@ function selectSearchResult(index) {
 
     const feature = result.feature;
     const geometry = feature.geometry;
+
+    if (result.resultType === 'parking') {
+        const matches = (window.jcuSearchIndex?.parking || []).filter(
+            item => item.properties?.parkType === feature.properties?.parkType
+        );
+
+        filterSearchableClusters(matches);
+
+        if (matches.length > 1) {
+            searchInput.value = result.name;
+            if (clearSearchButton) clearSearchButton.hidden = false;
+            closeSearchResults();
+            return;
+        }
+    } else if (result.resultType === 'poi') {
+        const matches = (window.jcuSearchIndex?.pois || []).filter(
+            item => item.properties?.description === feature.properties?.description
+        );
+
+        filterSearchableClusters(matches);
+
+        if (matches.length > 1) {
+            searchInput.value = result.name;
+            if (clearSearchButton) clearSearchButton.hidden = false;
+            closeSearchResults();
+            return;
+        }
+    } else {
+        restoreOriginalClusters();
+    }
+
+    // ------- Toggle POI and Parking Layers -------
+
+    // if (result.resultType === 'poi') {
+    //     map.addLayer(poiLayer);
+    //     map.removeLayer(parkingLayer);
+    // } else if (result.resultType === 'parking') {
+    //     map.addLayer(parkingLayer);
+    //     map.removeLayer(poiLayer);
+    // }
 
     if (result.resultType === 'building') {
         highlightBuilding(feature);

@@ -508,9 +508,11 @@ async function callbacktest(campus) {
     freeParkingLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("FREE")
-        }).addTo(freeParkingIcons);
+        });
+        marker.feature = layer.feature;
+        marker.addTo(freeParkingIcons);
     });
 
 
@@ -533,9 +535,11 @@ async function callbacktest(campus) {
     freevPermitLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("FREEVPERMIT")
-        }).addTo(freevPermitIcons);
+        });
+        marker.feature = layer.feature;
+        marker.addTo(freevPermitIcons);
     });
 
 
@@ -558,9 +562,11 @@ async function callbacktest(campus) {
     paidAllDayLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("PAID-ALL")
-        }).addTo(paidAllDayIcons);
+        });
+        marker.feature = layer.feature;
+        marker.addTo(paidAllDayIcons);
     });
 
 
@@ -583,9 +589,11 @@ async function callbacktest(campus) {
     paid4hrMaxLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("PAID-4HR")
-        }).addTo(paid4hrMaxIcons);
+        });
+        marker.feature = layer.feature;
+        marker.addTo(paid4hrMaxIcons);
     });
 
 
@@ -608,9 +616,11 @@ async function callbacktest(campus) {
     residentialLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("RESIDENTIAL")
-        }).addTo(residentialIcons);
+        });
+        marker.feature = layer.feature;
+        marker.addTo(residentialIcons);
     });
 
 
@@ -633,11 +643,140 @@ async function callbacktest(campus) {
     premiumLayer.eachLayer(function(layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("CEL-PREM")
         }).addTo(premiumIcons);
     });
 
+    // ------- Commercial -------
+
+    commercialLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "COMMERCIAL";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(commercialLayer);
+
+    commercialLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("COMMERCIAL")
+        });
+        marker.feature = layer.feature;
+        marker.addTo(commercialIcons);
+    });
+
+    // ------- Reserved -------
+
+    reservedLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "RESERVED";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(reservedLayer);
+
+    reservedLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("RESERVED")
+        });
+        marker.feature = layer.feature;
+        marker.addTo(reservedIcons);
+    });
+
+    // ------- Loading -------
+
+    loadingLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "LOADING";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(loadingLayer);
+
+    loadingLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("LOADING")
+        });
+        marker.feature = layer.feature;
+        marker.addTo(loadingIcons);
+    });
+
+    // ------- Visitor -------
+
+    visitorLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "VISITOR";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(visitorLayer);
+
+    visitorLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("VISITOR")
+        });
+        marker.feature = layer.feature;
+        marker.addTo(visitorIcons);
+    });
+
+    // ------- Service -------
+
+    serviceLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function(feature) {
+                return feature.properties.parkType === "SERVICE";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING
+        }
+    );
+
+    parkingLayer.addLayer(serviceLayer);
+
+    serviceLayer.eachLayer(function(layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("SERVICE")
+        });
+        marker.feature = layer.feature;
+        marker.addTo(serviceIcons);
+    });
 
     // ------- Nature Paths -------
 
@@ -781,6 +920,8 @@ async function callbacktest(campus) {
                 icon: icon
             });
 
+            marker.feature = feature;
+
             if (type === "MOTORC") {
                 marker.addTo(motorcycleIcons);
                 return;
@@ -887,6 +1028,8 @@ async function callbacktest(campus) {
     // ------- Update Filter Visibility -------
 
     updateFilterVisibility();
+
+    saveOriginalClusterMarkers();
 }
 
 

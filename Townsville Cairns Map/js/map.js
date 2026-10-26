@@ -132,7 +132,6 @@ locateControl.addTo(map);
 updateLocateButton();
 map.on('moveend zoomend', updateLocateButton);
 
-
 // ------- User Location Pane -------
 
 map.createPane('accuracyPane');
@@ -142,11 +141,14 @@ map.getPane('accuracyPane').style.pointerEvents = 'none';
 var campusLayers = L.featureGroup().addTo(map);
 var campusBounds = null;
 
+const searchableClusters = [];
+const originalClusterMarkers = new Map();
+let searchFilterActive = false;
 
 // ------- Marker Cluster -------
 
 function createMarkerCluster() {
-    return L.markerClusterGroup({
+    const cluster = L.markerClusterGroup({
         maxClusterRadius: 50,
         disableClusteringAtZoom: 18,
         showCoverageOnHover: false,
@@ -161,7 +163,53 @@ function createMarkerCluster() {
                 iconAnchor: markers.options.icon.options.iconAnchor
             });
         }
-    }).addTo(map);
+    });
+
+    searchableClusters.push(cluster);
+    cluster.addTo(map);
+
+    return cluster;
+}
+
+// ------- Hide Searchable Clusters -------
+
+function hideSearchableClusters() {
+    searchableClusters.forEach(cluster =>  map.removeLayer(cluster));
+}
+
+function saveOriginalClusterMarkers() {
+    originalClusterMarkers.clear();
+
+    searchableClusters.forEach(cluster => {
+        originalClusterMarkers.set(cluster, cluster.getLayers());
+    });
+}
+
+function restoreSearchableClusters() {
+    searchFilterActive = false;
+
+    searchableClusters.forEach(cluster => {
+        cluster.clearLayers();
+        cluster.addLayers(originalClusterMarkers.get(cluster) || []);
+    });
+
+    updateFilterVisibility();
+}
+
+function filterSearchableClusters(features) {
+    const matchingFeatures = new Set(features);
+    searchFilterActive = true;
+
+    searchableClusters.forEach(cluster => {
+        const markers = originalClusterMarkers.get(cluster) || [];
+
+        cluster.clearLayers();
+        cluster.addLayers(markers.filter(marker => matchingFeatures.has(marker.feature)));
+
+        if (cluster.getLayers().length > 0 && !map.hasLayer(cluster)) {
+            map.addLayer(cluster);
+        }
+    });
 }
 
 // ------- Styles -------
