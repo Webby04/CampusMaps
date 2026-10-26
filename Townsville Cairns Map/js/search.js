@@ -459,6 +459,7 @@ function selectSearchResult(index) {
         filterSearchableClusters(matches);
 
         if (matches.length > 1) {
+            map.setZoom(map.getMinZoom());
             searchInput.value = result.name;
             if (clearSearchButton) clearSearchButton.hidden = false;
             closeSearchResults();
@@ -472,6 +473,7 @@ function selectSearchResult(index) {
         filterSearchableClusters(matches);
 
         if (matches.length > 1) {
+            map.setZoom(map.getMinZoom());
             searchInput.value = result.name;
             if (clearSearchButton) clearSearchButton.hidden = false;
             closeSearchResults();
