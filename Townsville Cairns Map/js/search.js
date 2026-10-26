@@ -233,10 +233,19 @@ function getSearchMatches(query) {
 
     const pois = [];
     const seenPois = new Set();
+    const accessibleParking = [];
 
     // Search points of interest (POIs).
     for (const result of poiFuse.search(query)) {
         const feature = result.item;
+        const properties = feature.properties || {};
+
+        // Group all accessible parking POIs together.
+        if (properties.type === 'ACCPARK') {
+            accessibleParking.push(result);
+            continue;
+        }
+
         const name = String(feature.properties?.description || '');
         const key = normaliseText(name);
 
@@ -250,6 +259,19 @@ function getSearchMatches(query) {
             icon: 'fa-solid fa-location-dot',
             resultType: 'poi',
             score: result.score ?? 1
+        });
+    }
+
+    // Add one suggestion for all matching accessible parking POIs.
+    if (accessibleParking.length > 0) {
+        pois.push({
+            feature: accessibleParking[0].item,
+            features: accessibleParking.map(result => result.item),
+            name: 'Accessible Parking',
+            type: 'Point of Interest',
+            icon: 'fa-solid fa-location-dot',
+            resultType: 'accessible-parking',
+            score: Math.min(...accessibleParking.map(result => result.score ?? 1))
         });
     }
 
@@ -450,6 +472,20 @@ function selectSearchResult(index) {
 
     const feature = result.feature;
     const geometry = feature.geometry;
+
+    if (result.resultType === 'accessible-parking') {
+        const matches = (window.jcuSearchIndex?.pois || []).filter(
+            item => item.properties?.type === 'ACCPARK'
+        );
+
+        filterSearchableClusters(matches);
+
+        map.setZoom(map.getMinZoom());
+        searchInput.value = result.name;
+        if (clearSearchButton) clearSearchButton.hidden = false;
+        closeSearchResults();
+        return;
+    }
 
     if (result.resultType === 'parking') {
         const matches = (window.jcuSearchIndex?.parking || []).filter(
