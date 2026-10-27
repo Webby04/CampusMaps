@@ -131,35 +131,14 @@ function selectMapResult(index) {
     const result = currentPanelResults[index];
     if (!result) return;
 
+    // Highlight the selected result card.
     resultsList.querySelectorAll(".map-result-card").forEach(card => card.classList.remove("selected"));
 
     const card = resultsList.querySelector(`[data-result-index="${index}"]`);
     card?.classList.add("selected");
 
-    // Use the original search result's GeoJSON feature.
-    const feature = result.original?.feature ?? result.original;
-    if (!feature?.geometry) return;
-
-    const geometry = feature.geometry;
-
-    if (geometry.type === "Point") {
-        const [lng, lat] = geometry.coordinates;
-
-        map.flyTo([lat, lng], Math.max(map.getZoom(), 19), {
-            duration: 1
-        });
-    } else {
-        // Buildings and parking areas may be polygons.
-        const bounds = L.geoJSON(feature).getBounds();
-
-        if (bounds.isValid()) {
-            map.flyToBounds(bounds, {
-                padding: [50, 50],
-                maxZoom: 19,
-                duration: 1
-            });
-        }
-    }
+    // use the shared search selection logic.
+    selectSearchResultItem(result.original);
 }
 
 resultsList.addEventListener("click", (event) => {

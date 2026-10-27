@@ -470,8 +470,10 @@ function setActiveResult(index) {
 // ------- Select a Result -------
 
 function selectSearchResult(index) {
-    const result = matchingResults[index];
+    selectSearchResultItem(matchingResults[index]);
+}
 
+function selectSearchResultItem(result) {
     if (!result || !result.feature?.geometry) return;
 
     saveRecentSearch(result);
