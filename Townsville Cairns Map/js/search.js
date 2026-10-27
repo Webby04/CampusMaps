@@ -48,6 +48,13 @@ if (searchInput && clearSearchButton) {
 
         searchInput.focus();
         renderRecentSearches();
+        
+        // Close the full search results pane.
+        document.querySelector('#map-search-results').hidden = true;
+
+        if (resultsPanel) {
+            resultsPanel.hidden = true;
+        }
     });
 }
 
@@ -294,7 +301,6 @@ function getSearchMatches(query) {
 
             return a.score - b.score || a.name.localeCompare(b.name);
         })
-        .slice(0, 5);
 }
 
 // ------- Render Suggestions -------
@@ -319,7 +325,7 @@ function renderSearchResults() {
         return;
     }
 
-    matchingResults = getSearchMatches(query);
+    matchingResults = getSearchMatches(query).slice(0, 5);
     searchResults.replaceChildren();
 
     if (matchingResults.length === 0) {
@@ -580,17 +586,24 @@ if (searchInput && searchResults && searchBar) {
                 setActiveResult(activeResultIndex <= 0 ? matchingResults.length - 1 : activeResultIndex - 1);
             }
         } else if (event.key === 'Enter') {
-            if (!searchResults.hidden && activeResultIndex >= 0) {
-                event.preventDefault();
-                selectSearchResult(activeResultIndex);
-            } else {
-                renderSearchResults();
+            event.preventDefault();
 
-                if (matchingResults.length > 0) {
-                    event.preventDefault();
-                    selectSearchResult(0);
-                }
+            const query = searchInput.value.trim();
+            if (!query) return;
+            
+            // Keep selecting a suggestion if one is highlighted
+            if (!searchResults.hidden && activeResultIndex >= 0) {
+                selectSearchResult(activeResultIndex);
+                return;
             }
+
+            closeSearchResults();
+
+            // Get the matching results from your existing Fuse.js indexes.
+            const results = getSearchMatches(query);
+
+            // Open the full results panel without selecting a building.
+            showMapResults(results);
         } else if (event.key === 'Escape') {
             closeSearchResults();
         }
