@@ -63,6 +63,22 @@ function clearSearchEffects() {
     }
 }
 
+function resetSearchForCampusChange() {
+    // Remove the building highlight.
+    if (selectedBuildingHighlightLayer) {
+        map.removeLayer(selectedBuildingHighlightLayer);
+        selectedBuildingHighlightLayer = null;
+    }
+
+    // Close the search suggestions.
+    closeSearchResults();
+
+    // Close the full results panel.
+    if (resultsPanel) {
+        resultsPanel.hidden = true;
+    }
+}
+
 if (searchInput && clearSearchButton) {
     searchInput.addEventListener('input', () => {
         clearSearchButton.hidden = searchInput.value.length === 0;
@@ -717,7 +733,7 @@ document.querySelectorAll('input[name="campus"]').forEach(campusInput => {
             clearSearchButton.hidden = true;
         }
 
-        clearSearchEffects();
+        resetSearchForCampusChange();
     });
 });
 
@@ -732,7 +748,7 @@ document.querySelectorAll('.campus-button').forEach(campusButton => {
             clearSearchButton.hidden = true;
         }
 
-        clearSearchEffects();
+        resetSearchForCampusChange();
     });
 });
 
