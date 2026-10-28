@@ -717,7 +717,7 @@ document.querySelectorAll('input[name="campus"]').forEach(campusInput => {
             clearSearchButton.hidden = true;
         }
 
-        closeSearchResults();
+        clearSearchEffects();
     });
 });
 
@@ -731,7 +731,8 @@ document.querySelectorAll('.campus-button').forEach(campusButton => {
         if (clearSearchButton) {
             clearSearchButton.hidden = true;
         }
-        closeSearchResults();
+
+        clearSearchEffects();
     });
 });
 
