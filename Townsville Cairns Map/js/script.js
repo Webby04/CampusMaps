@@ -299,7 +299,7 @@ async function callbacktest(campus) {
 
     // Reset search results whenever the selected campus changes.
     window.jcuSearchIndex = {
-        campus: "tsv",
+        campus: campus,
         buildings: [],
         pois: [],
         parking: []
