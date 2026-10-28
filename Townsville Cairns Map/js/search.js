@@ -36,25 +36,42 @@ function saveRecentSearch(result) {
 
 // ------- Clear Search -------
 
+function clearSearchEffects() {
+    // Remove the building highlight.
+    if (selectedBuildingHighlightLayer) {
+        map.removeLayer(selectedBuildingHighlightLayer);
+        selectedBuildingHighlightLayer = null;
+    }
+
+    // Restore POI and parking markers using the active filters.
+    restoreSearchableClusters();
+
+    // Close the search suggestions.
+    closeSearchResults();
+
+    // Close the full results panel.
+    if (resultsPanel) {
+        resultsPanel.hidden = true;
+    }
+}
+
 if (searchInput && clearSearchButton) {
     searchInput.addEventListener('input', () => {
         clearSearchButton.hidden = searchInput.value.length === 0;
+
+        if (searchInput.value.trim() === '') {
+            clearSearchEffects();
+            renderRecentSearches();
+        }
     });
 
     clearSearchButton.addEventListener('click', () => {
         searchInput.value = '';
         clearSearchButton.hidden = true;
-        restoreSearchableClusters();
+        clearSearchEffects();
 
         searchInput.focus();
         renderRecentSearches();
-        
-        // Close the full search results pane.
-        document.querySelector('#map-search-results').hidden = true;
-
-        if (resultsPanel) {
-            resultsPanel.hidden = true;
-        }
     });
 }
 
