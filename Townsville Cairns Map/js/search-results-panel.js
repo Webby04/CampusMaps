@@ -6,6 +6,7 @@ const resultsCount = document.querySelector("#map-results-count");
 const closeResultsButton = document.querySelector("#map-results-close");
 
 let currentPanelResults = [];
+let activePanelResultIndex = -1;
 
 // Temporary descriptions until real building data is available.
 const placeholderDescriptions = [
@@ -74,6 +75,7 @@ function preparePanelResults(results) {
 
 function showMapResults(results) {
     currentPanelResults = preparePanelResults(results);
+    activePanelResultIndex = -1;
 
     resultsCount.textContent = 
         `${results.length} ${results.length === 1 ? "result" : "results"} found`;
@@ -124,6 +126,10 @@ function showMapResults(results) {
     `).join("");
 
     resultsPanel.hidden = false;
+
+    // Focus the first result so the arrow-key navigation works immediately.
+    const firstCard = resultsList.querySelector(".map-result-card");
+    firstCard?.focus();
 }
 
 // Only focus on the map after the user selects a specific result.
@@ -150,10 +156,32 @@ resultsList.addEventListener("click", (event) => {
 
 resultsList.addEventListener("keydown", (event) => {
     const card = event.target.closest(".map-result-card");
+    if (!card) return;
 
+    const currentIndex = Number(card.dataset.resultIndex);
+
+    // Navigate between result cards using arrow keys.
+    if (event.key === "ArrowDown" || event.key === "ArrowUp") {
+        event.preventDefault();
+        const direction = event.key === "ArrowDown" ? 1 : -1;
+        
+        const nextIndex = (currentIndex + direction + currentPanelResults.length) % currentPanelResults.length;
+        const nextCard = resultsList.querySelector(`[data-result-index="${nextIndex}"]`);
+
+        nextCard?.focus();
+        return;
+    }
+    
+    // Select a result using Enter or Space.
     if (card && (event.key === "Enter" || event.key === " ")) {
         event.preventDefault();
-        selectMapResult(Number(card.dataset.resultIndex));
+        selectMapResult(currentIndex);
+        return;
+    }
+
+    // Close the results panel using Escape.
+    if (event.key === "Escape") {
+        resultsPanel.hidden = true;
     }
 });
 

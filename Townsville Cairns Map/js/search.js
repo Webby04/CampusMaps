@@ -420,6 +420,9 @@ function renderRecentSearches() {
 
         button.type = 'button';
         button.className = 'map-search-result';
+        button.id = `search-result-${index}`;
+        button.setAttribute('role', 'option');
+        button.setAttribute('aria-selected', 'false');
 
         // Result icon.
         const icon = document.createElement('span');
@@ -482,6 +485,25 @@ function setActiveResult(index) {
     searchInput.setAttribute('aria-activedescendant', buttons[activeResultIndex].id);
 
     buttons[activeResultIndex].scrollIntoView({ block: 'nearest' });
+}
+
+function focusSearchResult(index) {
+    const buttons = searchResults.querySelectorAll('.map-search-result');
+
+    if (!buttons.length) return;
+
+    activeResultIndex = (index + buttons.length) % buttons.length;
+
+    buttons.forEach((button, i) => {
+        const active = i === activeResultIndex;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-selected', String(active));
+    });
+
+    const activeButton = buttons[activeResultIndex];
+    searchInput.setAttribute('aria-activedescendant', activeButton.id);
+    activeButton.focus();
+    activeButton.scrollIntoView({ block: 'nearest' });
 }
 
 // ------- Select a Result -------
@@ -591,18 +613,22 @@ if (searchInput && searchResults && searchBar) {
     searchInput.addEventListener('keydown', event => {
         if (event.key === 'ArrowDown') {
             if (searchResults.hidden) {
-                renderSearchResults();
+                if (searchInput.value.trim() === '') {
+                    renderRecentSearches();
+                } else {
+                    renderSearchResults();
+                }
             }
 
             if (!searchResults.hidden && matchingResults.length > 0) {
                 event.preventDefault();
-                setActiveResult(activeResultIndex + 1);
+                focusSearchResult(activeResultIndex + 1);
             }
         } else if (event.key === 'ArrowUp') {
-            if (!searchResults.hidden) {
+            if (!searchResults.hidden && matchingResults.length > 0) {
                 event.preventDefault();
 
-                setActiveResult(activeResultIndex <= 0 ? matchingResults.length - 1 : activeResultIndex - 1);
+                focusSearchResult(activeResultIndex <= 0 ? matchingResults.length - 1 : activeResultIndex - 1);
             }
         } else if (event.key === 'Enter') {
             event.preventDefault();
@@ -628,10 +654,37 @@ if (searchInput && searchResults && searchBar) {
         }
     });
 
+    // ------- Keyboard navigation inside suggestions -------
+
+    searchResults.addEventListener('keydown', event => {
+        const buttons = [...searchResults.querySelectorAll('.map-search-result')];
+
+        const currentIndex = buttons.indexOf(document.activeElement);
+
+        if (currentIndex === -1) return;
+
+        if (event.key === 'ArrowDown') {
+            event.preventDefault();
+            focusSearchResult(currentIndex + 1);
+        } else if (event.key === 'ArrowUp') {
+            event.preventDefault();
+            if (currentIndex == 0) {
+                searchInput.focus();
+                activeResultIndex = -1;
+            } else {
+                focusSearchResult(currentIndex - 1);
+            }
+        } else if (event.key === 'Escape') {
+            event.preventDefault();
+            closeSearchResults();
+            searchInput.focus();
+        }
+    });
+
     // ------- Close Dropdown -------
 
     document.addEventListener('click', event => {
-        if (!searchBar.contains(event.target)) {
+        if (!searchBar.contains(event.target) && !searchResults.contains(event.target)) {
             closeSearchResults();
         }
     });
