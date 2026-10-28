@@ -472,12 +472,7 @@ async function callbacktest(campus) {
         {
             type: "FeatureCollection",
             features: parkingData.features.filter(function(feature) {
-                return feature.properties.parkType !== "FREE" &&
-                feature.properties.parkType !== "FREEVPERMIT" &&
-                feature.properties.parkType !== "PAID-ALL" &&
-                feature.properties.parkType !== "PAID-4HR" &&
-                feature.properties.parkType !== "RESIDENTIAL" &&
-                feature.properties.parkType !== "CEL-PREM";
+                return !["FREE", "FREEVPERMIT", "PAID-ALL", "PAID-4HR", "RESIDENTIAL", "CEL-PREM", "COMMERCIAL", "RESERVED", "LOADING", "VISITOR", "SERVICE"].includes(feature.properties.parkType);
             })
         },
         {
