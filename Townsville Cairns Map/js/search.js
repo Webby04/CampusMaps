@@ -6,10 +6,18 @@ const clearSearchButton = document.querySelector('.map-search-clear');
 let matchingResults = [];
 let activeResultIndex = -1;
 
-let cachedSearchData = null;
+let cachedBuildings = null;
+let cachedPOIs = null;
+let cachedParking = null;
 let buildingFuse = null;
 let poiFuse = null;
 let parkingFuse = null;
+
+function invalidateSearchIndexes() {
+    cachedBuildings = null;
+    cachedPOIs = null;
+    cachedParking = null;
+}
 
 // ------- Recent Searches -------
 
@@ -189,10 +197,16 @@ function getSearchMatches(query) {
         return [];
     }
 
-    // Build the indexes only when the campus search data changes.
-    if (cachedSearchData !== index) {
-        cachedSearchData = index;
-        buildingFuse = new Fuse(index.buildings || [], { keys: ['properties.buildingNumber', 'properties.buildingName', 'properties.keywords'],
+    // Build the indexes only when the campus search data arrays change.
+    const buildingsData = index.buildings || [];
+    const poisData = index.pois || [];
+    const parkingData = index.parking || [];
+
+    if (cachedBuildings !== buildingsData || cachedPOIs !== poisData || cachedParking !== parkingData) {
+        cachedBuildings = buildingsData;
+        cachedPOIs = poisData;
+        cachedParking = parkingData;
+        buildingFuse = new Fuse(buildingsData, { keys: ['properties.buildingNumber', 'properties.buildingName', 'properties.keywords'],
             threshold: 0.35,
             ignoreLocation: true,
             includeScore: true,

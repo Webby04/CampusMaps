@@ -900,6 +900,9 @@ async function callbacktest(campus) {
 
     window.jcuSearchIndex.pois = poiData.features || [];
 
+    // Invalidate cached Fuse indexes after all search data has loaded.
+    invalidateSearchIndexes();
+
     updateCampusFilters(parkingData, poiData);
 
     poiLayer = L.geoJSON(poiData, {
@@ -1026,7 +1029,6 @@ async function callbacktest(campus) {
 
     saveOriginalClusterMarkers();
 }
-
 
     // ------- Campus Filter Visibility -------
 
