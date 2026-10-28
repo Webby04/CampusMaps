@@ -640,7 +640,10 @@ async function callbacktest(campus) {
 
         var marker = L.marker(center, {
             icon: getParkingIcon("CEL-PREM")
-        }).addTo(premiumIcons);
+        });
+
+        marker.feature = layer.feature;
+        marker.addTo(premiumIcons);
     });
 
     // ------- Commercial -------
