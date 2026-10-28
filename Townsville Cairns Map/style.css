@@ -839,7 +839,7 @@ path.directions-building-click-layer {
     display: flex;
     align-items: center;
     width: 400px;
-    max-width: calc(100vw - 32px);
+    max-width: calc(100vw - 92px);
     height: 48px;
     padding: 0 8px;
     box-sizing: border-box;
