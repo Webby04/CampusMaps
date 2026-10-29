@@ -267,7 +267,7 @@ const restrictedParkingChildren = [residentialCheckbox, premiumCheckbox, special
 const transportMobilityChildren = [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox];
 const amenitiesChildren = [kitchenettesCheckbox, parentRoomCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox];
 const safetySecurityChildren = [helpPhoneCheckbox, securityCheckbox, defibCheckbox];
-const foodServicesChildren = [foodBevCheckbox, atmCheckbox];
+const foodServicesChildren = [foodBevCheckbox, infoCheckbox, atmCheckbox];
 
 
 standardParkingChildren.forEach(child => {
