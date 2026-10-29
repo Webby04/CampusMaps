@@ -149,8 +149,8 @@ let searchFilterActive = false;
 
 function createMarkerCluster() {
     const cluster = L.markerClusterGroup({
-        maxClusterRadius: 50,
-        disableClusteringAtZoom: 18,
+        maxClusterRadius: 80,
+        disableClusteringAtZoom: 19,
         showCoverageOnHover: false,
 
         iconCreateFunction: function(cluster) {
