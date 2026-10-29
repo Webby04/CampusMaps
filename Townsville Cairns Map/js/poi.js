@@ -58,7 +58,7 @@ function getPOIIcon(type) {
             iconClass = 'poi-foodbev';
             break;
         case 'KITCHENETTES':
-            iconHTML = `<i class="fa-solid fa-kitchen-set"></i>`;
+            iconHTML = `<span class="material-symbols-outlined">microwave</span>`;
             iconClass = 'poi-kitchenettes';
             break;
         case 'ATM':
