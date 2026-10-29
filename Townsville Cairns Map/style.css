@@ -297,7 +297,8 @@ body {
     border-color: #663300;
 }
 
-.poi-foodbev {
+.poi-foodbev,
+.poi-kitchenettes {
     color: #aa2200;
     border-color: #aa2200;
 }
@@ -534,6 +535,40 @@ body {
     position: relative;
 }
 
+/* ------- Filter Categories ------- */
+
+.filter-category {
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.filter-category .filter-header {
+    border-bottom: none;
+    margin-bottom: 0;
+    padding: 6px 10px;
+}
+
+.filter-heading-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-category .filter-title {
+    font-size: 16px;
+}
+
+/* ------- Category Filter Options ------- */
+
+.filter-category .show-on-the-map-option {
+    padding-left: 30px;
+}
+
+.filter-category .parking-option {
+    padding-left: 30px;
+}
+
 .filter-title {
     color: white;
     font-size: 18px;
@@ -615,8 +650,9 @@ body {
     transform: none;
 }
 
+[hidden],
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .parking-header,
@@ -705,6 +741,13 @@ body {
 
 .parking-option > .checkbox-container,
 .show-on-the-map-option > .checkbox-container {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.show-all-header > .checkbox-container {
     position: absolute;
     right: 10px;
     top: 50%;

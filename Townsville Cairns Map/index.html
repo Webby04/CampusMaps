@@ -1,543 +1,631 @@
 <html>
-    <head>
-        <title>JCU Maps App</title>
-        
-        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
-            crossorigin=""/>
 
-        <link rel="stylesheet" href="style.css">
+<head>
+    <title>JCU Maps App</title>
 
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
-        <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="style.css">
 
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
 
-    </head>
-    <body>
-        <div class="map-sidebar" id="map-sidebar">
-            <div class="sidebar-header">
-                <span class="sidebar-title">Map Filters</span>
-                
-                <button class="sidebar-button menu-button" id="menu-button" aria-label="Open map filters">
-                    <i class="fa-solid fa-bars"></i>
-                </button>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css" />
 
-                
-                <button class="sidebar-button close-button" id="close-button" aria-label="Close map filters">
-                    <i class="fa-solid fa-xmark"></i>
-                </button>
-            </div>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-            <button class="sidebar-button campus-button" data-campus="tsv" aria-pressed="true">
-                <i class="fa-solid fa-location-dot"></i>
+</head>
+
+<body>
+    <div class="map-sidebar" id="map-sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-title">Map Filters</span>
+
+            <button class="sidebar-button menu-button" id="menu-button" aria-label="Open map filters">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+
+
+            <button class="sidebar-button close-button" id="close-button" aria-label="Close map filters">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <button class="sidebar-button campus-button" data-campus="tsv" aria-pressed="true">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Townsville</span>
+        </button>
+
+        <button class="sidebar-button campus-button" data-campus="cns" aria-pressed="false">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Cairns</span>
+        </button>
+
+        <div class="campus-filter">
+            <h3>Campus</h3>
+
+            <label class="campus-option">
+                <input type="radio" name="campus" value="tsv" checked>
+                <span class="radio-custom"></span>
                 <span>Townsville</span>
-            </button>
-
-            <button class="sidebar-button campus-button" data-campus="cns" aria-pressed="false">
-                <i class="fa-solid fa-location-dot"></i>
+            </label>
+            <label class="campus-option">
+                <input type="radio" name="campus" value="cns">
+                <span class="radio-custom"></span>
                 <span>Cairns</span>
-            </button>
+            </label>
+        </div>
 
-            <div class="campus-filter">
-                <h3>Campus</h3>
-
-                <label class="campus-option">
-                    <input type="radio" name="campus" value="tsv" checked>
-                    <span class="radio-custom"></span>
-                    <span>Townsville</span>
+        <div class="filter-menu">
+            <div class="filter-header show-all-header">
+                <div class="filter-heading-left">
+                    <button class="expand-button" id="showAllExpand" aria-label="Expand or collapse all filters"
+                        aria-expanded="false" aria-controls="filters">
+                        <i class="fa-solid fa-chevron-down" id="showAllChevron"></i>
+                    </button>
+                    <span class="filter-title">Map Filters</span>
+                </div>
+                <label class="checkbox-container">
+                    <input type="checkbox" id="showAllCheckbox" checked aria-label="Show All">
+                    <span class="checkmark"></span>
                 </label>
-                <label class="campus-option">
-                    <input type="radio" name="campus" value="cns">
-                    <span class="radio-custom"></span>
-                    <span>Cairns</span>
-                </label>
-
-                <hr>
             </div>
 
-            <div class="filter-menu">
-                <div class="filter-header show-all-header">
-                    <span class="filter-title">Map Filters</span>
+            <div id="filters" hidden>
+                <div class="show-on-the-map-option">
+                    <div class="show-on-the-map-name">
+                        <span class="poi-icon poi-info filter-poi-icon">
+                            <i class="fa-solid fa-circle-info"></i>
+                        </span>
+                        <span>Information</span>
+                    </div>
 
-                    <div class="filter-controls">
-                        <button class="expand-button" id="showAllExpand" aria-label="Expand or collapse all filters" aria-expanded="false" aria-controls="filters">
-                            <i class="fa-solid fa-chevron-down" id="showAllChevron"></i>
-                        </button>
-
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="infoCheckbox" checked aria-label="Information">
+                        <span class="checkmark"></span>
+                    </label>
+                </div>
+                <div class="filter-category">
+                    <div class="filter-header standard-parking-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="standardParkingExpand"
+                                aria-label="Expand or collapse parking filters" aria-expanded="false"
+                                aria-controls="standardParkingFilters">
+                                <i class="fa-solid fa-chevron-down" id="standardParkingChevron"></i>
+                            </button>
+                            <span class="filter-title">Standard Parking</span>
+                        </div>
                         <label class="checkbox-container">
-                            <input type="checkbox" id="showAllCheckbox" checked aria-label="Show All">
+                            <input type="checkbox" id="standardParkingCheckbox" checked aria-label="standard Parking">
                             <span class="checkmark"></span>
                         </label>
                     </div>
-                </div>
+                    <div class="filter-options" id="standardParkingFilters" hidden>
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-free"></i>
+                                <span>Free Parking</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="freeParkingCheckbox" checked aria-label="Free Parking">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
 
-                <div id="filters" class="hidden">
-                    <div class="parking-section">
-                        <div class="filter-header parking-header">
-                            <span class="filter-title">Parking</span>
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-freevpermit"></i>
+                                <span>Free with vPermit</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="freevPermitCheckbox" checked aria-label="Free with vPermit">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-paid-all"></i>
+                                <span>Paid All Day Parking</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="paidAllDayCheckbox" checked
+                                    aria-label="Paid All Day Parking">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-paid-4hr"></i>
+                                <span>Paid 4 Hour Max</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="paid4hrMaxCheckbox" checked aria-label="Paid 4 Hour Max">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <span class="poi-icon poi-motorc filter-poi-icon">
+                                    <span class="material-symbols-outlined">motorcycle</span>
+                                </span>
+                                <span>Motorcycle Parking</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="motorcycleCheckbox" checked aria-label="Motorcycle Parking">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <span class="poi-icon poi-accpark filter-poi-icon">
+                                    <i class="fa-solid fa-wheelchair"></i>
+                                </span>
+                                <span>Accessible Parking</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="accessibleCheckbox" checked aria-label="Accessible Parking">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-category">
+                    <div class="filter-header restricted-parking-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="restrictedParkingExpand"
+                                aria-label="Expand or collapse restricted parking filters" aria-expanded="false"
+                                aria-controls="restrictedParkingFilters">
+                                <i class="fa-solid fa-chevron-down" id="restrictedParkingChevron"></i>
+                            </button>
+                            <span class="filter-title">Restricted Parking</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="restrictedParkingCheckbox" checked
+                                aria-label="Restricted Parking">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="filter-options" id="restrictedParkingFilters" hidden>
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-residential"></i>
+                                <span>Residential Parking</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="residentialCheckbox" checked
+                                    aria-label="Residential Parking">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-cel-prem"></i>
+                                <span>Premium Parking</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="premiumCheckbox" checked aria-label="Premium Parking">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="parking-option">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-special"></i>
+                                <span>Special Parking</span>
+                            </div>
+
                             <div class="filter-controls">
-                                <button class="expand-button" id="parkingExpand" aria-label="Expand or collapse parking filters" aria-expanded="false" aria-controls="parkingFilters">
-                                    <i class="fa-solid fa-chevron-down" id="parkingChevron"></i>
+                                <button class="expand-button" id="specialParkingExpand"
+                                    aria-label="Expand or collapse special parking filters" aria-expanded="false"
+                                    aria-controls="specialParkingFilters">
+                                    <i class="fa-solid fa-chevron-down" id="specialParkingChevron"></i>
                                 </button>
                                 <label class="checkbox-container">
-                                    <input type="checkbox" id="parkingCheckbox" checked aria-label="Parking">
+                                    <input type="checkbox" id="specialParkingCheckbox" checked
+                                        aria-label="Special Parking">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
-                        <div id="parkingFilters" class="hidden">
-                            <div class="parking-option">
-                                <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-free"></i>
-                                    <span>Free Parking</span>
-                                </div>
 
+                        <div id="specialParkingFilters" class="special-parking-filters" hidden>
+                            <div class="special-parking-option">
+                                <div class="parking-option-name">
+                                    <span>Commercial</span>
+                                </div>
                                 <label class="checkbox-container">
-                                    <input type="checkbox" id="freeParkingCheckbox" checked aria-label="Free Parking">
+                                    <input type="checkbox" id="commercialCheckbox" checked aria-label="Commercial">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
 
-                            <div class="parking-option">
+                            <div class="special-parking-option">
                                 <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-freevpermit"></i>
-                                    <span>Free with vPermit</span>
+                                    <span>Reserved</span>
                                 </div>
-
                                 <label class="checkbox-container">
-                                    <input type="checkbox" id="freevPermitCheckbox" checked aria-label="Free with vPermit">
+                                    <input type="checkbox" id="reservedCheckbox" checked aria-label="Reserved">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
 
-                            <div class="parking-option">
+                            <div class="special-parking-option">
                                 <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-paid-all"></i>
-                                    <span>Paid All Day Parking</span>
+                                    <span>Loading</span>
                                 </div>
-
                                 <label class="checkbox-container">
-                                    <input type="checkbox" id="paidAllDayCheckbox" checked aria-label="Paid All Day Parking">
+                                    <input type="checkbox" id="loadingCheckbox" checked aria-label="Loading">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
 
-                            <div class="parking-option">
+                            <div class="special-parking-option">
                                 <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-paid-4hr"></i>
-                                    <span>Paid 4 Hour Max</span>
+                                    <span>Visitor</span>
                                 </div>
-
                                 <label class="checkbox-container">
-                                    <input type="checkbox" id="paid4hrMaxCheckbox" checked aria-label="Paid 4 Hour Max">
+                                    <input type="checkbox" id="visitorCheckbox" checked aria-label="Visitor">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
 
-                            <div class="parking-option">
+                            <div class="special-parking-option">
                                 <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-residential"></i>
-                                    <span>Residential Parking</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="residentialCheckbox" checked aria-label="Residential Parking">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="parking-option">
-                                <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-cel-prem"></i>
-                                    <span>Premium Parking</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="premiumCheckbox" checked aria-label="Premium Parking">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="parking-option">
-                                <div class="parking-option-name">
-                                    <i class="fa-solid fa-square-parking parking-special"></i>
-                                    <span>Special Parking</span>
-                                </div>
-
-                                <div class="filter-controls">
-                                    <button class="expand-button" id="specialParkingExpand" aria-label="Expand or collapse special parking filters" aria-expanded="false" aria-controls="specialParkingFilters">
-                                        <i class="fa-solid fa-chevron-down" id="specialParkingChevron"></i>
-                                    </button>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="specialParkingCheckbox" checked aria-label="Special Parking">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div id="specialParkingFilters" class="special-parking-filters hidden">
-                                <div class="special-parking-option">
-                                    <div class="parking-option-name">
-                                        <span>Commercial</span>
-                                    </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="commercialCheckbox" checked aria-label="Commercial">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                                
-                                <div class="special-parking-option">
-                                    <div class="parking-option-name">
-                                        <span>Reserved</span>
-                                    </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="reservedCheckbox" checked aria-label="Reserved">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-
-                                <div class="special-parking-option">
-                                    <div class="parking-option-name">
-                                        <span>Loading</span>
-                                    </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="loadingCheckbox" checked aria-label="Loading">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-
-                                <div class="special-parking-option">
-                                    <div class="parking-option-name">
-                                        <span>Visitor</span>
-                                    </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="visitorCheckbox" checked aria-label="Visitor">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-
-                                <div class="special-parking-option">
-                                    <div class="parking-option-name">
-                                        <span>Service</span>
-                                    </div>
-                                    <label class="checkbox-container">
-                                        <input type="checkbox" id="serviceCheckbox" checked aria-label="Service">
-                                        <span class="checkmark"></span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div class="parking-option">
-                                <div class="parking-option-name">
-                                    <span class="poi-icon poi-motorc filter-poi-icon">
-                                        <span class="material-symbols-outlined">motorcycle</span>
-                                    </span>
-                                    <span>Motorcycle</span>
+                                    <span>Service</span>
                                 </div>
                                 <label class="checkbox-container">
-                                    <input type="checkbox" id="motorcycleCheckbox" checked aria-label="Motorcycle">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="parking-option">
-                                <div class="parking-option-name">
-                                    <span class="poi-icon poi-accpark filter-poi-icon">
-                                        <i class="fa-solid fa-wheelchair"></i>
-                                    </span>
-                                    <span>Accessible Parking</span>
-                                </div>
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="accessibleCheckbox" checked aria-label="Accessible Parking">
+                                    <input type="checkbox" id="serviceCheckbox" checked aria-label="Service">
                                     <span class="checkmark"></span>
                                 </label>
                             </div>
                         </div>
                     </div>
-
-                    <div class="filter-header show-on-map-header show-on-map-header">
-                            <span class="filter-title">Show on the Map:</span>
-
-                            <div class="filter-controls">
-                                <button class="expand-button" id="showOnMapExpand" aria-label="Expand or collapse show on map filters" aria-expanded="false" aria-controls="showOnMapFilters">
-                                    <i class="fa-solid fa-chevron-down" id="showOnMapChevron"></i>    
-                                </button>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="showOnMapCheckbox" checked aria-label="Show on the Map">
-                                    <span class="checkmark"></span>
-                                </label>
+                </div>
+                <div class="filter-category">
+                    <div class="filter-header transport-mobility-header">
+                        <div class="filter-header-left">
+                            <button class="expand-button" id="transportMobilityExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="transportMobilityFilters">
+                                <i class="fa-solid fa-chevron-down" id="transportMobilityChevron"></i>
+                            </button>
+                            <span class="filter-title">Transport &amp; Mobility</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="transportMobilityCheckbox" checked
+                                aria-label="Transport &amp; Mobility">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="filter-options" id="transportMobilityFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-trans filter-poi-icon">
+                                    <i class="fa-solid fa-bus-simple"></i>
+                                </span>
+                                <span>Bus Stops</span>
                             </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="transportCheckbox" checked aria-label="Bus Stops">
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
 
-                        <div id="showOnMapFilters" class="hidden">
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-trans filter-poi-icon">
-                                        <i class="fa-solid fa-bus-simple"></i>
-                                    </span>
-                                    <span>Bus Stops</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="transportCheckbox" checked aria-label="Bus Stops">
-                                    <span class="checkmark"></span>
-                                </label>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-escooter filter-poi-icon">
+                                    <span class="material-symbols-outlined">electric_scooter</span>
+                                </span>
+                                <span>Electric Scooters</span>
                             </div>
 
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-escooter filter-poi-icon">
-                                        <span class="material-symbols-outlined">electric_scooter</span>
-                                    </span>
-                                    <span>Electric Scooters</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="escooterCheckbox" checked aria-label="Electric Scooters">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-ev-chg filter-poi-icon">
-                                        <i class="fa-solid fa-bolt"></i>
-                                    </span>
-                                    <span>Electric Charging Bays</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="evChargingCheckbox" checked aria-label="Electric Charging Bays">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-bike filter-poi-icon">
-                                        <span class="material-symbols-outlined">directions_bike</span>
-                                    </span>
-                                    <span>Bicycle Racks</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="bikeCheckbox" checked aria-label="Bicycle Racks">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-bikews filter-poi-icon">
-                                        <i class="fa-solid fa-wrench"></i>
-                                    </span>
-                                    <span>Bicycle Repair Station</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="bikewsCheckbox" checked aria-label="Bicycle Repair Station">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-foodbev filter-poi-icon">
-                                        <span class="material-symbols-outlined">restaurant</span>
-                                    </span>
-                                    <span>Food & Beverage</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="foodBevCheckbox" checked aria-label="Food & Beverage">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-atm filter-poi-icon">
-                                        <span class="material-symbols-outlined">attach_money</span>
-                                    </span>
-                                    <span>ATM</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="atmCheckbox" checked aria-label="ATM">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-helpphone filter-poi-icon">
-                                        <i class="fa-solid fa-phone"></i>
-                                    </span>
-                                    <span>Help Phone</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="helpPhoneCheckbox" checked aria-label="Help Phone">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-security filter-poi-icon">
-                                        <i class="fa-solid fa-shield"></i>
-                                    </span>
-                                    <span>Security</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="securityCheckbox" checked aria-label="Security">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-defib filter-poi-icon">
-                                        <i class="fa-solid fa-heart-crack"></i>
-                                    </span>
-                                    <span>Defibrillator</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="defibCheckbox" checked aria-label="Defibrillator">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-parent filter-poi-icon">
-                                        <i class="fa-solid fa-baby"></i>
-                                    </span>
-                                    <span>Parents Room</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="parentRoomCheckbox" checked aria-label="Parents Room">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-info filter-poi-icon">
-                                        <i class="fa-solid fa-circle-info"></i>
-                                    </span>
-                                    <span>Information</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="infoCheckbox" checked aria-label="Information">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-wellness filter-poi-icon">
-                                        <i class="fa-solid fa-leaf"></i>
-                                    </span>
-                                    <span>Wellness</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="wellnessCheckbox" checked aria-label="Wellness">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-shower filter-poi-icon">
-                                        <i class="fa-solid fa-shower"></i>
-                                    </span>
-                                    <span>Shower</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="showerCheckbox" checked aria-label="Shower">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
-
-                            <div class="show-on-the-map-option">
-                                <div class="show-on-the-map-name">
-                                    <span class="poi-icon poi-pwd filter-poi-icon">
-                                        <i class="fa-solid fa-restroom"></i>
-                                    </span>
-                                    <span>Restrooms</span>
-                                </div>
-
-                                <label class="checkbox-container">
-                                    <input type="checkbox" id="pwdCheckbox" checked aria-label="Restrooms">
-                                    <span class="checkmark"></span>
-                                </label>
-                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="escooterCheckbox" checked aria-label="Electric Scooters">
+                                <span class="checkmark"></span>
+                            </label>
                         </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-ev-chg filter-poi-icon">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </span>
+                                <span>Electric Charging Bays</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="evChargingCheckbox" checked
+                                    aria-label="Electric Charging Bays">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-bike filter-poi-icon">
+                                    <span class="material-symbols-outlined">directions_bike</span>
+                                </span>
+                                <span>Bicycle Racks</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="bikeCheckbox" checked aria-label="Bicycle Racks">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-bikews filter-poi-icon">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </span>
+                                <span>Bicycle Repair Station</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="bikewsCheckbox" checked aria-label="Bicycle Repair Station">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-category">
+                    <div class="filter-header amenities-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="amenitiesExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="amenitiesFilters">
+                                <i class="fa-solid fa-chevron-down" id="amenitiesChevron"></i>
+                            </button>
+                            <span class="filter-title">Amenities</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="amenitiesCheckbox" checked aria-label="Amenities">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="filter-options" id="amenitiesFilters" hidden>
+                         <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-parent filter-poi-icon">
+                                    <i class="fa-solid fa-kitchen-set"></i>
+                                </span>
+                                <span>Kitchenettes</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="kitchenettesCheckbox" checked aria-label="Kitchenettes">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-parent filter-poi-icon">
+                                    <i class="fa-solid fa-baby"></i>
+                                </span>
+                                <span>Parents Room</span>
+                            </div>
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="parentRoomCheckbox" checked aria-label="Parents Room">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-wellness filter-poi-icon">
+                                    <i class="fa-solid fa-leaf"></i>
+                                </span>
+                                <span>Wellness</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="wellnessCheckbox" checked aria-label="Wellness">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-shower filter-poi-icon">
+                                    <i class="fa-solid fa-shower"></i>
+                                </span>
+                                <span>Shower</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="showerCheckbox" checked aria-label="Shower">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-pwd filter-poi-icon">
+                                    <i class="fa-solid fa-restroom"></i>
+                                </span>
+                                <span>Accessible Toilets</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="pwdCheckbox" checked aria-label="Accessible Toilets">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-category">
+                    <div class="filter-header safety-security-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="safetySecurityExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="safetySecurityFilters">
+                                <i class="fa-solid fa-chevron-down" id="safetySecurityChevron"></i>
+                            </button>
+                            <span class="filter-title">Safety &amp; Security</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="safetySecurityCheckbox" checked aria-label="Safety & Security">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="filter-options" id="safetySecurityFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-helpphone filter-poi-icon">
+                                    <i class="fa-solid fa-phone"></i>
+                                </span>
+                                <span>Help Phone</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="helpPhoneCheckbox" checked aria-label="Help Phone">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-security filter-poi-icon">
+                                    <i class="fa-solid fa-shield"></i>
+                                </span>
+                                <span>Security</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="securityCheckbox" checked aria-label="Security">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-defib filter-poi-icon">
+                                    <i class="fa-solid fa-heart-crack"></i>
+                                </span>
+                                <span>Defibrillator</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="defibCheckbox" checked aria-label="Defibrillator">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-category">
+                    <div class="filter-header food-services-header">
+                        <div class="filter-header-left">
+                            <button class="expand-button" id="foodServicesExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="foodServicesFilters">
+                                <i class="fa-solid fa-chevron-down" id="foodServicesChevron"></i>
+                            </button>
+                            <span class="filter-title">Food &amp; Services</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="foodServicesCheckbox" checked aria-label="Food & Services">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="filter-options" id="foodServicesFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-foodbev filter-poi-icon">
+                                    <span class="material-symbols-outlined">restaurant</span>
+                                </span>
+                                <span>Food & Beverage/Cafe</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="foodBevCheckbox" checked aria-label="Food & Beverage">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-atm filter-poi-icon">
+                                    <span class="material-symbols-outlined">attach_money</span>
+                                </span>
+                                <span>ATM</span>
+                            </div>
+
+                            <label class="checkbox-container">
+                                <input type="checkbox" id="atmCheckbox" checked aria-label="ATM">
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">
+        </div>
+        <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">
                 <i class="fa-solid fa-gear"></i>
             </button> -->
+    </div>
+
+    <div class="map-search-bar">
+        <button class="search-icon" aria-label="Search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+
+        <input type="text" class="map-search-input" aria-label="Search the JCU Map">
+
+        <div id="map-search-results" class="map-search-results" role="listbox" aria-label="Search suggestions" hidden>
         </div>
 
-        <div class="map-search-bar">
-            <button class="search-icon" aria-label="Search">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
+        <button type="button" class="map-search-clear" aria-label="Clear search" hidden>&times;</button>
 
-            <input type="text" class="map-search-input" aria-label="Search the JCU Map">
-
-            <div id="map-search-results" class="map-search-results" role="listbox" aria-label="Search suggestions" hidden></div>
-
-            <button type="button" class="map-search-clear" aria-label="Clear search" hidden>&times;</button>
-
-            <!-- Search Results Panel -->
-            <aside class="map-results-panel" id="map-results-panel" hidden>
-                <div class="map-results-header">
-                    <div>
-                        <h2>Search Results</h2>
-                        <p id="map-results-count">0 places found</p>
-                    </div>
-                    <button class="map-results-close" id="map-results-close" type="button" aria-label="Close search results">
-                        &times;
-                    </button>
+        <!-- Search Results Panel -->
+        <aside class="map-results-panel" id="map-results-panel" hidden>
+            <div class="map-results-header">
+                <div>
+                    <h2>Search Results</h2>
+                    <p id="map-results-count">0 places found</p>
                 </div>
+                <button class="map-results-close" id="map-results-close" type="button"
+                    aria-label="Close search results">
+                    &times;
+                </button>
+            </div>
 
-                <div class="map-results-list" id="map-results-list" role="list" aria-label="Search results"></div>
-            </aside>
-        </div>
-    
-        <div id="map"></div>
+            <div class="map-results-list" id="map-results-list" role="list" aria-label="Search results"></div>
+        </aside>
+    </div>
 
-        
+    <div id="map"></div>
 
-        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
-            crossorigin=""></script>
 
-        <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
 
-        <script src="js/map.js"></script>
-        <script src="js/location.js"></script>
-        <script src="js/parking.js"></script>
-        <script src="js/poi.js"></script>
-        <script src="js/filters.js"></script>
-        <script src="js/directions.js"></script>
-        <script src="js/script.js"></script>
-        <script src="js/search.js"></script>
-        <script src="js/search-results-panel.js"></script>
-    </body>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fuse.js@7/dist/fuse.min.js"></script>
+
+    <script src="js/map.js"></script>
+    <script src="js/location.js"></script>
+    <script src="js/parking.js"></script>
+    <script src="js/poi.js"></script>
+    <script src="js/filters.js"></script>
+    <script src="js/directions.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/search.js"></script>
+    <script src="js/search-results-panel.js"></script>
+</body>
+
 </html>

@@ -9,7 +9,6 @@ var premiumLayer = null;
 
 // ------- Parking Icons -------
 
-var parkingIcons = createMarkerCluster();
 var freeParkingIcons = createMarkerCluster();
 var freevPermitIcons = createMarkerCluster();
 var paidAllDayIcons = createMarkerCluster();
@@ -47,8 +46,6 @@ function addParkingIcon(feature, layer) {
         marker.addTo(visitorIcons);
     } else if (parkType === "SERVICE") {
         marker.addTo(serviceIcons);
-    } else {
-        marker.addTo(parkingIcons);
     }
 
     marker.feature = feature;
