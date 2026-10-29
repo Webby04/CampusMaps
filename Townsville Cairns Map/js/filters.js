@@ -180,6 +180,15 @@ showAllCheckbox.addEventListener("change", function () {
         checkbox.checked = this.checked;
     });
 
+    // Recalculate parent checkbox states
+    updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
+    updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
+    updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
+    updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
+    updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
+    updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
+    updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
+
     updateFilterVisibility();
 });
 
