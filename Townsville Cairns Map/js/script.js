@@ -352,6 +352,121 @@ setupParentCheckbox(amenitiesCheckbox, amenitiesChildren);
 setupParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
 setupParentCheckbox(foodServicesCheckbox, foodServicesChildren);
 
+// ------- Save and Restore Map Filter Settings -------
+
+const filterStorageKey = 'jcuMapFilterSettings';
+
+const savedFilterSettings = localStorage.getItem(filterStorageKey);
+
+if (savedFilterSettings) {
+    // Restore the user's previous selections
+    const settings = JSON.parse(savedFilterSettings);
+
+    document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+        if (settings[checkbox.id] !== undefined) {
+            checkbox.checked = settings[checkbox.id];
+        }
+    });
+} else {
+    // First visit: set the default filters
+    document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    freeParkingCheckbox.checked = true;
+    transportCheckbox.checked = true;
+    foodBevCheckbox.checked = true;
+    infoCheckbox.checked = true;
+    pwdCheckbox.checked = true;
+}
+
+// Recalculate parent checkbox states
+updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
+updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
+updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
+updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
+updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
+updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
+updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
+
+// Update the map
+updateFilterVisibility();
+
+// Save settigns whenever a checkbox changes
+document.querySelector(".filter-menu").addEventListener("change", function (){
+    const settings = {};
+    document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+        settings[checkbox.id] = checkbox.checked;
+    });
+    localStorage.setItem(filterStorageKey, JSON.stringify(settings));
+});
+
+// ------- Automatically Expand categories with Active Filters -------
+
+function expandActiveFilterCategories() {
+    function expandCategory(buttonID, chevronID, contentID, checkboxes) {
+        const hasActiveFilters = checkboxes.some(checkbox => checkbox.checked);
+        if (hasActiveFilters) {
+            const button = document.getElementById(buttonID);
+            const chevron = document.getElementById(chevronID);
+            const content = document.getElementById(contentID);
+            
+            content.hidden = false;
+            content.classList.remove("hidden");
+
+            chevron.classList.remove("fa-chevron-down");
+            chevron.classList.add("fa-chevron-up");
+
+            button.setAttribute("aria-expanded", "true");
+        }
+    }
+
+    // Standard Parking
+    expandCategory("standardParkingExpand", "standardParkingChevron", "standardParkingFilters", 
+        [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, motorcycleCheckbox, accessibleCheckbox]);
+
+    // Restricted Parking
+    expandCategory("restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters",
+        [residentialCheckbox, premiumCheckbox, commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox]);
+
+    // Special Parking
+    expandCategory("specialParkingExpand", "specialParkingChevron", "specialParkingFilters",
+        [commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox]);
+
+    // Transport & Mobility
+    expandCategory("transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters",
+        [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox]);
+
+    // Amenities
+    expandCategory("amenitiesExpand", "amenitiesChevron", "amenitiesFilters",
+        [kitchenettesCheckbox, parentRoomCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox]);
+
+    // Safety & Security
+    expandCategory("safetySecurityExpand", "safetySecurityChevron", "safetySecurityFilters",
+        [helpPhoneCheckbox, securityCheckbox, defibCheckbox]);
+
+    // Food & Services
+    expandCategory("foodServicesExpand", "foodServicesChevron", "foodServicesFilters",
+        [foodBevCheckbox, atmCheckbox]);
+
+    // Expand the main Map Filters section
+    const filters = document.getElementById("filters");
+    const showAllButton = document.getElementById("showAllExpand");
+    const showAllChevron = document.getElementById("showAllChevron");
+
+    const hasActiveFilters = document.querySelectorAll(".filter-menu input[type='checkbox']:checked").length > 0;
+
+    if (hasActiveFilters) {
+        filters.hidden = false;
+        filters.classList.remove("hidden");
+        showAllChevron.classList.remove("fa-chevron-down");
+        showAllChevron.classList.add("fa-chevron-up");
+        showAllButton.setAttribute("aria-expanded", "true");
+    }
+}
+
+expandActiveFilterCategories();
+
 // ------- Load Campus Data -------
 
 async function callbacktest(campus) {
