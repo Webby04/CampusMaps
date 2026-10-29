@@ -6,16 +6,24 @@ let zoomEndHandler = null;
 
 // ------- Building Labels -------
 
+
 function addBuildingLabel(feature, layer) {
+    // Handle clicks on the existing building layer.
+    layer.on("click", function () {
+        if (typeof handleBuildingDirections === "function") {
+            handleBuildingDirections(feature, layer);
+        }
+    });
+
     var center = layer.getBounds().getCenter();
 
     var buildingNumber = feature.properties.buildingTag ??
-    feature.properties.buildingNumber; 
+        feature.properties.buildingNumber;
 
     if (buildingNumber == null) {
         return;
     }
-    
+
     buildingNumber = String(buildingNumber);
 
     var buildingName = feature.properties.buildingName;
@@ -26,7 +34,18 @@ function addBuildingLabel(feature, layer) {
             html: buildingNumber,
             iconSize: [40, 20],
             iconAnchor: [20, 10]
-        })
+        }),
+        interactive: true,
+        bubblingMouseEvents: false,
+    });
+
+    // Handle clicks directly on the building number/name Label.
+    label.on("click", function () {
+        if (typeof handleBuildingDirections === "function") {
+            handleBuildingDirections(feature, layer);
+        } else {
+            console.error("handleBuildingDirections() is not defined.");
+        }
     });
 
     buildingLabels.push({
@@ -35,6 +54,7 @@ function addBuildingLabel(feature, layer) {
         label: label
     });
 }
+
 
 // ------- Filter Visibility -------
 
@@ -276,6 +296,10 @@ poiChildren.forEach(child => {
 
 async function callbacktest(campus) {
     const generation = ++campusLoadGeneration;
+
+    reloadDirections(campus).catch(error => {
+        console.error("Directions reload failed:", error);
+    });
 
     parkingIcons.clearLayers();
     freeParkingIcons.clearLayers();

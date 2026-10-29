@@ -154,6 +154,13 @@ function checkUserLocationAgainstCampus() {
     updateLocateButton();
 
     showUserLocation(latitude, longitude, lastUserPosition.accuracy);
+
+    if (centerMapLocationFound && userLocationMarker) {
+        centerMapLocationFound = false;
+        map.setView(userLocationMarker.getLatLng(), 18, {
+            animate: true
+        });
+    }
 }
 
 function showUserLocation(latitude, longitude, accuracy) {
@@ -221,6 +228,7 @@ function watchUserLocation() {
             locationWatcherId = null;
             centerMapLocationFound = false;
             lastUserPosition = null;
+            outsidePopupShown = false;
             removeUserLocation();
             
             if (error.code === 1) {

@@ -215,6 +215,7 @@ body {
     text-align: center;
     line-height: 20px;
     text-shadow: -1px 0 0 white, 1px 0 0 white, 0px -1px 0 white, 0 1px 0 white, 0 1px 3px white;
+    pointer-events: none;
 }
 
 .parking-free {
@@ -799,4 +800,25 @@ body {
     stroke-width: 1;
     fill: #8AB4F8;
     fill-opacity: 0.2;
+}
+
+/*Transparent building layer used to detect clicks */
+.directions-building-click-layer {
+    pointer-events: auto;
+}
+
+path.directions-building-click-layer {
+    fill: #000;
+    fill-opacity: 0.001;
+    stroke: transparent;
+    stroke-opacity: 0;
+    pointer-events: auto;
+}
+
+.directions-route-line {
+    stroke: red;
+    stroke-width: 4;
+    stroke-dasharray: 6.8;
+    stroke-linecap: round;
+    fill: none;
 }
