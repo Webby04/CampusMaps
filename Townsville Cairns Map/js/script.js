@@ -100,7 +100,7 @@ function updateFilterVisibility() {
 
     // ------- Special Parking -------
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked && commercialCheckbox.checked) {
+    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && commercialCheckbox.checked) {
         map.addLayer(commercialIcons);
     } else {
         map.removeLayer(commercialIcons);
