@@ -1288,6 +1288,14 @@ function updateCampusFilters(parkingData, poiData) {
 
     updateFilter(showerCheckbox, poiTypes.has("SHWR"));
     updateFilter(pwdCheckbox, poiTypes.has("PWD"));
+
+    updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
+    updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
+    updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
+    updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
+    updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
+    updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
+    updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
 }
 
 // ------- Load Initial Campus -------
