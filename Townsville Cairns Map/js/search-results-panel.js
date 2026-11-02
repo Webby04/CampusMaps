@@ -54,6 +54,7 @@ function preparePanelResults(results) {
                 "Unnamed location",
 
             number:
+                item.feature?.properties?.buildingNumber ??
                 item.buildingNumber ??
                 item.number ??
                 item.building_number ??
