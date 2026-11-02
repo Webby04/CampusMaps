@@ -447,7 +447,7 @@ function expandActiveFilterCategories() {
 
     // Food & Services
     expandCategory("foodServicesExpand", "foodServicesChevron", "foodServicesFilters",
-        [foodBevCheckbox, atmCheckbox]);
+        [foodBevCheckbox, infoCheckbox, atmCheckbox]);
 
     // Expand the main Map Filters section
     const filters = document.getElementById("filters");
