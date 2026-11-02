@@ -236,7 +236,7 @@ function updateFilterVisibility() {
         map.removeLayer(pwdIcons);
     }
 
-    if (infoCheckbox.checked) {
+    if ((foodServicesCheckbox.checked || foodServicesCheckbox.indeterminate) && infoCheckbox.checked) {
         map.addLayer(infoIcons);
     } else {
         map.removeLayer(infoIcons);
