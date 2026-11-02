@@ -106,25 +106,25 @@ function updateFilterVisibility() {
         map.removeLayer(commercialIcons);
     }
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked && reservedCheckbox.checked) {
+    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && reservedCheckbox.checked) {
         map.addLayer(reservedIcons);
     } else {
         map.removeLayer(reservedIcons);
     }
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked && loadingCheckbox.checked) {
+    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && loadingCheckbox.checked) {
         map.addLayer(loadingIcons);
     } else {
         map.removeLayer(loadingIcons);
     }
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked && visitorCheckbox.checked) {
+    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && visitorCheckbox.checked) {
         map.addLayer(visitorIcons);
     } else {
         map.removeLayer(visitorIcons);
     }
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked && serviceCheckbox.checked) {
+    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && serviceCheckbox.checked) {
         map.addLayer(serviceIcons);
     } else {
         map.removeLayer(serviceIcons);
