@@ -238,7 +238,9 @@ body {
     color: #c48001
 }
 
-.parking-cel-prem,
+.parking-cel-prem {
+    color: #aa00aa;
+}
 .parking-special {
     color: #bb0000
 }
