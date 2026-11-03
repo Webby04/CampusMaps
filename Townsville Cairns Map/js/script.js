@@ -389,9 +389,6 @@ updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
 updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
 updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
 
-// Update the map
-updateFilterVisibility();
-
 // Save settigns whenever a checkbox changes
 document.querySelector(".filter-menu").addEventListener("change", function (){
     const settings = {};
