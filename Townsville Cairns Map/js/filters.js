@@ -97,13 +97,7 @@ const paidAllDayCheckbox = document.getElementById("paidAllDayCheckbox");
 const paid4hrMaxCheckbox = document.getElementById("paid4hrMaxCheckbox");
 const residentialCheckbox = document.getElementById("residentialCheckbox");
 const premiumCheckbox = document.getElementById("premiumCheckbox");
-
 const specialParkingCheckbox = document.getElementById("specialParkingCheckbox");
-const commercialCheckbox = document.getElementById("commercialCheckbox");
-const reservedCheckbox = document.getElementById("reservedCheckbox");
-const loadingCheckbox = document.getElementById("loadingCheckbox");
-const visitorCheckbox = document.getElementById("visitorCheckbox");
-const serviceCheckbox = document.getElementById("serviceCheckbox");
 
 const motorcycleCheckbox = document.getElementById("motorcycleCheckbox");
 const accessibleCheckbox = document.getElementById("accessibleCheckbox");
@@ -148,11 +142,6 @@ showAllCheckbox.addEventListener("change", function () {
         residentialCheckbox,
         premiumCheckbox,
         specialParkingCheckbox,
-        commercialCheckbox,
-        reservedCheckbox,
-        loadingCheckbox,
-        visitorCheckbox,
-        serviceCheckbox,
 
         transportCheckbox,
         escooterCheckbox,
@@ -182,7 +171,6 @@ showAllCheckbox.addEventListener("change", function () {
 
     // Recalculate parent checkbox states
     updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
-    updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
     updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
     updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
     updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
@@ -218,29 +206,6 @@ restrictedParkingCheckbox.addEventListener("change", function () {
         residentialCheckbox,
         premiumCheckbox,
         specialParkingCheckbox,
-        commercialCheckbox,
-        reservedCheckbox,
-        loadingCheckbox,
-        visitorCheckbox,
-        serviceCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
-
-// ------- Special Parking -------
-
-specialParkingCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        commercialCheckbox,
-        reservedCheckbox,
-        loadingCheckbox,
-        visitorCheckbox,
-        serviceCheckbox
     ];
 
     checkboxes.forEach(checkbox => {
@@ -330,11 +295,6 @@ const individualCheckboxes = [
         residentialCheckbox,
         premiumCheckbox,
         specialParkingCheckbox,
-        commercialCheckbox,
-        reservedCheckbox,
-        loadingCheckbox,
-        visitorCheckbox,
-        serviceCheckbox,
 
         transportCheckbox,
         escooterCheckbox,
@@ -400,7 +360,6 @@ function setupChevron(buttonID, chevronID, contentID) {
 setupChevron("showAllExpand", "showAllChevron", "filters");
 setupChevron("standardParkingExpand", "standardParkingChevron", "standardParkingFilters");
 setupChevron("restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters");
-setupChevron("specialParkingExpand", "specialParkingChevron", "specialParkingFilters");
 setupChevron("transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters");
 setupChevron("amenitiesExpand", "amenitiesChevron", "amenitiesFilters");
 setupChevron("safetySecurityExpand", "safetySecurityChevron", "safetySecurityFilters");

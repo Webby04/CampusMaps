@@ -100,33 +100,17 @@ function updateFilterVisibility() {
 
     // ------- Special Parking -------
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && commercialCheckbox.checked) {
+    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked) {
         map.addLayer(commercialIcons);
-    } else {
-        map.removeLayer(commercialIcons);
-    }
-
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && reservedCheckbox.checked) {
         map.addLayer(reservedIcons);
-    } else {
-        map.removeLayer(reservedIcons);
-    }
-
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && loadingCheckbox.checked) {
         map.addLayer(loadingIcons);
-    } else {
-        map.removeLayer(loadingIcons);
-    }
-
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && visitorCheckbox.checked) {
         map.addLayer(visitorIcons);
-    } else {
-        map.removeLayer(visitorIcons);
-    }
-
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && (specialParkingCheckbox.checked || specialParkingCheckbox.indeterminate) && serviceCheckbox.checked) {
         map.addLayer(serviceIcons);
     } else {
+        map.removeLayer(commercialIcons);
+        map.removeLayer(reservedIcons);
+        map.removeLayer(loadingIcons);
+        map.removeLayer(visitorIcons);
         map.removeLayer(serviceIcons);
     }
 
@@ -262,7 +246,6 @@ function updateParentCheckbox(parent, children) {
 }
 
 const standardParkingChildren = [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, motorcycleCheckbox, accessibleCheckbox];
-const specialParkingChildren = [commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox];
 const restrictedParkingChildren = [residentialCheckbox, premiumCheckbox, specialParkingCheckbox];
 const transportMobilityChildren = [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox];
 const amenitiesChildren = [kitchenettesCheckbox, parentRoomCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox];
@@ -279,14 +262,6 @@ standardParkingChildren.forEach(child => {
 
 [residentialCheckbox, premiumCheckbox, specialParkingCheckbox].forEach(child => {
     child.addEventListener('change', () => {
-        updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-        updateFilterVisibility();
-    });
-});
-
-specialParkingChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
         updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
         updateFilterVisibility();
     });
@@ -336,17 +311,11 @@ restrictedParkingCheckbox.addEventListener('change', () => {
     residentialCheckbox.checked = restrictedParkingCheckbox.checked;
     premiumCheckbox.checked = restrictedParkingCheckbox.checked;
     specialParkingCheckbox.checked = restrictedParkingCheckbox.checked;
-    specialParkingCheckbox.indeterminate = false;
-
-    specialParkingChildren.forEach(child => {
-        child.checked = restrictedParkingCheckbox.checked;
-    });
 
     restrictedParkingCheckbox.indeterminate = false;
 
     updateFilterVisibility();
 });
-setupParentCheckbox(specialParkingCheckbox, specialParkingChildren);
 setupParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
 setupParentCheckbox(amenitiesCheckbox, amenitiesChildren);
 setupParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
@@ -383,7 +352,6 @@ if (savedFilterSettings) {
 // Recalculate parent checkbox states
 updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
 updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
 updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
 updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
 updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
@@ -404,7 +372,6 @@ function collapseFilterCategories() {
     const categories = [
         ["standardParkingExpand", "standardParkingChevron", "standardParkingFilters"],
         ["restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters"],
-        ["specialParkingExpand", "specialParkingChevron", "specialParkingFilters"],
         ["transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters"],
         ["amenitiesExpand", "amenitiesChevron", "amenitiesFilters"],
         ["safetySecurityExpand", "safetySecurityChevron", "safetySecurityFilters"],
@@ -1190,7 +1157,7 @@ function updateCampusFilters(parkingData, poiData) {
     function updateFilter(checkbox, available) {
 
         const filterElement = checkbox.closest(
-            ".parking-option, .special-parking-option, .show-on-the-map-option"
+            ".parking-option, .show-on-the-map-option"
         );
 
         if (filterElement) {
@@ -1208,14 +1175,6 @@ function updateCampusFilters(parkingData, poiData) {
     updateFilter(paid4hrMaxCheckbox, parkingTypes.has("PAID-4HR"));
     updateFilter(residentialCheckbox, parkingTypes.has("RESIDENTIAL"));
     updateFilter(premiumCheckbox, parkingTypes.has("CEL-PREM"));
-
-    // ------- Special Parking Filters -------
-
-    updateFilter(commercialCheckbox, parkingTypes.has("COMMERCIAL"));
-    updateFilter(reservedCheckbox, parkingTypes.has("RESERVED"));
-    updateFilter(loadingCheckbox, parkingTypes.has("LOADING"));
-    updateFilter(visitorCheckbox, parkingTypes.has("VISITOR"));
-    updateFilter(serviceCheckbox, parkingTypes.has("SERVICE"));
 
     // ------- Motorcycle and Accessible -------
 
@@ -1253,7 +1212,6 @@ function updateCampusFilters(parkingData, poiData) {
 
     updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
     updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-    updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
     updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
     updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
     updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
