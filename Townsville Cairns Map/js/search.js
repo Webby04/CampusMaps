@@ -354,6 +354,7 @@ function getSearchMatches(query) {
 
 function renderSearchResults() {
     if (!searchInput || !searchResults) return;
+    if (resultsPanel) resultsPanel.hidden = true;
 
     const query = normaliseText(searchInput.value);
 
