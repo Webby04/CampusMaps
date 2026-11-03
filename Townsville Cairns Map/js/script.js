@@ -162,14 +162,19 @@ const filterStorageKey = 'jcuMapFilterSettings';
 const savedFilterSettings = localStorage.getItem(filterStorageKey);
 
 if (savedFilterSettings) {
-    // Restore the user's previous selections
-    const settings = JSON.parse(savedFilterSettings);
+    try {
+        // Restore the user's previous selections
+        const settings = JSON.parse(savedFilterSettings);
 
-    document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
-        if (settings[checkbox.id] !== undefined) {
-            checkbox.checked = settings[checkbox.id];
-        }
-    });
+        document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+            if (settings[checkbox.id] !== undefined) {
+                checkbox.checked = settings[checkbox.id];
+            }
+        });
+    } catch (error) {
+        console.error("Failed to restore saved filter settings:", error);
+        localStorage.removeItem(filterStorageKey);
+    }
 } else {
     // First visit: set the default filters
     document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
@@ -181,7 +186,7 @@ if (savedFilterSettings) {
 }
 
 // Save settings whenever a checkbox changes
-document.querySelector(".filter-menu").addEventListener("change", function (){
+document.querySelector(".filter-menu").addEventListener("change", function () {
     const settings = {};
     document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
         settings[checkbox.id] = checkbox.checked;
