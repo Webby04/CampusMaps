@@ -1188,7 +1188,6 @@ async function callbacktest(campus) {
             return marker;
         }
     })
-    campusLayers.addLayer(poiLayer);
 
 
     // ------- Campus Bounds -------
