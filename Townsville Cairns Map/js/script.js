@@ -398,71 +398,37 @@ document.querySelector(".filter-menu").addEventListener("change", function (){
     localStorage.setItem(filterStorageKey, JSON.stringify(settings));
 });
 
-// ------- Automatically Expand categories with Active Filters -------
+// ------- Collapse Filter Categories -------
 
-function expandActiveFilterCategories() {
-    function expandCategory(buttonID, chevronID, contentID, checkboxes) {
-        const hasActiveFilters = checkboxes.some(checkbox => checkbox.checked);
-        if (hasActiveFilters) {
-            const button = document.getElementById(buttonID);
-            const chevron = document.getElementById(chevronID);
-            const content = document.getElementById(contentID);
-            
-            content.hidden = false;
-            content.classList.remove("hidden");
+function collapseFilterCategories() {
+    const categories = [
+        ["standardParkingExpand", "standardParkingChevron", "standardParkingFilters"],
+        ["restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters"],
+        ["specialParkingExpand", "specialParkingChevron", "specialParkingFilters"],
+        ["transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters"],
+        ["amenitiesExpand", "amenitiesChevron", "amenitiesFilters"],
+        ["safetySecurityExpand", "safetySecurityChevron", "safetySecurityFilters"],
+        ["foodServicesExpand", "foodServicesChevron", "foodServicesFilters"]
+    ];
 
-            chevron.classList.remove("fa-chevron-down");
-            chevron.classList.add("fa-chevron-up");
+    categories.forEach(([buttonID, chevronID, contentID]) => {
+        const button = document.getElementById(buttonID);
+        const chevron = document.getElementById(chevronID);
+        const content = document.getElementById(contentID);
 
-            button.setAttribute("aria-expanded", "true");
+        if (button && chevron && content) {
+            content.hidden = true;
+            content.classList.add("hidden");
+
+            chevron.classList.remove("fa-chevron-up");
+            chevron.classList.add("fa-chevron-down");
+
+            button.setAttribute("aria-expanded", "false");
         }
-    }
-
-    // Standard Parking
-    expandCategory("standardParkingExpand", "standardParkingChevron", "standardParkingFilters", 
-        [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, motorcycleCheckbox, accessibleCheckbox]);
-
-    // Restricted Parking
-    expandCategory("restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters",
-        [residentialCheckbox, premiumCheckbox, commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox]);
-
-    // Special Parking
-    expandCategory("specialParkingExpand", "specialParkingChevron", "specialParkingFilters",
-        [commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox]);
-
-    // Transport & Mobility
-    expandCategory("transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters",
-        [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox]);
-
-    // Amenities
-    expandCategory("amenitiesExpand", "amenitiesChevron", "amenitiesFilters",
-        [kitchenettesCheckbox, parentRoomCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox]);
-
-    // Safety & Security
-    expandCategory("safetySecurityExpand", "safetySecurityChevron", "safetySecurityFilters",
-        [helpPhoneCheckbox, securityCheckbox, defibCheckbox]);
-
-    // Food & Services
-    expandCategory("foodServicesExpand", "foodServicesChevron", "foodServicesFilters",
-        [foodBevCheckbox, infoCheckbox, atmCheckbox]);
-
-    // Expand the main Map Filters section
-    const filters = document.getElementById("filters");
-    const showAllButton = document.getElementById("showAllExpand");
-    const showAllChevron = document.getElementById("showAllChevron");
-
-    const hasActiveFilters = document.querySelectorAll(".filter-menu input[type='checkbox']:checked").length > 0;
-
-    if (hasActiveFilters) {
-        filters.hidden = false;
-        filters.classList.remove("hidden");
-        showAllChevron.classList.remove("fa-chevron-down");
-        showAllChevron.classList.add("fa-chevron-up");
-        showAllButton.setAttribute("aria-expanded", "true");
-    }
+    });
 }
 
-expandActiveFilterCategories();
+collapseFilterCategories();
 
 // ------- Load Campus Data -------
 
