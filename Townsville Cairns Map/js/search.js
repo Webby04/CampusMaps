@@ -222,7 +222,7 @@ function getSearchMatches(query) {
         cachedBuildings = buildingsData;
         cachedPOIs = poisData;
         cachedParking = parkingData;
-        buildingFuse = new Fuse(buildingsData, { keys: ['properties.buildingNumber', 'properties.buildingName', 'properties.keywords'],
+        buildingFuse = new Fuse(buildingsData, { keys: ['properties.buildingNumber', 'properties.buildingTag', 'properties.buildingName', 'properties.keywords'],
             threshold: 0.35,
             ignoreLocation: true,
             includeScore: true,
