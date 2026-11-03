@@ -60,266 +60,100 @@ function addBuildingLabel(feature, layer) {
 
 function updateFilterVisibility() {
 
-    // ------- Parking -------
+    // ------- Standard Parking -------
 
-    if ((standardParkingCheckbox.checked || standardParkingCheckbox.indeterminate) && freeParkingCheckbox.checked) {
+    if (standardParkingCheckbox.checked) {
         map.addLayer(freeParkingIcons);
+        map.addLayer(freevPermitIcons);
+        map.addLayer(paidAllDayIcons);
+        map.addLayer(paid4hrMaxIcons);
+        map.addLayer(motorcycleIcons);
+        map.addLayer(accessibleIcons);
     } else {
         map.removeLayer(freeParkingIcons);
-    }
-
-    if ((standardParkingCheckbox.checked || standardParkingCheckbox.indeterminate) && freevPermitCheckbox.checked) {
-        map.addLayer(freevPermitIcons);
-    } else {
         map.removeLayer(freevPermitIcons);
-    }
-
-    if ((standardParkingCheckbox.checked || standardParkingCheckbox.indeterminate) && paidAllDayCheckbox.checked) {
-        map.addLayer(paidAllDayIcons);
-    } else {
         map.removeLayer(paidAllDayIcons);
-    }
-
-    if ((standardParkingCheckbox.checked || standardParkingCheckbox.indeterminate) && paid4hrMaxCheckbox.checked) {
-        map.addLayer(paid4hrMaxIcons);
-    } else {
         map.removeLayer(paid4hrMaxIcons);
+        map.removeLayer(motorcycleIcons);
+        map.removeLayer(accessibleIcons);
     }
 
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && residentialCheckbox.checked) {
+    // ------- Restricted Parking -------
+
+    if (restrictedParkingCheckbox.checked) {
         map.addLayer(residentialIcons);
-    } else {
-        map.removeLayer(residentialIcons);
-    }
-
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && premiumCheckbox.checked) {
         map.addLayer(premiumIcons);
-    } else {
-        map.removeLayer(premiumIcons);
-    }
-
-    // ------- Special Parking -------
-
-    if ((restrictedParkingCheckbox.checked || restrictedParkingCheckbox.indeterminate) && specialParkingCheckbox.checked) {
         map.addLayer(commercialIcons);
-        map.addLayer(reservedIcons);
         map.addLayer(loadingIcons);
         map.addLayer(visitorIcons);
         map.addLayer(serviceIcons);
     } else {
+        map.removeLayer(residentialIcons);
+        map.removeLayer(premiumIcons);
+        map.removeLayer(residentialIcons);
+        map.removeLayer(premiumIcons);
         map.removeLayer(commercialIcons);
-        map.removeLayer(reservedIcons);
         map.removeLayer(loadingIcons);
         map.removeLayer(visitorIcons);
         map.removeLayer(serviceIcons);
     }
 
-    // ------- Motorcycle / Accessible -------
+    // ------- Transport & Mobility -------
 
-    if ((standardParkingCheckbox.checked || standardParkingCheckbox.indeterminate) && motorcycleCheckbox.checked) {
-        map.addLayer(motorcycleIcons);
-    } else {
-        map.removeLayer(motorcycleIcons);
-    }
-
-    if ((standardParkingCheckbox.checked || standardParkingCheckbox.indeterminate) && accessibleCheckbox.checked) {
-        map.addLayer(accessibleIcons);
-    } else {
-        map.removeLayer(accessibleIcons);
-    }
-
-    // ------- POIs -------
-
-    if ((transportMobilityCheckbox.checked || transportMobilityCheckbox.indeterminate) && transportCheckbox.checked) {
+    if (transportMobilityCheckbox.checked) {
         map.addLayer(transportIcons);
-    } else {
-        map.removeLayer(transportIcons);
-    }
-
-    if ((transportMobilityCheckbox.checked || transportMobilityCheckbox.indeterminate) && escooterCheckbox.checked) {
         map.addLayer(escooterIcons);
-    } else {
-        map.removeLayer(escooterIcons);
-    }
-
-    if ((transportMobilityCheckbox.checked || transportMobilityCheckbox.indeterminate) && evChargingCheckbox.checked) {
         map.addLayer(evChargingIcons);
-    } else {
-        map.removeLayer(evChargingIcons);
-    }
-
-    if ((transportMobilityCheckbox.checked || transportMobilityCheckbox.indeterminate) && bikeCheckbox.checked) {
         map.addLayer(bikeIcons);
-    } else {
-        map.removeLayer(bikeIcons);
-    }
-
-    if ((transportMobilityCheckbox.checked || transportMobilityCheckbox.indeterminate) && bikewsCheckbox.checked) {
         map.addLayer(bikewsIcons);
     } else {
+        map.removeLayer(transportIcons);
+        map.removeLayer(escooterIcons);
+        map.removeLayer(evChargingIcons);
+        map.removeLayer(bikeIcons);
         map.removeLayer(bikewsIcons);
     }
 
-    if ((foodServicesCheckbox.checked || foodServicesCheckbox.indeterminate) && foodBevCheckbox.checked) {
-        map.addLayer(foodBevIcons);
-    } else {
-        map.removeLayer(foodBevIcons);
-    }
+    // ------- Amenities -------
 
-    if ((foodServicesCheckbox.checked || foodServicesCheckbox.indeterminate) && atmCheckbox.checked) {
-        map.addLayer(atmIcons);
-    } else {
-        map.removeLayer(atmIcons);
-    }
-
-    if ((safetySecurityCheckbox.checked || safetySecurityCheckbox.indeterminate) && helpPhoneCheckbox.checked) {
-        map.addLayer(helpPhoneIcons);
-    } else {
-        map.removeLayer(helpPhoneIcons);
-    }
-
-    if ((safetySecurityCheckbox.checked || safetySecurityCheckbox.indeterminate) && securityCheckbox.checked) {
-        map.addLayer(securityIcons);
-    } else {
-        map.removeLayer(securityIcons);
-    }
-
-    if ((safetySecurityCheckbox.checked || safetySecurityCheckbox.indeterminate) && defibCheckbox.checked) {
-        map.addLayer(defibIcons);
-    } else {
-        map.removeLayer(defibIcons);
-    }
-
-    if ((amenitiesCheckbox.checked || amenitiesCheckbox.indeterminate) && kitchenettesCheckbox.checked) {
+    if (amenitiesCheckbox.checked) {
         map.addLayer(kitchenettesIcons);
-    } else {
-        map.removeLayer(kitchenettesIcons);
-    }
-
-    if ((amenitiesCheckbox.checked || amenitiesCheckbox.indeterminate) && parentRoomCheckbox.checked) {
         map.addLayer(parentRoomIcons);
-    } else {
-        map.removeLayer(parentRoomIcons);
-    }
-
-    if ((amenitiesCheckbox.checked || amenitiesCheckbox.indeterminate) && wellnessCheckbox.checked) {
         map.addLayer(wellnessIcons);
-    } else {
-        map.removeLayer(wellnessIcons);
-    }
-
-    if ((amenitiesCheckbox.checked || amenitiesCheckbox.indeterminate) && showerCheckbox.checked) {
         map.addLayer(showerIcons);
-    } else {
-        map.removeLayer(showerIcons);
-    }
-
-    if ((amenitiesCheckbox.checked || amenitiesCheckbox.indeterminate) && pwdCheckbox.checked) {
         map.addLayer(pwdIcons);
     } else {
+        map.removeLayer(kitchenettesIcons);
+        map.removeLayer(parentRoomIcons);
+        map.removeLayer(wellnessIcons);
+        map.removeLayer(showerIcons);
         map.removeLayer(pwdIcons);
     }
 
-    if ((foodServicesCheckbox.checked || foodServicesCheckbox.indeterminate) && infoCheckbox.checked) {
+    // ------- Safety & Security -------
+
+    if (safetySecurityCheckbox.checked) {
+        map.addLayer(helpPhoneIcons);
+        map.addLayer(securityIcons);
+        map.addLayer(defibIcons);
+    } else {
+        map.removeLayer(helpPhoneIcons);
+        map.removeLayer(securityIcons);
+        map.removeLayer(defibIcons);
+    }
+
+    // ------- Food & Services -------
+
+    if (foodServicesCheckbox.checked) {
+        map.addLayer(foodBevIcons);
         map.addLayer(infoIcons);
+        map.addLayer(atmIcons);
     } else {
+        map.removeLayer(foodBevIcons);
         map.removeLayer(infoIcons);
+        map.removeLayer(atmIcons);
     }
 }
-
-// ------- Parent / Child Checkbox Synchronisation -------
-
-function updateParentCheckbox(parent, children) {
-    const availableChildren = children.filter(child => !child.disabled);
-    const checkedChildren = availableChildren.filter(child => child.checked).length;
-
-    if (checkedChildren === 0) {
-        parent.checked = false;
-        parent.indeterminate = false;
-    } else if (checkedChildren === availableChildren.length) {
-        parent.checked = true;
-        parent.indeterminate = false;
-    } else {
-        parent.checked = false;
-        parent.indeterminate = true;
-    }
-}
-
-const standardParkingChildren = [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, motorcycleCheckbox, accessibleCheckbox];
-const restrictedParkingChildren = [residentialCheckbox, premiumCheckbox, specialParkingCheckbox];
-const transportMobilityChildren = [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox];
-const amenitiesChildren = [kitchenettesCheckbox, parentRoomCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox];
-const safetySecurityChildren = [helpPhoneCheckbox, securityCheckbox, defibCheckbox];
-const foodServicesChildren = [foodBevCheckbox, infoCheckbox, atmCheckbox];
-
-
-standardParkingChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
-        updateFilterVisibility();
-    });
-});
-
-[residentialCheckbox, premiumCheckbox, specialParkingCheckbox].forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-        updateFilterVisibility();
-    });
-});
-
-transportMobilityChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
-        updateFilterVisibility();
-    });
-});
-
-amenitiesChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
-        updateFilterVisibility();
-    });
-});
-
-safetySecurityChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
-        updateFilterVisibility();
-    });
-});
-
-foodServicesChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
-        updateFilterVisibility();
-    });
-});
-
-function setupParentCheckbox(parent, children) {
-    parent.addEventListener('change', () => {
-        children.forEach(child => {
-            child.checked = parent.checked;
-        });
-
-        parent.indeterminate = false;
-        updateFilterVisibility();
-    });
-}
-setupParentCheckbox(standardParkingCheckbox, standardParkingChildren);
-
-restrictedParkingCheckbox.addEventListener('change', () => {
-    residentialCheckbox.checked = restrictedParkingCheckbox.checked;
-    premiumCheckbox.checked = restrictedParkingCheckbox.checked;
-    specialParkingCheckbox.checked = restrictedParkingCheckbox.checked;
-
-    restrictedParkingCheckbox.indeterminate = false;
-
-    updateFilterVisibility();
-});
-setupParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
-setupParentCheckbox(amenitiesCheckbox, amenitiesChildren);
-setupParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
-setupParentCheckbox(foodServicesCheckbox, foodServicesChildren);
 
 // ------- Save and Restore Map Filter Settings -------
 
@@ -342,22 +176,11 @@ if (savedFilterSettings) {
         checkbox.checked = false;
     });
 
-    freeParkingCheckbox.checked = true;
-    transportCheckbox.checked = true;
-    foodBevCheckbox.checked = true;
-    infoCheckbox.checked = true;
-    pwdCheckbox.checked = true;
+    standardParkingCheckbox.checked = true;
+    foodServicesCheckbox.checked = true;
 }
 
-// Recalculate parent checkbox states
-updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
-updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
-updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
-updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
-updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
-
-// Save settigns whenever a checkbox changes
+// Save settings whenever a checkbox changes
 document.querySelector(".filter-menu").addEventListener("change", function (){
     const settings = {};
     document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
@@ -1011,8 +834,6 @@ async function callbacktest(campus) {
     // Invalidate cached Fuse indexes after all search data has loaded.
     invalidateSearchIndexes();
 
-    updateCampusFilters(parkingData, poiData);
-
     poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
             var type = feature.properties.type;
@@ -1140,82 +961,6 @@ async function callbacktest(campus) {
     updateFilterVisibility();
 
     saveOriginalClusterMarkers();
-}
-
-// ------- Campus Filter Visibility -------
-
-function updateCampusFilters(parkingData, poiData) {
-
-    const parkingTypes = new Set(
-        parkingData.features.map(feature => feature.properties.parkType)
-    );
-
-    const poiTypes = new Set(
-        poiData.features.map(feature => feature.properties.type)
-    );
-
-    function updateFilter(checkbox, available) {
-
-        const filterElement = checkbox.closest(
-            ".parking-option, .show-on-the-map-option"
-        );
-
-        if (filterElement) {
-            filterElement.style.display = available ? "" : "none";
-        }
-
-        checkbox.disabled = !available;
-    }
-
-    // ------- Parking Filters -------
-
-    updateFilter(freeParkingCheckbox, parkingTypes.has("FREE"));
-    updateFilter(freevPermitCheckbox, parkingTypes.has("FREEVPERMIT"));
-    updateFilter(paidAllDayCheckbox, parkingTypes.has("PAID-ALL"));
-    updateFilter(paid4hrMaxCheckbox, parkingTypes.has("PAID-4HR"));
-    updateFilter(residentialCheckbox, parkingTypes.has("RESIDENTIAL"));
-    updateFilter(premiumCheckbox, parkingTypes.has("CEL-PREM"));
-
-    // ------- Motorcycle and Accessible -------
-
-    updateFilter(motorcycleCheckbox, poiTypes.has("MOTORC"));
-    updateFilter(accessibleCheckbox, poiTypes.has("ACCPARK"));
-
-    // ------- POI Filters -------
-
-    updateFilter(transportCheckbox, poiTypes.has("TRANS"));
-    updateFilter(escooterCheckbox, poiTypes.has("ESCOOTER"));
-    updateFilter(evChargingCheckbox, poiTypes.has("EV_CHG"));
-    updateFilter(bikeCheckbox, poiTypes.has("BIKE"));
-    updateFilter(bikewsCheckbox, poiTypes.has("BIKEWS"));
-
-    updateFilter(
-        foodBevCheckbox,
-        ["CAFE", "FOODBEV"].some(type => poiTypes.has(type))
-    );
-
-    updateFilter(atmCheckbox, poiTypes.has("ATM"));
-    updateFilter(helpPhoneCheckbox, poiTypes.has("HELPPHONE"));
-    updateFilter(securityCheckbox, poiTypes.has("SECURITY"));
-    updateFilter(defibCheckbox, poiTypes.has("DEFIB"));
-    updateFilter(parentRoomCheckbox, poiTypes.has("PARENT"));
-    updateFilter(infoCheckbox, poiTypes.has("INFO"));
-    updateFilter(kitchenettesCheckbox, poiTypes.has("KITCHENETTES"));
-
-    updateFilter(
-        wellnessCheckbox,
-        ["COMGARDEN", "WELLNESS"].some(type => poiTypes.has(type))
-    );
-
-    updateFilter(showerCheckbox, poiTypes.has("SHWR"));
-    updateFilter(pwdCheckbox, poiTypes.has("PWD"));
-
-    updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
-    updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-    updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
-    updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
-    updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
-    updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
 }
 
 // ------- Load Initial Campus -------

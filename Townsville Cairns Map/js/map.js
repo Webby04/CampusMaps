@@ -166,7 +166,7 @@ function createMarkerCluster() {
     });
 
     searchableClusters.push(cluster);
-    cluster.addTo(map);
+    //cluster.addTo(map);
 
     return cluster;
 }

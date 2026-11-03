@@ -91,33 +91,6 @@ const transportMobilityCheckbox = document.getElementById("transportMobilityChec
 const amenitiesCheckbox = document.getElementById("amenitiesCheckbox");
 const safetySecurityCheckbox = document.getElementById("safetySecurityCheckbox");
 const foodServicesCheckbox = document.getElementById("foodServicesCheckbox");
-const freeParkingCheckbox = document.getElementById("freeParkingCheckbox");
-const freevPermitCheckbox = document.getElementById("freevPermitCheckbox");
-const paidAllDayCheckbox = document.getElementById("paidAllDayCheckbox");
-const paid4hrMaxCheckbox = document.getElementById("paid4hrMaxCheckbox");
-const residentialCheckbox = document.getElementById("residentialCheckbox");
-const premiumCheckbox = document.getElementById("premiumCheckbox");
-const specialParkingCheckbox = document.getElementById("specialParkingCheckbox");
-
-const motorcycleCheckbox = document.getElementById("motorcycleCheckbox");
-const accessibleCheckbox = document.getElementById("accessibleCheckbox");
-
-const transportCheckbox = document.getElementById("transportCheckbox");
-const escooterCheckbox = document.getElementById("escooterCheckbox");
-const evChargingCheckbox = document.getElementById("evChargingCheckbox");
-const bikeCheckbox = document.getElementById("bikeCheckbox");
-const bikewsCheckbox = document.getElementById("bikewsCheckbox");
-const foodBevCheckbox = document.getElementById("foodBevCheckbox");
-const kitchenettesCheckbox = document.getElementById("kitchenettesCheckbox");
-const atmCheckbox = document.getElementById("atmCheckbox");
-const helpPhoneCheckbox = document.getElementById("helpPhoneCheckbox");
-const securityCheckbox = document.getElementById("securityCheckbox");
-const defibCheckbox = document.getElementById("defibCheckbox");
-const parentRoomCheckbox = document.getElementById("parentRoomCheckbox");
-const infoCheckbox = document.getElementById("infoCheckbox");
-const wellnessCheckbox = document.getElementById("wellnessCheckbox");
-const showerCheckbox = document.getElementById("showerCheckbox");
-const pwdCheckbox = document.getElementById("pwdCheckbox");
 
 
 
@@ -130,66 +103,7 @@ showAllCheckbox.addEventListener("change", function () {
         transportMobilityCheckbox,
         amenitiesCheckbox,
         safetySecurityCheckbox,
-        foodServicesCheckbox,
-
-        freeParkingCheckbox,
-        freevPermitCheckbox,
-        paidAllDayCheckbox,
-        paid4hrMaxCheckbox,
-        motorcycleCheckbox,
-        accessibleCheckbox,
-
-        residentialCheckbox,
-        premiumCheckbox,
-        specialParkingCheckbox,
-
-        transportCheckbox,
-        escooterCheckbox,
-        evChargingCheckbox,
-        bikeCheckbox,
-        bikewsCheckbox,
-        
-        kitchenettesCheckbox,
-        parentRoomCheckbox,
-        wellnessCheckbox,
-        showerCheckbox,
-        pwdCheckbox,
-
-        helpPhoneCheckbox,
-        securityCheckbox,
-        defibCheckbox,
-
-        foodBevCheckbox,
-        atmCheckbox,
-
-        infoCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    // Recalculate parent checkbox states
-    updateParentCheckbox(standardParkingCheckbox, standardParkingChildren);
-    updateParentCheckbox(restrictedParkingCheckbox, restrictedParkingChildren);
-    updateParentCheckbox(transportMobilityCheckbox, transportMobilityChildren);
-    updateParentCheckbox(amenitiesCheckbox, amenitiesChildren);
-    updateParentCheckbox(safetySecurityCheckbox, safetySecurityChildren);
-    updateParentCheckbox(foodServicesCheckbox, foodServicesChildren);
-
-    updateFilterVisibility();
-});
-
-// ------- Standard Parking -------
-
-standardParkingCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        freeParkingCheckbox,
-        freevPermitCheckbox,
-        paidAllDayCheckbox,
-        paid4hrMaxCheckbox,
-        motorcycleCheckbox,
-        accessibleCheckbox
+        foodServicesCheckbox
     ];
 
     checkboxes.forEach(checkbox => {
@@ -199,127 +113,19 @@ standardParkingCheckbox.addEventListener("change", function () {
     updateFilterVisibility();
 });
 
-// ------- Restricted Parking -------
+// ------- Category Filters -------
 
-restrictedParkingCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        residentialCheckbox,
-        premiumCheckbox,
-        specialParkingCheckbox,
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
-
-// ------- Transport & Mobility -------
-
-transportMobilityCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        transportCheckbox,
-        escooterCheckbox,
-        evChargingCheckbox,
-        bikeCheckbox,
-        bikewsCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
-
-// ------- Amenities -------
-
-amenitiesCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        kitchenettesCheckbox,
-        parentRoomCheckbox,
-        wellnessCheckbox,
-        showerCheckbox,
-        pwdCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
-
-// ------- Safety & Security -------
-
-safetySecurityCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        helpPhoneCheckbox,
-        securityCheckbox,
-        defibCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
-
-// ------- Food & Services -------
-
-foodServicesCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        foodBevCheckbox,
-        atmCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
-
-// ------- Indiviual Filter Changes -------
-
-const individualCheckboxes = [
-    freeParkingCheckbox,
-        freevPermitCheckbox,
-        paidAllDayCheckbox,
-        paid4hrMaxCheckbox,
-        motorcycleCheckbox,
-        accessibleCheckbox,
-
-        residentialCheckbox,
-        premiumCheckbox,
-        specialParkingCheckbox,
-
-        transportCheckbox,
-        escooterCheckbox,
-        evChargingCheckbox,
-        bikeCheckbox,
-        bikewsCheckbox,
-
-        kitchenettesCheckbox,
-        parentRoomCheckbox,
-        wellnessCheckbox,
-        showerCheckbox,
-        pwdCheckbox,
-
-        helpPhoneCheckbox,
-        securityCheckbox,
-        defibCheckbox,
-
-        foodBevCheckbox,
-        atmCheckbox,
-
-        infoCheckbox
+const categoryCheckboxes = [
+    standardParkingCheckbox,
+    restrictedParkingCheckbox,
+    transportMobilityCheckbox,
+    amenitiesCheckbox,
+    safetySecurityCheckbox,
+    foodServicesCheckbox
 ];
 
-individualCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener("change", () => {
+categoryCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
         updateFilterVisibility();
     });
 });
