@@ -73,7 +73,7 @@
                 </label>
             </div>
 
-            <div id="filters">
+            <div id="filters" class="hidden" hidden>
                 <div class="filter-category">
                     <div class="filter-header standard-parking-header">
                         <div class="filter-heading-left">
@@ -176,225 +176,224 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="filter-category">
-                <div class="filter-header transport-mobility-header">
-                    <div class="filter-heading-left">
-                        <button class="expand-button" id="transportMobilityExpand"
-                            aria-label="Expand or collapse show on map filters" aria-expanded="false"
-                            aria-controls="transportMobilityFilters">
-                            <i class="fa-solid fa-chevron-down" id="transportMobilityChevron"></i>
-                        </button>
-                        <span class="filter-title">Transport &amp; Mobility</span>
-                    </div>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="transportMobilityCheckbox" checked
-                            aria-label="Transport &amp; Mobility">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="filter-options" id="transportMobilityFilters" hidden>
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-trans filter-poi-icon">
-                                <i class="fa-solid fa-bus-simple"></i>
-                            </span>
-                            <span>Bus Stops</span>
+                <div class="filter-category">
+                    <div class="filter-header transport-mobility-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="transportMobilityExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="transportMobilityFilters">
+                                <i class="fa-solid fa-chevron-down" id="transportMobilityChevron"></i>
+                            </button>
+                            <span class="filter-title">Transport &amp; Mobility</span>
                         </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="transportMobilityCheckbox" checked
+                                aria-label="Transport &amp; Mobility">
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
-
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-escooter filter-poi-icon">
-                                <span class="material-symbols-outlined">electric_scooter</span>
-                            </span>
-                            <span>Electric Scooters</span>
+                    <div class="filter-options" id="transportMobilityFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-trans filter-poi-icon">
+                                    <i class="fa-solid fa-bus-simple"></i>
+                                </span>
+                                <span>Bus Stops</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-ev-chg filter-poi-icon">
-                                <i class="fa-solid fa-bolt"></i>
-                            </span>
-                            <span>Electric Charging Bays</span>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-escooter filter-poi-icon">
+                                    <span class="material-symbols-outlined">electric_scooter</span>
+                                </span>
+                                <span>Electric Scooters</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-bike filter-poi-icon">
-                                <span class="material-symbols-outlined">directions_bike</span>
-                            </span>
-                            <span>Bicycle Racks</span>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-ev-chg filter-poi-icon">
+                                    <i class="fa-solid fa-bolt"></i>
+                                </span>
+                                <span>Electric Charging Bays</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-bikews filter-poi-icon">
-                                <i class="fa-solid fa-wrench"></i>
-                            </span>
-                            <span>Bicycle Repair Station</span>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-bike filter-poi-icon">
+                                    <span class="material-symbols-outlined">directions_bike</span>
+                                </span>
+                                <span>Bicycle Racks</span>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="filter-category">
-                <div class="filter-header amenities-header">
-                    <div class="filter-heading-left">
-                        <button class="expand-button" id="amenitiesExpand"
-                            aria-label="Expand or collapse show on map filters" aria-expanded="false"
-                            aria-controls="amenitiesFilters">
-                            <i class="fa-solid fa-chevron-down" id="amenitiesChevron"></i>
-                        </button>
-                        <span class="filter-title">Amenities</span>
-                    </div>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="amenitiesCheckbox" checked aria-label="Amenities">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="filter-options" id="amenitiesFilters" hidden>
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-kitchenettes filter-poi-icon">
-                                <span class="material-symbols-outlined">microwave_gen</span>
-                            </span>
-                            <span>Kitchenettes</span>
-                        </div>
-                    </div>
-
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-parent filter-poi-icon">
-                                <i class="fa-solid fa-baby"></i>
-                            </span>
-                            <span>Parents Room</span>
-                        </div>
-                    </div>
-
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-wellness filter-poi-icon">
-                                <i class="fa-solid fa-leaf"></i>
-                            </span>
-                            <span>Wellness</span>
-                        </div>
-                    </div>
-
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-shower filter-poi-icon">
-                                <i class="fa-solid fa-shower"></i>
-                            </span>
-                            <span>Shower</span>
-                        </div>
-                    </div>
-
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-pwd filter-poi-icon">
-                                <i class="fa-solid fa-restroom"></i>
-                            </span>
-                            <span>Accessible Toilets</span>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-bikews filter-poi-icon">
+                                    <i class="fa-solid fa-wrench"></i>
+                                </span>
+                                <span>Bicycle Repair Station</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="filter-category">
-                <div class="filter-header safety-security-header">
-                    <div class="filter-heading-left">
-                        <button class="expand-button" id="safetySecurityExpand"
-                            aria-label="Expand or collapse show on map filters" aria-expanded="false"
-                            aria-controls="safetySecurityFilters">
-                            <i class="fa-solid fa-chevron-down" id="safetySecurityChevron"></i>
-                        </button>
-                        <span class="filter-title">Safety &amp; Security</span>
+
+                <div class="filter-category">
+                    <div class="filter-header amenities-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="amenitiesExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="amenitiesFilters">
+                                <i class="fa-solid fa-chevron-down" id="amenitiesChevron"></i>
+                            </button>
+                            <span class="filter-title">Amenities</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="amenitiesCheckbox" checked aria-label="Amenities">
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="safetySecurityCheckbox" checked aria-label="Safety & Security">
-                        <span class="checkmark"></span>
-                    </label>
+                    <div class="filter-options" id="amenitiesFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-kitchenettes filter-poi-icon">
+                                    <span class="material-symbols-outlined">microwave_gen</span>
+                                </span>
+                                <span>Kitchenettes</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-parent filter-poi-icon">
+                                    <i class="fa-solid fa-baby"></i>
+                                </span>
+                                <span>Parents Room</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-wellness filter-poi-icon">
+                                    <i class="fa-solid fa-leaf"></i>
+                                </span>
+                                <span>Wellness</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-shower filter-poi-icon">
+                                    <i class="fa-solid fa-shower"></i>
+                                </span>
+                                <span>Shower</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-pwd filter-poi-icon">
+                                    <i class="fa-solid fa-restroom"></i>
+                                </span>
+                                <span>Accessible Toilets</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-
-                <div class="filter-options" id="safetySecurityFilters" hidden>
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-helpphone filter-poi-icon">
-                                <i class="fa-solid fa-phone"></i>
-                            </span>
-                            <span>Help Phone</span>
+                <div class="filter-category">
+                    <div class="filter-header safety-security-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="safetySecurityExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="safetySecurityFilters">
+                                <i class="fa-solid fa-chevron-down" id="safetySecurityChevron"></i>
+                            </button>
+                            <span class="filter-title">Safety &amp; Security</span>
                         </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="safetySecurityCheckbox" checked aria-label="Safety & Security">
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
 
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-security filter-poi-icon">
-                                <i class="fa-solid fa-shield"></i>
-                            </span>
-                            <span>Security</span>
+                    <div class="filter-options" id="safetySecurityFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-helpphone filter-poi-icon">
+                                    <i class="fa-solid fa-phone"></i>
+                                </span>
+                                <span>Help Phone</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-defib filter-poi-icon">
-                                <i class="fa-solid fa-heart-crack"></i>
-                            </span>
-                            <span>Defibrillator</span>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-security filter-poi-icon">
+                                    <i class="fa-solid fa-shield"></i>
+                                </span>
+                                <span>Security</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-defib filter-poi-icon">
+                                    <i class="fa-solid fa-heart-crack"></i>
+                                </span>
+                                <span>Defibrillator</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="filter-category">
-                <div class="filter-header food-services-header">
-                    <div class="filter-heading-left">
-                        <button class="expand-button" id="foodServicesExpand"
-                            aria-label="Expand or collapse show on map filters" aria-expanded="false"
-                            aria-controls="foodServicesFilters">
-                            <i class="fa-solid fa-chevron-down" id="foodServicesChevron"></i>
-                        </button>
-                        <span class="filter-title">Food &amp; Services</span>
-                    </div>
-                    <label class="checkbox-container">
-                        <input type="checkbox" id="foodServicesCheckbox" checked aria-label="Food & Services">
-                        <span class="checkmark"></span>
-                    </label>
-                </div>
-                <div class="filter-options" id="foodServicesFilters" hidden>
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-foodbev filter-poi-icon">
-                                <span class="material-symbols-outlined">restaurant</span>
-                            </span>
-                            <span>Food & Beverage/Cafe</span>
+                <div class="filter-category">
+                    <div class="filter-header food-services-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="foodServicesExpand"
+                                aria-label="Expand or collapse show on map filters" aria-expanded="false"
+                                aria-controls="foodServicesFilters">
+                                <i class="fa-solid fa-chevron-down" id="foodServicesChevron"></i>
+                            </button>
+                            <span class="filter-title">Food &amp; Services</span>
                         </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="foodServicesCheckbox" checked aria-label="Food & Services">
+                            <span class="checkmark"></span>
+                        </label>
                     </div>
-
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-info filter-poi-icon">
-                                <i class="fa-solid fa-circle-info"></i>
-                            </span>
-                            <span>Information</span>
+                    <div class="filter-options" id="foodServicesFilters" hidden>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-foodbev filter-poi-icon">
+                                    <span class="material-symbols-outlined">restaurant</span>
+                                </span>
+                                <span>Food & Beverage/Cafe</span>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="show-on-the-map-option">
-                        <div class="show-on-the-map-name">
-                            <span class="poi-icon poi-atm filter-poi-icon">
-                                <span class="material-symbols-outlined">attach_money</span>
-                            </span>
-                            <span>ATM</span>
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-info filter-poi-icon">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </span>
+                                <span>Information</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-atm filter-poi-icon">
+                                    <span class="material-symbols-outlined">attach_money</span>
+                                </span>
+                                <span>ATM</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">
+        <!-- <button class="sidebar-button settings-button" aria-label="Open map settings">
                 <i class="fa-solid fa-gear"></i>
             </button> -->
     </div>
