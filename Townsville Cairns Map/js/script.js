@@ -83,6 +83,7 @@ function updateFilterVisibility() {
     if (restrictedParkingCheckbox.checked) {
         map.addLayer(residentialIcons);
         map.addLayer(premiumIcons);
+        map.addLayer(reservedIcons);
         map.addLayer(commercialIcons);
         map.addLayer(loadingIcons);
         map.addLayer(visitorIcons);
@@ -90,8 +91,7 @@ function updateFilterVisibility() {
     } else {
         map.removeLayer(residentialIcons);
         map.removeLayer(premiumIcons);
-        map.removeLayer(residentialIcons);
-        map.removeLayer(premiumIcons);
+        map.removeLayer(reservedIcons);
         map.removeLayer(commercialIcons);
         map.removeLayer(loadingIcons);
         map.removeLayer(visitorIcons);
