@@ -78,12 +78,7 @@ closeButton.addEventListener("click", function () {
 
 
 // ------- Filter Elements -------
-
-const showAllExpand = document.getElementById("showAllExpand");
-const showAllChevron = document.getElementById("showAllChevron");
 const filters = document.getElementById("filters");
-
-const showAllCheckbox = document.getElementById("showAllCheckbox");
 
 const standardParkingCheckbox = document.getElementById("standardParkingCheckbox");
 const restrictedParkingCheckbox = document.getElementById("restrictedParkingCheckbox");
@@ -91,27 +86,6 @@ const transportMobilityCheckbox = document.getElementById("transportMobilityChec
 const amenitiesCheckbox = document.getElementById("amenitiesCheckbox");
 const safetySecurityCheckbox = document.getElementById("safetySecurityCheckbox");
 const foodServicesCheckbox = document.getElementById("foodServicesCheckbox");
-
-
-
-// ------- Show All -------
-
-showAllCheckbox.addEventListener("change", function () {
-    const checkboxes = [
-        standardParkingCheckbox,
-        restrictedParkingCheckbox,
-        transportMobilityCheckbox,
-        amenitiesCheckbox,
-        safetySecurityCheckbox,
-        foodServicesCheckbox
-    ];
-
-    checkboxes.forEach(checkbox => {
-        checkbox.checked = this.checked;
-    });
-
-    updateFilterVisibility();
-});
 
 // ------- Category Filters -------
 
@@ -163,7 +137,6 @@ function setupChevron(buttonID, chevronID, contentID) {
     });
 }
 
-setupChevron("showAllExpand", "showAllChevron", "filters");
 setupChevron("standardParkingExpand", "standardParkingChevron", "standardParkingFilters");
 setupChevron("restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters");
 setupChevron("transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters");
