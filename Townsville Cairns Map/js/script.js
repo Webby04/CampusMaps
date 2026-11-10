@@ -174,6 +174,14 @@ if (savedFilterSettings) {
     } catch (error) {
         console.error("Failed to restore saved filter settings:", error);
         localStorage.removeItem(filterStorageKey);
+
+        // Reset to default filters if saved settings are invalid
+        document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        standardParkingCheckbox.checked = true;
+        foodServicesCheckbox.checked = true;
     }
 } else {
     // First visit: set the default filters
@@ -192,6 +200,8 @@ document.querySelector(".filter-menu").addEventListener("change", function () {
         settings[checkbox.id] = checkbox.checked;
     });
     localStorage.setItem(filterStorageKey, JSON.stringify(settings));
+
+    updateFilterVisibility();
 });
 
 // ------- Collapse Filter Categories -------
@@ -753,7 +763,7 @@ async function callbacktest(campus) {
     campusLayers.addLayer(buildingsLayer)
 
 
-    // ------- uilding Labels -------
+    // ------- Building Labels -------
 
     function updateBuildingLabels() {
         var zoom = map.getZoom();
