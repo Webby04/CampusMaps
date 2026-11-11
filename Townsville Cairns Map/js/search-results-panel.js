@@ -75,6 +75,8 @@ function preparePanelResults(results) {
 }
 
 function showMapResults(results) {
+    closeDetailsPanel();
+    
     currentPanelResults = preparePanelResults(results);
     activePanelResultIndex = -1;
 

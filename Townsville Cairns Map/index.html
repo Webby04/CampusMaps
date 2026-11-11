@@ -389,7 +389,8 @@
             <i class="fa-solid fa-magnifying-glass"></i>
         </button>
 
-        <input type="text" class="map-search-input" role="combobox" aria-label="Search the JCU Map" aria-controls="map-search-results" aria-autocomplete="list" aria-expanded="false">
+        <input type="text" class="map-search-input" role="combobox" aria-label="Search the JCU Map"
+            aria-controls="map-search-results" aria-autocomplete="list" aria-expanded="false">
 
         <div id="map-search-results" class="map-search-results" role="listbox" aria-label="Search suggestions" hidden>
         </div>
@@ -411,11 +412,41 @@
 
             <div class="map-results-list" id="map-results-list" role="list" aria-label="Search results"></div>
         </aside>
+
+
+        <!-- ------- Map Details Panel ------- -->
+
+        <aside class="map-details-panel" id="map-details-panel" hidden>
+
+            <div class="map-details-header">
+                <div>
+                    <h2 id="map-details-title"></h2>
+                    <p id="map-details-subtitle"></p>
+                </div>
+
+                <button class="map-details-close" id="map-details-close" type="button" aria-label="Close details">
+                    &times;
+                </button>
+            </div>
+
+            <div class="map-details-content">
+
+                <!-- Building Image -->
+                <img id="map-building-image" class="map-building-image" src="" alt="" hidden>
+
+                <!-- Building Directions -->
+                <button class="map-building-directions" id="map-building-directions" type="button" hidden>
+                    <i class="fa-solid fa-diamond-turn-right"></i>
+                    Directions
+                </button>
+
+            </div>
+
+        </aside>
+
     </div>
 
     <div id="map"></div>
-
-
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -432,6 +463,7 @@
     <script src="js/script.js"></script>
     <script src="js/search.js"></script>
     <script src="js/search-results-panel.js"></script>
+    <script src="js/map-details-panel.js"></script>
 </body>
 
 </html>

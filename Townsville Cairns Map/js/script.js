@@ -7,12 +7,11 @@ let zoomEndHandler = null;
 // ------- Building Labels -------
 
 
+
 function addBuildingLabel(feature, layer) {
     // Handle clicks on the existing building layer.
     layer.on("click", function () {
-        if (typeof handleBuildingDirections === "function") {
-            handleBuildingDirections(feature, layer);
-        }
+        openBuildingDetails(feature, layer);
     });
 
     var center = layer.getBounds().getCenter();
@@ -39,13 +38,9 @@ function addBuildingLabel(feature, layer) {
         bubblingMouseEvents: false,
     });
 
-    // Handle clicks directly on the building number/name Label.
+    // Handle clicks directly on the building number/name label.
     label.on("click", function () {
-        if (typeof handleBuildingDirections === "function") {
-            handleBuildingDirections(feature, layer);
-        } else {
-            console.error("handleBuildingDirections() is not defined.");
-        }
+        openBuildingDetails(feature, layer);
     });
 
     buildingLabels.push({
@@ -54,7 +49,6 @@ function addBuildingLabel(feature, layer) {
         label: label
     });
 }
-
 
 // ------- Filter Visibility -------
 
