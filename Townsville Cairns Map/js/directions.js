@@ -143,6 +143,15 @@ function highlightBuilding(feature) {
     selectedBuildingHighlightLayer.bringToFront();
 }
 
+// ------- Clear Building Highlight -------
+
+function clearBuildingHighlight() {
+    if (selectedBuildingHighlightLayer) {
+        map.removeLayer(selectedBuildingHighlightLayer);
+        selectedBuildingHighlightLayer = null;
+    }
+}
+
 function drawDirectionsRoute(coordinates) {
     clearDirectionsRoute();
 

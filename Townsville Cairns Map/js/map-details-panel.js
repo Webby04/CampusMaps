@@ -146,9 +146,10 @@ function getMapFeatureDisplayName(type) {
 function openPOIDetails(feature, layer) {
     if (!feature) return;
 
+    clearBuildingHighlight();
+
     const properties = feature.properties || {};
     const type = properties.type || "";
-
     const name = properties.description || getMapFeatureDisplayName(type);
     const category = getMapFeatureDisplayName(type);
 
@@ -161,9 +162,10 @@ function openPOIDetails(feature, layer) {
 function openParkingDetails(feature, layer) {
     if (!feature) return;
 
+    clearBuildingHighlight();
+
     const properties = feature.properties || {};
     const type = properties.parkType || "";
-
     const name = getParkingDisplayName(type) || getMapFeatureDisplayName(type);
     const category = getMapFeatureDisplayName(type);
 
