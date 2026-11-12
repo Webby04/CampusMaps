@@ -104,6 +104,27 @@ categoryCheckboxes.forEach(checkbox => {
     });
 });
 
+// ------- Campus Filter Availability -------
+
+function updateCampusFilterAvailability(poiData, parkingData) {
+    const availablePOITypes = new Set(
+        (poiData.features || []).map(feature => feature.properties?.type)
+    );
+
+    const availableParkingTypes = new Set(
+        (parkingData.features || []).map(feature => feature.properties?.parkType)
+    );
+
+    document.querySelectorAll("[data-poi-type]").forEach(element => {
+        const types = element.dataset.poiType.split(",");
+        element.hidden = !types.some(type => availablePOITypes.has(type.trim()));
+    });
+
+    document.querySelectorAll("[data-parking-type]").forEach(element => {
+        const types = element.dataset.parkingType.split(",");
+        element.hidden = !types.some(type => availableParkingTypes.has(type.trim()));
+    });
+}
 
 // ------- Chevron Controls -------
 

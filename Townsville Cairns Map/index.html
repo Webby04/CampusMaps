@@ -76,35 +76,35 @@
                         </label>
                     </div>
                     <div class="filter-options" id="standardParkingFilters" hidden>
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="FREE">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-free"></i>
                                 <span>Free Parking</span>
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="FREEVPERMIT">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-freevpermit"></i>
                                 <span>Free with vPermit</span>
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="PAID-ALL">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-paid-all"></i>
                                 <span>Paid All Day Parking</span>
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="PAID-4HR">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-paid-4hr"></i>
                                 <span>Paid 4 Hour Max</span>
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-poi-type="MOTORC">
                             <div class="parking-option-name">
                                 <span class="poi-icon poi-motorc filter-poi-icon">
                                     <span class="material-symbols-outlined">motorcycle</span>
@@ -113,7 +113,7 @@
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-poi-type="ACCPARK">
                             <div class="parking-option-name">
                                 <span class="poi-icon poi-accpark filter-poi-icon">
                                     <i class="fa-solid fa-wheelchair"></i>
@@ -140,21 +140,21 @@
                         </label>
                     </div>
                     <div class="filter-options" id="restrictedParkingFilters" hidden>
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="RESIDENTIAL">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-residential"></i>
                                 <span>Residential Parking</span>
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="CEL-PREM">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-cel-prem"></i>
                                 <span>Premium Parking</span>
                             </div>
                         </div>
 
-                        <div class="parking-option">
+                        <div class="parking-option" data-parking-type="COMMERCIAL,RESERVED,LOADING,VISITOR,SERVICE">
                             <div class="parking-option-name">
                                 <i class="fa-solid fa-square-parking parking-special"></i>
                                 <span>Special Parking</span>
@@ -179,7 +179,7 @@
                         </label>
                     </div>
                     <div class="filter-options" id="transportMobilityFilters" hidden>
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="TRANS">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-trans filter-poi-icon">
                                     <i class="fa-solid fa-bus-simple"></i>
@@ -188,7 +188,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="ESCOOTER">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-escooter filter-poi-icon">
                                     <span class="material-symbols-outlined">electric_scooter</span>
@@ -197,7 +197,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="EV_CHG">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-ev-chg filter-poi-icon">
                                     <i class="fa-solid fa-bolt"></i>
@@ -206,7 +206,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="BIKE">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-bike filter-poi-icon">
                                     <span class="material-symbols-outlined">directions_bike</span>
@@ -215,7 +215,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="BIKEWS">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-bikews filter-poi-icon">
                                     <i class="fa-solid fa-wrench"></i>
@@ -242,7 +242,7 @@
                         </label>
                     </div>
                     <div class="filter-options" id="amenitiesFilters" hidden>
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="KITCHENETTES">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-kitchenettes filter-poi-icon">
                                     <span class="material-symbols-outlined">microwave_gen</span>
@@ -251,7 +251,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="PARENT">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-parent filter-poi-icon">
                                     <i class="fa-solid fa-baby"></i>
@@ -260,7 +260,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="WELLNESS,COMGARDEN">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-wellness filter-poi-icon">
                                     <i class="fa-solid fa-leaf"></i>
@@ -269,7 +269,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="SHWR">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-shower filter-poi-icon">
                                     <i class="fa-solid fa-shower"></i>
@@ -278,7 +278,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="PWD">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-pwd filter-poi-icon">
                                     <i class="fa-solid fa-restroom"></i>
@@ -305,7 +305,7 @@
                     </div>
 
                     <div class="filter-options" id="safetySecurityFilters" hidden>
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="HELPPHONE">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-helpphone filter-poi-icon">
                                     <i class="fa-solid fa-phone"></i>
@@ -314,7 +314,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="SECURITY">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-security filter-poi-icon">
                                     <i class="fa-solid fa-shield"></i>
@@ -323,7 +323,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="DEFIB">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-defib filter-poi-icon">
                                     <i class="fa-solid fa-heart-crack"></i>
@@ -349,7 +349,7 @@
                         </label>
                     </div>
                     <div class="filter-options" id="foodServicesFilters" hidden>
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="FOODBEV,CAFE">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-foodbev filter-poi-icon">
                                     <span class="material-symbols-outlined">restaurant</span>
@@ -358,7 +358,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="INFO">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-info filter-poi-icon">
                                     <i class="fa-solid fa-circle-info"></i>
@@ -367,7 +367,7 @@
                             </div>
                         </div>
 
-                        <div class="show-on-the-map-option">
+                        <div class="show-on-the-map-option" data-poi-type="ATM">
                             <div class="show-on-the-map-name">
                                 <span class="poi-icon poi-atm filter-poi-icon">
                                     <span class="material-symbols-outlined">attach_money</span>

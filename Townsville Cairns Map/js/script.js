@@ -1047,6 +1047,7 @@ async function callbacktest(campus) {
 
     // ------- Update Filter Visibility -------
 
+    updateCampusFilterAvailability(poiData, parkingData);
     updateFilterVisibility();
 
     saveOriginalClusterMarkers();
