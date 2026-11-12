@@ -264,7 +264,7 @@ const MAP_OBJECT_STYLES = {
 
     PATH_CENTER_LINE: {
         color: MAP_OBJECT_COLORS.PATH,
-        weight: 2,
+        weight: 7,
         lineCap: "round",
         lineJoin: "miter"
     },
