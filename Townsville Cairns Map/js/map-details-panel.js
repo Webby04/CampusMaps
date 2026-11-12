@@ -62,6 +62,9 @@ function openDetailsPanel(title, subtitle = "", searchText = null) {
 function openBuildingDetails(feature, layer) {
     if (!feature || !layer) return;
 
+    clearPOIHighlight();
+    clearParkingHighlight();
+
     const number = getBuildingNumber(feature);
     const name = feature.properties?.buildingName || "Building";
 
@@ -141,12 +144,43 @@ function getMapFeatureDisplayName(type) {
     return displayNames[type] || type;
 }
 
+// ------- POI Highlight -------
+
+let selectedPOILayer = null;
+
+function clearPOIHighlight() {
+    if (selectedPOILayer) {
+        const element = selectedPOILayer.getElement?.();
+
+        if (element) {
+            element.classList.remove("poi-selected-highlight");
+        }
+
+        selectedPOILayer = null;
+    }
+}
+
+function highlightPOI(layer) {
+    clearPOIHighlight();
+
+    if (!layer) return;
+
+    const element = layer.getElement?.();
+
+    if (element) {
+        element.classList.add("poi-selected-highlight");
+        selectedPOILayer = layer;
+    }
+}
+
 // ------- Open POI Details -------
 
 function openPOIDetails(feature, layer) {
     if (!feature) return;
 
     clearBuildingHighlight();
+    clearParkingHighlight();
+    highlightPOI(layer);
 
     const properties = feature.properties || {};
     const type = properties.type || "";
@@ -156,13 +190,40 @@ function openPOIDetails(feature, layer) {
     openDetailsPanel(name, category, name);
 }
 
+// ------- Parking Highlight -------
+
+let selectedParkingHighlightLayer = null;
+
+function clearParkingHighlight() {
+    if (selectedParkingHighlightLayer) {
+        map.removeLayer(selectedParkingHighlightLayer);
+        selectedParkingHighlightLayer = null;
+    }
+}
+
+function highlightParking(feature) {
+    clearParkingHighlight();
+
+    if (!feature?.geometry) return;
+
+    selectedParkingHighlightLayer = L.geoJSON(feature, {
+        interactive: false,
+        style: {
+            className: "parking-highlight-layer"
+        }
+    }).addTo(map);
+
+    selectedParkingHighlightLayer.bringToFront();
+}
 
 // ------- Open Parking Details -------
 
 function openParkingDetails(feature, layer) {
     if (!feature) return;
 
+    clearPOIHighlight();                    
     clearBuildingHighlight();
+    highlightParking(feature);
 
     const properties = feature.properties || {};
     const type = properties.parkType || "";
