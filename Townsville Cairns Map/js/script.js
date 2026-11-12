@@ -6,8 +6,6 @@ let zoomEndHandler = null;
 
 // ------- Building Labels -------
 
-
-
 function addBuildingLabel(feature, layer) {
     // Handle clicks on the existing building layer.
     layer.on("click", function () {
@@ -47,6 +45,14 @@ function addBuildingLabel(feature, layer) {
         number: buildingNumber,
         name: buildingName,
         label: label
+    });
+}
+
+// ------- Parking Details Click -------
+
+function addParkingDetailsClick(feature, layer) {
+    layer.on("click", function () {
+        openParkingDetails(feature, layer);
     });
 }
 
@@ -414,9 +420,11 @@ async function callbacktest(campus) {
         },
         {
             style: MAP_OBJECT_STYLES.PARKING,
-            onEachFeature: addParkingIcon
+
+            onEachFeature: addParkingDetailsClick
         }
     );
+
 
     parkingLayer.addLayer(otherParkingLayer);
 
@@ -431,7 +439,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -444,6 +453,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("FREE")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(freeParkingIcons);
     });
 
@@ -458,7 +472,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -471,6 +486,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("FREEVPERMIT")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(freevPermitIcons);
     });
 
@@ -485,7 +505,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -498,6 +519,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("PAID-ALL")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(paidAllDayIcons);
     });
 
@@ -512,7 +538,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -525,6 +552,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("PAID-4HR")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(paid4hrMaxIcons);
     });
 
@@ -539,7 +571,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -552,6 +585,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("RESIDENTIAL")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(residentialIcons);
     });
 
@@ -566,7 +604,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -580,6 +619,11 @@ async function callbacktest(campus) {
         });
 
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(premiumIcons);
     });
 
@@ -593,7 +637,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -606,6 +651,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("COMMERCIAL")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(commercialIcons);
     });
 
@@ -619,7 +669,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -632,6 +683,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("RESERVED")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(reservedIcons);
     });
 
@@ -645,7 +701,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -658,6 +715,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("LOADING")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(loadingIcons);
     });
 
@@ -671,7 +733,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -684,6 +747,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("VISITOR")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(visitorIcons);
     });
 
@@ -697,7 +765,8 @@ async function callbacktest(campus) {
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
@@ -710,6 +779,11 @@ async function callbacktest(campus) {
             icon: getParkingIcon("SERVICE")
         });
         marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
         marker.addTo(serviceIcons);
     });
 
@@ -857,6 +931,12 @@ async function callbacktest(campus) {
             });
 
             marker.feature = feature;
+
+            // ------- Open POI Details When Clicked -------
+
+            marker.on("click", function () {
+                openPOIDetails(feature, marker);
+            });
 
             if (type === "MOTORC") {
                 marker.addTo(motorcycleIcons);

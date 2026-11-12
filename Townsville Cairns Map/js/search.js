@@ -623,6 +623,13 @@ function selectSearchResultItem(result) {
     // Only update the search input.
     searchInput.value = result.name;
 
+    // Open the selected feature's details panel.
+    if (result.resultType === "poi") {
+        openPOIDetails(feature);
+    } else if (result.resultType === "parking") {
+        openParkingDetails(feature);
+    }
+
     if (clearSearchButton) {
         clearSearchButton.hidden = false;
     }

@@ -90,6 +90,85 @@ function openBuildingDetails(feature, layer) {
     highlightBuilding(feature);
 }
 
+// ------- Map Feature Display Names -------
+
+function getMapFeatureDisplayName(type) {
+    const displayNames = {
+        // ------- Standard Parking -------
+        "FREE": "Free Parking",
+        "FREEVPERMIT": "Free with vPermit",
+        "PAID-ALL": "Paid All Day Parking",
+        "PAID-4HR": "Paid 4 Hour Max",
+        "MOTORC": "Motorcycle Parking",
+        "ACCPARK": "Accessible Parking",
+
+        // ------- Restricted Parking -------
+        "RESIDENTIAL": "Residential Parking",
+        "CEL-PREM": "Premium Parking",
+        "COMMERCIAL": "Special Parking",
+        "RESERVED": "Special Parking",
+        "LOADING": "Special Parking",
+        "VISITOR": "Special Parking",
+        "SERVICE": "Special Parking",
+
+        // ------- Transport & Mobility -------
+        "TRANS": "Bus Stops",
+        "ESCOOTER": "Electric Scooters",
+        "EV_CHG": "Electric Charging Bays",
+        "BIKE": "Bicycle Racks",
+        "BIKEWS": "Bicycle Repair Station",
+
+        // ------- Amenities -------
+        "KITCHENETTES": "Kitchenettes",
+        "PARENT": "Parents Room",
+        "WELLNESS": "Wellness",
+        "COMGARDEN": "Wellness",
+        "SHWR": "Shower",
+        "PWD": "Accessible Toilets",
+
+        // ------- Safety & Security -------
+        "HELPPHONE": "Help Phone",
+        "SECURITY": "Security",
+        "DEFIB": "Defibrillator",
+
+        // ------- Food & Services -------
+        "CAFE": "Food & Beverage/Cafe",
+        "FOODBEV": "Food & Beverage/Cafe",
+        "INFO": "Information",
+        "ATM": "ATM"
+    };
+
+    return displayNames[type] || type;
+}
+
+// ------- Open POI Details -------
+
+function openPOIDetails(feature, layer) {
+    if (!feature) return;
+
+    const properties = feature.properties || {};
+    const type = properties.type || "";
+
+    const name = properties.description || getMapFeatureDisplayName(type);
+    const category = getMapFeatureDisplayName(type);
+
+    openDetailsPanel(name, category, name);
+}
+
+
+// ------- Open Parking Details -------
+
+function openParkingDetails(feature, layer) {
+    if (!feature) return;
+
+    const properties = feature.properties || {};
+    const type = properties.parkType || "";
+
+    const name = getParkingDisplayName(type) || getMapFeatureDisplayName(type);
+    const category = getMapFeatureDisplayName(type);
+
+    openDetailsPanel(name, category, name);
+}
 
 // ------- Building Directions -------
 
