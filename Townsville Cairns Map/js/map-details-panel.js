@@ -55,15 +55,47 @@ function openDetailsPanel(title, subtitle = "", searchText = null) {
     detailsPanel.hidden = false;
 }
 
+// ------- Fly to Selected Feature -------
+
+function flyToSelectedFeature(feature, layer) {
+    if (layer?.getBounds) {
+        const bounds = layer.getBounds();
+
+        if (bounds.isValid()) {
+            map.flyTo(bounds.getCenter(), Math.max(map.getZoom(), 19), {
+                duration: 0.8
+            });
+            return;
+        }
+    }
+
+    if (layer?.getLatLng) {
+        map.flyTo(layer.getLatLng(), Math.max(map.getZoom(), 19), {
+            duration: 0.8
+        });
+        return;
+    }
+
+    if (feature?.geometry) {
+        const bounds = L.geoJSON(feature).getBounds();
+
+        if (bounds.isValid()) {
+            map.flyTo(bounds.getCenter(), Math.max(map.getZoom(), 19), {
+                duration: 0.8
+            });
+        }
+    }
+}
 
 // ------- Open Building Details -------
-
 
 function openBuildingDetails(feature, layer) {
     if (!feature || !layer) return;
 
     clearPOIHighlight();
     clearParkingHighlight();
+    highlightBuilding(feature);
+    flyToSelectedFeature(feature, layer);
 
     const number = getBuildingNumber(feature);
     const name = feature.properties?.buildingName || "Building";
@@ -89,8 +121,6 @@ function openBuildingDetails(feature, layer) {
 
     // Building-only directions button
     buildingDirectionsButton.hidden = false;
-
-    highlightBuilding(feature);
 }
 
 // ------- Map Feature Display Names -------
@@ -181,6 +211,7 @@ function openPOIDetails(feature, layer) {
     clearBuildingHighlight();
     clearParkingHighlight();
     highlightPOI(layer);
+    flyToSelectedFeature(feature, layer);
 
     const properties = feature.properties || {};
     const type = properties.type || "";
@@ -221,9 +252,10 @@ function highlightParking(feature) {
 function openParkingDetails(feature, layer) {
     if (!feature) return;
 
-    clearPOIHighlight();                    
+    clearPOIHighlight();
     clearBuildingHighlight();
     highlightParking(feature);
+    flyToSelectedFeature(feature, layer);
 
     const properties = feature.properties || {};
     const type = properties.parkType || "";
