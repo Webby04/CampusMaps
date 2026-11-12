@@ -831,10 +831,24 @@ async function callbacktest(campus) {
     campusLayers.addLayer(buildingsLayer)
 
 
-    // ------- Building Labels -------
+    // ------- Update Building Labels on Zoom -------
 
     function updateBuildingLabels() {
         var zoom = map.getZoom();
+
+        // ------- Building Label Font Size -------
+
+        const fontSizes = {
+            16: 11,
+            17: 12,
+            18: 14,
+            19: 16,
+            20: 17
+        };
+
+        const fontSize = fontSizes[zoom] || 12;
+
+        map.getContainer().style.setProperty("--building-label-font-size", `${fontSize}px`);
 
         buildingLabels.forEach(function (building) {
             if (zoom <= 17) {
