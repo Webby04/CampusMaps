@@ -949,7 +949,9 @@ async function callbacktest(campus) {
             // ------- Open POI Details When Clicked -------
 
             marker.on("click", function () {
+                console.log(feature);
                 openPOIDetails(feature, marker);
+                console.log(feature);
             });
 
             if (type === "MOTORC") {

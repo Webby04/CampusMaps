@@ -199,6 +199,7 @@ function highlightPOI(layer) {
 
     if (element) {
         element.classList.add("poi-selected-highlight");
+        layer.update();
         selectedPOILayer = layer;
     }
 }

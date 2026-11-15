@@ -272,7 +272,7 @@ body {
 
 .poi-icon.poi-selected-highlight {
     position: relative;
-    z-index: 1001;
+    z-index: 2001;
     outline: 4px solid #ffeb00;
     outline-offset: 1px;
     box-shadow: 0 0 5px rgba(255, 235, 0, 0.6);
