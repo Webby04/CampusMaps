@@ -60,98 +60,123 @@ function addParkingDetailsClick(feature, layer) {
 
 function updateFilterVisibility() {
 
+    // ------- Popular -------
+
+    const popular = popularCheckbox.checked;
+
     // ------- Standard Parking -------
 
-    if (standardParkingCheckbox.checked) {
+    const standardParking = standardParkingCheckbox.checked;
+
+    const standardParkingLayers = [ freevPermitIcons, paidAllDayIcons, paid4hrMaxIcons, motorcycleIcons, accessibleIcons ];
+
+    standardParkingLayers.forEach(layer => {
+        if (standardParking) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Free Parking is also in Popular
+    if (popular || standardParking) {
         map.addLayer(freeParkingIcons);
-        map.addLayer(freevPermitIcons);
-        map.addLayer(paidAllDayIcons);
-        map.addLayer(paid4hrMaxIcons);
-        map.addLayer(motorcycleIcons);
-        map.addLayer(accessibleIcons);
     } else {
         map.removeLayer(freeParkingIcons);
-        map.removeLayer(freevPermitIcons);
-        map.removeLayer(paidAllDayIcons);
-        map.removeLayer(paid4hrMaxIcons);
-        map.removeLayer(motorcycleIcons);
-        map.removeLayer(accessibleIcons);
     }
 
     // ------- Restricted Parking -------
 
-    if (restrictedParkingCheckbox.checked) {
-        map.addLayer(residentialIcons);
-        map.addLayer(premiumIcons);
-        map.addLayer(reservedIcons);
-        map.addLayer(commercialIcons);
-        map.addLayer(loadingIcons);
-        map.addLayer(visitorIcons);
-        map.addLayer(serviceIcons);
-    } else {
-        map.removeLayer(residentialIcons);
-        map.removeLayer(premiumIcons);
-        map.removeLayer(reservedIcons);
-        map.removeLayer(commercialIcons);
-        map.removeLayer(loadingIcons);
-        map.removeLayer(visitorIcons);
-        map.removeLayer(serviceIcons);
-    }
+    const restrictedParkingLayers = [ residentialIcons, premiumIcons, reservedIcons, commercialIcons, loadingIcons, visitorIcons, serviceIcons ];
+
+    restrictedParkingLayers.forEach(layer => {
+        if (restrictedParkingCheckbox.checked) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
 
     // ------- Transport & Mobility -------
 
-    if (transportMobilityCheckbox.checked) {
+    const transportMobility = transportMobilityCheckbox.checked;
+
+    const transportMobilityLayers = [ transportIcons, escooterIcons, evChargingIcons, bikeIcons, bikewsIcons ];
+
+    transportMobilityLayers.forEach(layer => {
+        if (transportMobility) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Bus Stops are also in Popular
+    if (popular || transportMobility) {
         map.addLayer(transportIcons);
-        map.addLayer(escooterIcons);
-        map.addLayer(evChargingIcons);
-        map.addLayer(bikeIcons);
-        map.addLayer(bikewsIcons);
     } else {
         map.removeLayer(transportIcons);
-        map.removeLayer(escooterIcons);
-        map.removeLayer(evChargingIcons);
-        map.removeLayer(bikeIcons);
-        map.removeLayer(bikewsIcons);
     }
 
     // ------- Amenities -------
 
-    if (amenitiesCheckbox.checked) {
-        map.addLayer(kitchenettesIcons);
-        map.addLayer(parentRoomIcons);
-        map.addLayer(wellnessIcons);
-        map.addLayer(showerIcons);
+    const amenities = amenitiesCheckbox.checked;
+
+    const amenitiesLayers = [ kitchenettesIcons, parentRoomIcons, wellnessIcons, showerIcons ];
+
+    amenitiesLayers.forEach(layer => {
+        if (amenities) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Accessible Toilets are also in Popular
+    if (popular || amenities) {
         map.addLayer(pwdIcons);
     } else {
-        map.removeLayer(kitchenettesIcons);
-        map.removeLayer(parentRoomIcons);
-        map.removeLayer(wellnessIcons);
-        map.removeLayer(showerIcons);
         map.removeLayer(pwdIcons);
     }
 
     // ------- Safety & Security -------
 
-    if (safetySecurityCheckbox.checked) {
+    const safetySecurity = safetySecurityCheckbox.checked;
+
+    const safetySecurityLayers = [ securityIcons, defibIcons ];
+
+    safetySecurityLayers.forEach(layer => {
+        if (safetySecurity) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Help Phone is also in Popular
+    if (popular || safetySecurity) {
         map.addLayer(helpPhoneIcons);
-        map.addLayer(securityIcons);
-        map.addLayer(defibIcons);
     } else {
         map.removeLayer(helpPhoneIcons);
-        map.removeLayer(securityIcons);
-        map.removeLayer(defibIcons);
     }
 
     // ------- Food & Services -------
 
-    if (foodServicesCheckbox.checked) {
+    const foodServices = foodServicesCheckbox.checked;
+
+    if (foodServices) {
+        map.addLayer(atmIcons);
+    } else {
+        map.removeLayer(atmIcons);
+    }
+
+    // Food & Beverage and Information are also in Popular
+    if (popular || foodServices) {
         map.addLayer(foodBevIcons);
         map.addLayer(infoIcons);
-        map.addLayer(atmIcons);
     } else {
         map.removeLayer(foodBevIcons);
         map.removeLayer(infoIcons);
-        map.removeLayer(atmIcons);
     }
 }
 
@@ -180,8 +205,7 @@ if (savedFilterSettings) {
             checkbox.checked = false;
         });
 
-        standardParkingCheckbox.checked = true;
-        foodServicesCheckbox.checked = true;
+        popularCheckbox.checked = true;
     }
 } else {
     // First visit: set the default filters
@@ -189,8 +213,7 @@ if (savedFilterSettings) {
         checkbox.checked = false;
     });
 
-    standardParkingCheckbox.checked = true;
-    foodServicesCheckbox.checked = true;
+    popularCheckbox.checked = true;
 }
 
 // Save settings whenever a checkbox changes
@@ -208,6 +231,7 @@ document.querySelector(".filter-menu").addEventListener("change", function () {
 
 function collapseFilterCategories() {
     const categories = [
+        ["popularExpand", "popularChevron", "popularFilters"],
         ["standardParkingExpand", "standardParkingChevron", "standardParkingFilters"],
         ["restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters"],
         ["transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters"],

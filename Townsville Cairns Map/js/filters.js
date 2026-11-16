@@ -78,8 +78,10 @@ closeButton.addEventListener("click", function () {
 
 
 // ------- Filter Elements -------
+
 const filters = document.getElementById("filters");
 
+const popularCheckbox = document.getElementById("popularCheckbox");
 const standardParkingCheckbox = document.getElementById("standardParkingCheckbox");
 const restrictedParkingCheckbox = document.getElementById("restrictedParkingCheckbox");
 const transportMobilityCheckbox = document.getElementById("transportMobilityCheckbox");
@@ -90,6 +92,7 @@ const foodServicesCheckbox = document.getElementById("foodServicesCheckbox");
 // ------- Category Filters -------
 
 const categoryCheckboxes = [
+    popularCheckbox,
     standardParkingCheckbox,
     restrictedParkingCheckbox,
     transportMobilityCheckbox,
@@ -158,6 +161,7 @@ function setupChevron(buttonID, chevronID, contentID) {
     });
 }
 
+setupChevron("popularExpand", "popularChevron", "popularFilters");
 setupChevron("standardParkingExpand", "standardParkingChevron", "standardParkingFilters");
 setupChevron("restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters");
 setupChevron("transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters");

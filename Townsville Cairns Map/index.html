@@ -61,6 +61,76 @@
         <div class="filter-menu">
             <div id="filters">
                 <div class="filter-category">
+                    <div class="filter-header popular-header">
+                        <div class="filter-heading-left">
+                            <button class="expand-button" id="popularExpand"
+                                aria-label="Expand or collapse popular filters" aria-expanded="false"
+                                aria-controls="popularFilters">
+                                <i class="fa-solid fa-chevron-down" id="popularChevron"></i>
+                            </button>
+                            <span class="filter-title">Popular</span>
+                        </div>
+                        <label class="checkbox-container">
+                            <input type="checkbox" id="popularCheckbox" checked aria-label="Popular">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+
+                    <div class="filter-options" id="popularFilters" hidden>
+                        <div class="parking-option" data-parking-type="FREE">
+                            <div class="parking-option-name">
+                                <i class="fa-solid fa-square-parking parking-free"></i>
+                                <span>Free Parking</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option" data-poi-type="TRANS">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-trans filter-poi-icon">
+                                    <i class="fa-solid fa-bus-simple"></i>
+                                </span>
+                                <span>Bus Stops</span>
+                            </div>
+                        </div>
+                        
+                        <div class="show-on-the-map-option" data-poi-type="FOODBEV,CAFE">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-foodbev filter-poi-icon">
+                                    <span class="material-symbols-outlined">restaurant</span>
+                                </span>
+                                <span>Food &amp; Beverage/Cafe</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option" data-poi-type="INFO">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-info filter-poi-icon">
+                                    <i class="fa-solid fa-circle-info"></i>
+                                </span>
+                                <span>Information</span>
+                            </div>
+                        </div>
+
+                        <div class="show-on-the-map-option" data-poi-type="HELPPHONE">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-helpphone filter-poi-icon">
+                                    <i class="fa-solid fa-phone"></i>
+                                </span>
+                                <span>Help Phone</span>
+                            </div>
+                        </div>
+                        
+                        <div class="show-on-the-map-option" data-poi-type="PWD">
+                            <div class="show-on-the-map-name">
+                                <span class="poi-icon poi-pwd filter-poi-icon">
+                                    <i class="fa-solid fa-restroom"></i>
+                                </span>
+                                <span>Accessible Toilets</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="filter-category">
                     <div class="filter-header standard-parking-header">
                         <div class="filter-heading-left">
                             <button class="expand-button" id="standardParkingExpand"
@@ -354,7 +424,7 @@
                                 <span class="poi-icon poi-foodbev filter-poi-icon">
                                     <span class="material-symbols-outlined">restaurant</span>
                                 </span>
-                                <span>Food & Beverage/Cafe</span>
+                                <span>Food &amp; Beverage/Cafe</span>
                             </div>
                         </div>
 
