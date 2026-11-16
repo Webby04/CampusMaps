@@ -6,13 +6,10 @@ let zoomEndHandler = null;
 
 // ------- Building Labels -------
 
-
 function addBuildingLabel(feature, layer) {
     // Handle clicks on the existing building layer.
     layer.on("click", function () {
-        if (typeof handleBuildingDirections === "function") {
-            handleBuildingDirections(feature, layer);
-        }
+        openBuildingDetails(feature, layer);
     });
 
     var center = layer.getBounds().getCenter();
@@ -39,13 +36,9 @@ function addBuildingLabel(feature, layer) {
         bubblingMouseEvents: false,
     });
 
-    // Handle clicks directly on the building number/name Label.
+    // Handle clicks directly on the building number/name label.
     label.on("click", function () {
-        if (typeof handleBuildingDirections === "function") {
-            handleBuildingDirections(feature, layer);
-        } else {
-            console.error("handleBuildingDirections() is not defined.");
-        }
+        openBuildingDetails(feature, layer);
     });
 
     buildingLabels.push({
@@ -55,253 +48,234 @@ function addBuildingLabel(feature, layer) {
     });
 }
 
+// ------- Parking Details Click -------
+
+function addParkingDetailsClick(feature, layer) {
+    layer.on("click", function () {
+        openParkingDetails(feature, layer);
+    });
+}
 
 // ------- Filter Visibility -------
 
 function updateFilterVisibility() {
-    
-    // ------- Parking -------
 
-    if (showAllCheckbox.checked && parkingCheckbox.checked) {
-        map.addLayer(parkingIcons);
-    } else {
-        map.removeLayer(parkingIcons);
-    }
+    // ------- Popular -------
 
-    if (freeParkingCheckbox.checked) {
+    const popular = popularCheckbox.checked;
+
+    // ------- Standard Parking -------
+
+    const standardParking = standardParkingCheckbox.checked;
+
+    const standardParkingLayers = [ freevPermitIcons, paidAllDayIcons, paid4hrMaxIcons, motorcycleIcons, accessibleIcons ];
+
+    standardParkingLayers.forEach(layer => {
+        if (standardParking) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Free Parking is also in Popular
+    if (popular || standardParking) {
         map.addLayer(freeParkingIcons);
     } else {
         map.removeLayer(freeParkingIcons);
     }
 
-    if (freevPermitCheckbox.checked) {
-        map.addLayer(freevPermitIcons);
-    } else {
-        map.removeLayer(freevPermitIcons);
-    }
+    // ------- Restricted Parking -------
 
-    if (paidAllDayCheckbox.checked) {
-        map.addLayer(paidAllDayIcons);
-    } else {
-        map.removeLayer(paidAllDayIcons);
-    }
+    const restrictedParkingLayers = [ residentialIcons, premiumIcons, reservedIcons, commercialIcons, loadingIcons, visitorIcons, serviceIcons ];
 
-    if (paid4hrMaxCheckbox.checked) {
-        map.addLayer(paid4hrMaxIcons);
-    } else {
-        map.removeLayer(paid4hrMaxIcons);
-    }
+    restrictedParkingLayers.forEach(layer => {
+        if (restrictedParkingCheckbox.checked) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
 
-    if (residentialCheckbox.checked) {
-        map.addLayer(residentialIcons);
-    } else {
-        map.removeLayer(residentialIcons);
-    }
+    // ------- Transport & Mobility -------
 
-    if (premiumCheckbox.checked) {
-        map.addLayer(premiumIcons);
-    } else {
-        map.removeLayer(premiumIcons);
-    }
+    const transportMobility = transportMobilityCheckbox.checked;
 
-    // ------- Special Parking -------
+    const transportMobilityLayers = [ transportIcons, escooterIcons, evChargingIcons, bikeIcons, bikewsIcons ];
 
-    if (commercialCheckbox.checked) {
-        map.addLayer(commercialIcons);
-    } else {
-        map.removeLayer(commercialIcons);
-    }
+    transportMobilityLayers.forEach(layer => {
+        if (transportMobility) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
 
-    if (reservedCheckbox.checked) {
-        map.addLayer(reservedIcons);
-    } else {
-        map.removeLayer(reservedIcons);
-    }
-
-    if (loadingCheckbox.checked) {
-        map.addLayer(loadingIcons);
-    } else {
-        map.removeLayer(loadingIcons);
-    }
-
-    if (visitorCheckbox.checked) {
-        map.addLayer(visitorIcons);
-    } else {
-        map.removeLayer(visitorIcons);
-    }
-
-    if (serviceCheckbox.checked) {
-        map.addLayer(serviceIcons);
-    } else {
-        map.removeLayer(serviceIcons);
-    }
-
-    // ------- Motorcycle / Accessible -------
-
-    if (motorcycleCheckbox.checked) {
-        map.addLayer(motorcycleIcons);
-    } else {
-        map.removeLayer(motorcycleIcons);
-    }
-    
-    if (accessibleCheckbox.checked) {
-        map.addLayer(accessibleIcons);
-    } else {
-        map.removeLayer(accessibleIcons);
-    }
-
-    // ------- POIs -------
-
-    if (!showAllCheckbox.checked) {
-        map.removeLayer(poiLayer);
-    } else {
-        map.addLayer(poiLayer);
-    }
-    
-
-    if (transportCheckbox.checked) {
+    // Bus Stops are also in Popular
+    if (popular || transportMobility) {
         map.addLayer(transportIcons);
     } else {
         map.removeLayer(transportIcons);
     }
 
-    if (escooterCheckbox.checked) {
-        map.addLayer(escooterIcons);
+    // ------- Amenities -------
+
+    const amenities = amenitiesCheckbox.checked;
+
+    const amenitiesLayers = [ kitchenettesIcons, parentRoomIcons, wellnessIcons, showerIcons ];
+
+    amenitiesLayers.forEach(layer => {
+        if (amenities) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
+
+    // Accessible Toilets are also in Popular
+    if (popular || amenities) {
+        map.addLayer(pwdIcons);
     } else {
-        map.removeLayer(escooterIcons);
+        map.removeLayer(pwdIcons);
     }
 
-    if (evChargingCheckbox.checked) {
-        map.addLayer(evChargingIcons);
-    } else {
-        map.removeLayer(evChargingIcons);
-    }
+    // ------- Safety & Security -------
 
-    if (bikeCheckbox.checked) {
-        map.addLayer(bikeIcons);
-    } else {
-        map.removeLayer(bikeIcons);
-    }
+    const safetySecurity = safetySecurityCheckbox.checked;
 
-    if (bikewsCheckbox.checked) {
-        map.addLayer(bikewsIcons);
-    } else {
-        map.removeLayer(bikewsIcons);
-    }
+    const safetySecurityLayers = [ securityIcons, defibIcons ];
 
-    if (foodBevCheckbox.checked) {
-        map.addLayer(foodBevIcons);
-    } else {
-        map.removeLayer(foodBevIcons);
-    }
+    safetySecurityLayers.forEach(layer => {
+        if (safetySecurity) {
+            map.addLayer(layer);
+        } else {
+            map.removeLayer(layer);
+        }
+    });
 
-    if (atmCheckbox.checked) {
-        map.addLayer(atmIcons);
-    } else {
-        map.removeLayer(atmIcons);
-    }
-
-    if (helpPhoneCheckbox.checked) {
+    // Help Phone is also in Popular
+    if (popular || safetySecurity) {
         map.addLayer(helpPhoneIcons);
     } else {
         map.removeLayer(helpPhoneIcons);
     }
 
-    if (securityCheckbox.checked) {
-        map.addLayer(securityIcons);
+    // ------- Food & Services -------
+
+    const foodServices = foodServicesCheckbox.checked;
+
+    if (foodServices) {
+        map.addLayer(atmIcons);
     } else {
-        map.removeLayer(securityIcons);
+        map.removeLayer(atmIcons);
     }
 
-    if (defibCheckbox.checked) {
-        map.addLayer(defibIcons);
-    } else {
-        map.removeLayer(defibIcons);
-    }
-
-    if (parentRoomCheckbox.checked) {
-        map.addLayer(parentRoomIcons);
-    } else {
-        map.removeLayer(parentRoomIcons);
-    }
-
-    if (infoCheckbox.checked) {
+    // Food & Beverage and Information are also in Popular
+    if (popular || foodServices) {
+        map.addLayer(foodBevIcons);
         map.addLayer(infoIcons);
     } else {
+        map.removeLayer(foodBevIcons);
         map.removeLayer(infoIcons);
     }
-
-    if (wellnessCheckbox.checked) {
-        map.addLayer(wellnessIcons);
-    } else {
-        map.removeLayer(wellnessIcons);
-    }
-
-    if (showerCheckbox.checked) {
-        map.addLayer(showerIcons);
-    } else {
-        map.removeLayer(showerIcons);
-    }
-
-    if (pwdCheckbox.checked) {
-        map.addLayer(pwdIcons);
-    } else {
-        map.removeLayer(pwdIcons);
-    }
 }
 
-// ------- Parent / Child Checkbox Synchronisation -------
+// ------- Save and Restore Map Filter Settings -------
 
-function updateParentCheckbox(parent, children) {
-    const checkedChildren = children.filter(child => child.checked).length;
+const filterStorageKey = 'jcuMapFilterSettings';
 
-    if (checkedChildren === 0) {
-        parent.checked = false;
-        parent.indeterminate = false;
-    } else if (checkedChildren === children.length) {
-        parent.checked = true;
-        parent.indeterminate = false;
-    } else {
-        parent.checked = false;
-        parent.indeterminate = true;
+const savedFilterSettings = localStorage.getItem(filterStorageKey);
+
+if (savedFilterSettings) {
+    try {
+        // Restore the user's previous selections
+        const settings = JSON.parse(savedFilterSettings);
+
+        document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+            if (settings[checkbox.id] !== undefined) {
+                checkbox.checked = settings[checkbox.id];
+            }
+        });
+    } catch (error) {
+        console.error("Failed to restore saved filter settings:", error);
+        localStorage.removeItem(filterStorageKey);
+
+        // Reset to default filters if saved settings are invalid
+        document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        popularCheckbox.checked = true;
     }
+} else {
+    // First visit: set the default filters
+    document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = false;
+    });
+
+    popularCheckbox.checked = true;
 }
 
-const specialParkingChildren = [commercialCheckbox, reservedCheckbox, loadingCheckbox, visitorCheckbox, serviceCheckbox];
-const parkingChildren = [freeParkingCheckbox, freevPermitCheckbox, paidAllDayCheckbox, paid4hrMaxCheckbox, residentialCheckbox, premiumCheckbox, ...specialParkingChildren, motorcycleCheckbox, accessibleCheckbox];
-const poiChildren = [transportCheckbox, escooterCheckbox, evChargingCheckbox, bikeCheckbox, bikewsCheckbox, foodBevCheckbox, atmCheckbox, helpPhoneCheckbox, securityCheckbox, defibCheckbox, parentRoomCheckbox, infoCheckbox, wellnessCheckbox, showerCheckbox, pwdCheckbox];
-
-[...parkingChildren, specialParkingCheckbox].forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(parkingCheckbox, parkingChildren);
-        updateFilterVisibility();
+// Save settings whenever a checkbox changes
+document.querySelector(".filter-menu").addEventListener("change", function () {
+    const settings = {};
+    document.querySelectorAll(".filter-menu input[type='checkbox']").forEach(checkbox => {
+        settings[checkbox.id] = checkbox.checked;
     });
+    localStorage.setItem(filterStorageKey, JSON.stringify(settings));
+
+    updateFilterVisibility();
 });
 
-specialParkingChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(specialParkingCheckbox, specialParkingChildren);
-        updateFilterVisibility();
-    });
-});
+// ------- Collapse Filter Categories -------
 
-poiChildren.forEach(child => {
-    child.addEventListener('change', () => {
-        updateParentCheckbox(showOnMapCheckbox, poiChildren);
-        updateFilterVisibility();
+function collapseFilterCategories() {
+    const categories = [
+        ["popularExpand", "popularChevron", "popularFilters"],
+        ["standardParkingExpand", "standardParkingChevron", "standardParkingFilters"],
+        ["restrictedParkingExpand", "restrictedParkingChevron", "restrictedParkingFilters"],
+        ["transportMobilityExpand", "transportMobilityChevron", "transportMobilityFilters"],
+        ["amenitiesExpand", "amenitiesChevron", "amenitiesFilters"],
+        ["safetySecurityExpand", "safetySecurityChevron", "safetySecurityFilters"],
+        ["foodServicesExpand", "foodServicesChevron", "foodServicesFilters"]
+    ];
+
+    categories.forEach(([buttonID, chevronID, contentID]) => {
+        const button = document.getElementById(buttonID);
+        const chevron = document.getElementById(chevronID);
+        const content = document.getElementById(contentID);
+
+        if (button && chevron && content) {
+            content.hidden = true;
+            content.classList.add("hidden");
+
+            chevron.classList.remove("fa-chevron-up");
+            chevron.classList.add("fa-chevron-down");
+
+            button.setAttribute("aria-expanded", "false");
+        }
     });
-});
+}
+
+collapseFilterCategories();
 
 // ------- Load Campus Data -------
 
 async function callbacktest(campus) {
     const generation = ++campusLoadGeneration;
 
+    // Reset search results whenever the selected campus changes.
+    window.jcuSearchIndex = {
+        campus: campus,
+        buildings: [],
+        pois: [],
+        parking: []
+    };
+
     reloadDirections(campus).catch(error => {
         console.error("Directions reload failed:", error);
     });
 
-    parkingIcons.clearLayers();
     freeParkingIcons.clearLayers();
     freevPermitIcons.clearLayers();
     paidAllDayIcons.clearLayers();
@@ -324,6 +298,7 @@ async function callbacktest(campus) {
     bikeIcons.clearLayers();
     bikewsIcons.clearLayers();
     foodBevIcons.clearLayers();
+    kitchenettesIcons.clearLayers();
     atmIcons.clearLayers();
     helpPhoneIcons.clearLayers();
     securityIcons.clearLayers();
@@ -356,7 +331,7 @@ async function callbacktest(campus) {
         map.removeLayer(premiumLayer);
     }
 
-    buildingLabels.forEach(function(building) {
+    buildingLabels.forEach(function (building) {
         if (map.hasLayer(building.label)) {
             map.removeLayer(building.label);
         }
@@ -369,11 +344,11 @@ async function callbacktest(campus) {
 
     let creekJSON = await fetch(`../data/mapsdata/${campus}_creeks.json`);
     let creekData = await creekJSON.json();
-    
-    if (generation !== campusLoadGeneration)  {
+
+    if (generation !== campusLoadGeneration) {
         return;
     }
-    
+
     var creekLayer = L.geoJSON(creekData, {
         style: MAP_OBJECT_STYLES.CREEK
     })
@@ -384,8 +359,8 @@ async function callbacktest(campus) {
 
     let sportsfieldsJSON = await fetch(`../data/mapsdata/${campus}_sports_fields.json`);
     let sportsfieldsData = await sportsfieldsJSON.json();
-    
-    if (generation !== campusLoadGeneration)  {
+
+    if (generation !== campusLoadGeneration) {
         return;
     }
     var sportsfieldsLayer = L.geoJSON(sportsfieldsData, {
@@ -398,7 +373,7 @@ async function callbacktest(campus) {
     let fencesJSON = await fetch(`../data/mapsdata/${campus}_fences.json`);
     let fencesData = await fencesJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -411,8 +386,8 @@ async function callbacktest(campus) {
 
     let roadareasJSON = await fetch(`../data/mapsdata/${campus}_road_areas.json`);
     let roadareasData = await roadareasJSON.json();
-    
-    if (generation !== campusLoadGeneration)  {
+
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -426,7 +401,7 @@ async function callbacktest(campus) {
     let pathareasJSON = await fetch(`../data/mapsdata/${campus}_path_areas.json`);
     let pathareasData = await pathareasJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -440,7 +415,7 @@ async function callbacktest(campus) {
     let pathcenterlinesJSON = await fetch(`../data/mapsdata/${campus}_path_center_lines.json`);
     let pathcenterlinesData = await pathcenterlinesJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -454,27 +429,26 @@ async function callbacktest(campus) {
     let parkingJSON = await fetch(`../data/mapsdata/${campus}_parking.json`);
     let parkingData = await parkingJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
+
+    window.jcuSearchIndex.parking = parkingData.features || [];
 
     var otherParkingLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
-                return feature.properties.parkType !== "FREE" &&
-                feature.properties.parkType !== "FREEVPERMIT" &&
-                feature.properties.parkType !== "PAID-ALL" &&
-                feature.properties.parkType !== "PAID-4HR" &&
-                feature.properties.parkType !== "RESIDENTIAL" &&
-                feature.properties.parkType !== "CEL-PREM";
+            features: parkingData.features.filter(function (feature) {
+                return !["FREE", "FREEVPERMIT", "PAID-ALL", "PAID-4HR", "RESIDENTIAL", "CEL-PREM", "COMMERCIAL", "RESERVED", "LOADING", "VISITOR", "SERVICE"].includes(feature.properties.parkType);
             })
         },
         {
             style: MAP_OBJECT_STYLES.PARKING,
-            onEachFeature: addParkingIcon
+
+            onEachFeature: addParkingDetailsClick
         }
     );
+
 
     parkingLayer.addLayer(otherParkingLayer);
 
@@ -484,23 +458,31 @@ async function callbacktest(campus) {
     freeParkingLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
+            features: parkingData.features.filter(function (feature) {
                 return feature.properties.parkType === "FREE";
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
     parkingLayer.addLayer(freeParkingLayer);
 
-    freeParkingLayer.eachLayer(function(layer) {
+    freeParkingLayer.eachLayer(function (layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("FREE")
-        }).addTo(freeParkingIcons);
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(freeParkingIcons);
     });
 
 
@@ -509,23 +491,31 @@ async function callbacktest(campus) {
     freevPermitLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
+            features: parkingData.features.filter(function (feature) {
                 return feature.properties.parkType === "FREEVPERMIT";
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
     parkingLayer.addLayer(freevPermitLayer);
 
-    freevPermitLayer.eachLayer(function(layer) {
+    freevPermitLayer.eachLayer(function (layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("FREEVPERMIT")
-        }).addTo(freevPermitIcons);
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(freevPermitIcons);
     });
 
 
@@ -534,23 +524,31 @@ async function callbacktest(campus) {
     paidAllDayLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
+            features: parkingData.features.filter(function (feature) {
                 return feature.properties.parkType === "PAID-ALL";
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
     parkingLayer.addLayer(paidAllDayLayer);
 
-    paidAllDayLayer.eachLayer(function(layer) {
+    paidAllDayLayer.eachLayer(function (layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("PAID-ALL")
-        }).addTo(paidAllDayIcons);
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(paidAllDayIcons);
     });
 
 
@@ -559,23 +557,31 @@ async function callbacktest(campus) {
     paid4hrMaxLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
+            features: parkingData.features.filter(function (feature) {
                 return feature.properties.parkType === "PAID-4HR";
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
     parkingLayer.addLayer(paid4hrMaxLayer);
 
-    paid4hrMaxLayer.eachLayer(function(layer) {
+    paid4hrMaxLayer.eachLayer(function (layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("PAID-4HR")
-        }).addTo(paid4hrMaxIcons);
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(paid4hrMaxIcons);
     });
 
 
@@ -584,23 +590,31 @@ async function callbacktest(campus) {
     residentialLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
+            features: parkingData.features.filter(function (feature) {
                 return feature.properties.parkType === "RESIDENTIAL";
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
     parkingLayer.addLayer(residentialLayer);
 
-    residentialLayer.eachLayer(function(layer) {
+    residentialLayer.eachLayer(function (layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("RESIDENTIAL")
-        }).addTo(residentialIcons);
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(residentialIcons);
     });
 
 
@@ -609,32 +623,200 @@ async function callbacktest(campus) {
     premiumLayer = L.geoJSON(
         {
             type: "FeatureCollection",
-            features: parkingData.features.filter(function(feature) {
+            features: parkingData.features.filter(function (feature) {
                 return feature.properties.parkType === "CEL-PREM";
             })
         },
         {
-            style: MAP_OBJECT_STYLES.PARKING
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
         }
     );
 
     parkingLayer.addLayer(premiumLayer);
 
-    premiumLayer.eachLayer(function(layer) {
+    premiumLayer.eachLayer(function (layer) {
         var center = layer.getBounds().getCenter();
 
-        L.marker(center, {
+        var marker = L.marker(center, {
             icon: getParkingIcon("CEL-PREM")
-        }).addTo(premiumIcons);
+        });
+
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(premiumIcons);
     });
 
+    // ------- Commercial -------
+
+    commercialLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function (feature) {
+                return feature.properties.parkType === "COMMERCIAL";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
+        }
+    );
+
+    parkingLayer.addLayer(commercialLayer);
+
+    commercialLayer.eachLayer(function (layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("COMMERCIAL")
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(commercialIcons);
+    });
+
+    // ------- Reserved -------
+
+    reservedLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function (feature) {
+                return feature.properties.parkType === "RESERVED";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
+        }
+    );
+
+    parkingLayer.addLayer(reservedLayer);
+
+    reservedLayer.eachLayer(function (layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("RESERVED")
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(reservedIcons);
+    });
+
+    // ------- Loading -------
+
+    loadingLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function (feature) {
+                return feature.properties.parkType === "LOADING";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
+        }
+    );
+
+    parkingLayer.addLayer(loadingLayer);
+
+    loadingLayer.eachLayer(function (layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("LOADING")
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(loadingIcons);
+    });
+
+    // ------- Visitor -------
+
+    visitorLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function (feature) {
+                return feature.properties.parkType === "VISITOR";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
+        }
+    );
+
+    parkingLayer.addLayer(visitorLayer);
+
+    visitorLayer.eachLayer(function (layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("VISITOR")
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(visitorIcons);
+    });
+
+    // ------- Service -------
+
+    serviceLayer = L.geoJSON(
+        {
+            type: "FeatureCollection",
+            features: parkingData.features.filter(function (feature) {
+                return feature.properties.parkType === "SERVICE";
+            })
+        },
+        {
+            style: MAP_OBJECT_STYLES.PARKING,
+            onEachFeature: addParkingDetailsClick
+        }
+    );
+
+    parkingLayer.addLayer(serviceLayer);
+
+    serviceLayer.eachLayer(function (layer) {
+        var center = layer.getBounds().getCenter();
+
+        var marker = L.marker(center, {
+            icon: getParkingIcon("SERVICE")
+        });
+        marker.feature = layer.feature;
+
+        marker.on("click", function () {
+            openParkingDetails(layer.feature, layer);
+        });
+
+        marker.addTo(serviceIcons);
+    });
 
     // ------- Nature Paths -------
 
     let naturepathsJSON = await fetch(`../data/mapsdata/${campus}_nature_paths.json`);
     let naturepathsData = await naturepathsJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
@@ -652,17 +834,19 @@ async function callbacktest(campus) {
     var Landmarks;
     var BuildingNames;
 
-    if (campus ==="tsv") {
-        Landmarks = ["18", "26", "104", "134", "142", "500" ];
-        BuildingNames = ["18", "26", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500" ];
-    } else if (campus ==="cns") {
+    if (campus === "tsv") {
+        Landmarks = ["18", "26", "104", "134", "142", "500"];
+        BuildingNames = ["18", "26", "99", "104", "134", "142", "143", "145", "168", "191", "206", "283", "500"];
+    } else if (campus === "cns") {
         Landmarks = ["B1", "D3", "F1"];
         BuildingNames = ["B1", "D3", "D4", "F1"];
     }
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
+
+    window.jcuSearchIndex.buildings = buildingsData.features || [];
 
     var buildingsLayer = L.geoJSON(buildingsData, {
         style: MAP_OBJECT_STYLES.BUILDING,
@@ -671,10 +855,24 @@ async function callbacktest(campus) {
     campusLayers.addLayer(buildingsLayer)
 
 
-    // ------- uilding Labels -------
+    // ------- Update Building Labels on Zoom -------
 
     function updateBuildingLabels() {
         var zoom = map.getZoom();
+
+        // ------- Building Label Font Size -------
+
+        const fontSizes = {
+            16: 11,
+            17: 12,
+            18: 14,
+            19: 16,
+            20: 17
+        };
+
+        const fontSize = fontSizes[zoom] || 12;
+
+        map.getContainer().style.setProperty("--building-label-font-size", `${fontSize}px`);
 
         buildingLabels.forEach(function (building) {
             if (zoom <= 17) {
@@ -688,7 +886,7 @@ async function callbacktest(campus) {
                         })
                     );
                     building.label.addTo(map)
-                } else { 
+                } else {
                     map.removeLayer(building.label)
                 }
             }
@@ -704,7 +902,7 @@ async function callbacktest(campus) {
                         })
                     );
                     building.label.addTo(map)
-                } else { 
+                } else {
                     map.removeLayer(building.label)
                 }
             }
@@ -734,7 +932,7 @@ async function callbacktest(campus) {
         });
     }
     updateBuildingLabels();
-    
+
     if (zoomEndHandler) {
         map.off("zoomend", zoomEndHandler);
     }
@@ -748,11 +946,14 @@ async function callbacktest(campus) {
     let poiJSON = await fetch(`../data/mapsdata/${campus}_poi.json`);
     let poiData = await poiJSON.json();
 
-    if (generation !== campusLoadGeneration)  {
+    if (generation !== campusLoadGeneration) {
         return;
     }
 
-    updateCampusFilters(parkingData, poiData);
+    window.jcuSearchIndex.pois = poiData.features || [];
+
+    // Invalidate cached Fuse indexes after all search data has loaded.
+    invalidateSearchIndexes();
 
     poiLayer = L.geoJSON(poiData, {
         pointToLayer: function (feature, latlng) {
@@ -765,6 +966,16 @@ async function callbacktest(campus) {
 
             var marker = L.marker(latlng, {
                 icon: icon
+            });
+
+            marker.feature = feature;
+
+            // ------- Open POI Details When Clicked -------
+
+            marker.on("click", function () {
+                console.log(feature);
+                openPOIDetails(feature, marker);
+                console.log(feature);
             });
 
             if (type === "MOTORC") {
@@ -791,62 +1002,67 @@ async function callbacktest(campus) {
                 marker.addTo(evChargingIcons);
                 return;
             }
-            
+
             if (type === "BIKE") {
                 marker.addTo(bikeIcons);
                 return;
             }
-            
+
             if (type === "BIKEWS") {
                 marker.addTo(bikewsIcons);
                 return;
             }
-            
-            if (type === "CAFE" || type === "KITCHENETTES" || type === "FOODBEV") {
+
+            if (type === "CAFE" || type === "FOODBEV") {
                 marker.addTo(foodBevIcons);
                 return;
             }
-            
+
+            if (type === "KITCHENETTES") {
+                marker.addTo(kitchenettesIcons);
+                return;
+            }
+
             if (type === "ATM") {
                 marker.addTo(atmIcons);
                 return;
             }
-            
+
             if (type === "HELPPHONE") {
                 marker.addTo(helpPhoneIcons);
                 return;
             }
-            
+
             if (type === "SECURITY") {
                 marker.addTo(securityIcons);
                 return;
             }
-            
+
             if (type === "DEFIB") {
                 marker.addTo(defibIcons);
                 return;
             }
-            
+
             if (type === "PARENT") {
                 marker.addTo(parentRoomIcons);
                 return;
             }
-            
+
             if (type === "INFO") {
                 marker.addTo(infoIcons);
                 return;
             }
-            
+
             if (type === "COMGARDEN" || type === "WELLNESS") {
                 marker.addTo(wellnessIcons);
                 return;
             }
-            
+
             if (type === "SHWR") {
                 marker.addTo(showerIcons);
                 return;
             }
-            
+
             if (type === "PWD") {
                 marker.addTo(pwdIcons);
                 return;
@@ -855,7 +1071,6 @@ async function callbacktest(campus) {
             return marker;
         }
     })
-    campusLayers.addLayer(poiLayer);
 
 
     // ------- Campus Bounds -------
@@ -872,85 +1087,11 @@ async function callbacktest(campus) {
 
     // ------- Update Filter Visibility -------
 
+    updateCampusFilterAvailability(poiData, parkingData);
     updateFilterVisibility();
+
+    saveOriginalClusterMarkers();
 }
-
-
-    // ------- Campus Filter Visibility -------
-
-    function updateCampusFilters(parkingData, poiData) {
-
-        const parkingTypes = new Set(
-            parkingData.features.map(feature => feature.properties.parkType)
-        );
-
-        const poiTypes = new Set(
-            poiData.features.map(feature => feature.properties.type)
-        );
-
-        function updateFilter(checkbox, available) {
-            
-            const filterElement = checkbox.closest(
-                ".parking-option, .special-parking-option, .show-on-the-map-option"
-            );
-
-            if (filterElement) {
-                filterElement.style.display = available ? "" : "none";
-            }
-
-            checkbox.disabled = !available;
-        }
-
-        // ------- Parking Filters -------
-
-        updateFilter(freeParkingCheckbox, parkingTypes.has("FREE"));
-        updateFilter(freevPermitCheckbox, parkingTypes.has("FREEVPERMIT"));
-        updateFilter(paidAllDayCheckbox, parkingTypes.has("PAID-ALL"));
-        updateFilter(paid4hrMaxCheckbox, parkingTypes.has("PAID-4HR"));
-        updateFilter(residentialCheckbox, parkingTypes.has("RESIDENTIAL"));
-        updateFilter(premiumCheckbox, parkingTypes.has("CEL-PREM"));
-
-        // ------- Special Parking Filters -------
-
-        updateFilter(commercialCheckbox, parkingTypes.has("COMMERCIAL"));
-        updateFilter(reservedCheckbox, parkingTypes.has("RESERVED"));
-        updateFilter(loadingCheckbox, parkingTypes.has("LOADING"));
-        updateFilter(visitorCheckbox, parkingTypes.has("VISITOR"));
-        updateFilter(serviceCheckbox, parkingTypes.has("SERVICE"));
-
-        // ------- Motorcycle and Accessible -------
-
-        updateFilter(motorcycleCheckbox, poiTypes.has("MOTORC"));
-        updateFilter(accessibleCheckbox, poiTypes.has("ACCPARK"));
-
-        // ------- POI Filters -------
-
-        updateFilter(transportCheckbox, poiTypes.has("TRANS"));
-        updateFilter(escooterCheckbox, poiTypes.has("ESCOOTER"));
-        updateFilter(evChargingCheckbox, poiTypes.has("EV_CHG"));
-        updateFilter(bikeCheckbox, poiTypes.has("BIKE"));
-        updateFilter(bikewsCheckbox, poiTypes.has("BIKEWS"));
-
-        updateFilter(
-            foodBevCheckbox,
-            ["CAFE", "KITCHENETTES", "FOODBEV"].some(type => poiTypes.has(type))
-        );
-
-        updateFilter(atmCheckbox, poiTypes.has("ATM"));
-        updateFilter(helpPhoneCheckbox, poiTypes.has("HELPPHONE"));
-        updateFilter(securityCheckbox, poiTypes.has("SECURITY"));
-        updateFilter(defibCheckbox, poiTypes.has("DEFIB"));
-        updateFilter(parentRoomCheckbox, poiTypes.has("PARENT"));
-        updateFilter(infoCheckbox, poiTypes.has("INFO"));
-
-        updateFilter(
-            wellnessCheckbox,
-            ["COMGARDEN", "WELLNESS"].some(type => poiTypes.has(type))
-        );
-
-        updateFilter(showerCheckbox, poiTypes.has("SHWR"));
-        updateFilter(pwdCheckbox, poiTypes.has("PWD"));
-    }
 
 // ------- Load Initial Campus -------
 

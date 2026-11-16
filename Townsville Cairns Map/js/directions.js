@@ -13,7 +13,7 @@ const DIRECTIONS_FILES = {
         buildings: "cns_buildings.json",
         pois: "cns_poi.json",
         path: "cns_path_center_lines.json"
-    }    
+    }
 };
 
 let directionsData = {};
@@ -21,16 +21,17 @@ let directionsClickLayer = null;
 let directionsRouteLayer = null;
 let directionsPathGraph = null;
 let directionsLoadGeneration = 0;
+let selectedBuildingHighlightLayer = null;
 
 function normaliseBuildingNumber(value) {
     if (value === null || value === undefined) return "";
-    
+
     const valueAsText = String(value).trim();
 
     return valueAsText.toUpperCase().replace(
-         /^([A-Z]*)(\d+)$/,
-         (_, prefix, digits) => prefix + String(Number(digits))
-     );
+        /^([A-Z]*)(\d+)$/,
+        (_, prefix, digits) => prefix + String(Number(digits))
+    );
 }
 
 function getBuildingNumber(feature) {
@@ -82,7 +83,7 @@ async function loadDirectionsData(campus = DIRECTIONS_CAMPUS) {
 
     const loadedData = { buildings: building, pois: pois, paths: paths };
 
-    console.log("Directions data loaded:", {campus, buildings: building.features?.length ?? 0, pois: pois.features?.length ?? 0, path: paths.features?.length ?? 0 });
+    console.log("Directions data loaded:", { campus, buildings: building.features?.length ?? 0, pois: pois.features?.length ?? 0, path: paths.features?.length ?? 0 });
 
     return loadedData;
 }
@@ -98,7 +99,7 @@ function createBuildingClickLayer() {
         onEachFeature: (feature, layer) => {
             layer.on("click", function () {
                 console.log("Building clicked:", getBuildingNumber(feature));
-                handleBuildingDirections(feature, layer);
+                openBuildingDetails(feature, layer);
             });
         }
     }).addTo(map);
@@ -119,6 +120,35 @@ function clearDirectionsRoute() {
     if (directionsRouteLayer) {
         map.removeLayer(directionsRouteLayer);
         directionsRouteLayer = null;
+    }
+}
+
+// ------- Building Highlight -------
+
+function highlightBuilding(feature) {
+    if (selectedBuildingHighlightLayer) {
+        map.removeLayer(selectedBuildingHighlightLayer);
+        selectedBuildingHighlightLayer = null;
+    }
+
+    if (!feature?.geometry) return;
+
+    selectedBuildingHighlightLayer = L.geoJSON(feature, {
+        interactive: false,
+        style: {
+            className: "directions-building-highlight-layer"
+        }
+    }).addTo(map);
+
+    selectedBuildingHighlightLayer.bringToFront();
+}
+
+// ------- Clear Building Highlight -------
+
+function clearBuildingHighlight() {
+    if (selectedBuildingHighlightLayer) {
+        map.removeLayer(selectedBuildingHighlightLayer);
+        selectedBuildingHighlightLayer = null;
     }
 }
 
@@ -145,7 +175,7 @@ function projectLatLng(latLng) {
 
     const referenceLat = -19.328;
     const scale = Math.cos(referenceLat * Math.PI / 180);
-    
+
     return { x: projected.x * scale, y: projected.y * scale };
 }
 
@@ -241,15 +271,15 @@ function buildPathGraph() {
 
             const coordinate = [
                 graph.nodes[segmentA.startNodeId].coordinate[0] +
-                    amountA * (
-                        graph.nodes[segmentA.endNodeId].coordinate[0] -
-                        graph.nodes[segmentA.startNodeId].coordinate[0]
-                    ),
+                amountA * (
+                    graph.nodes[segmentA.endNodeId].coordinate[0] -
+                    graph.nodes[segmentA.startNodeId].coordinate[0]
+                ),
                 graph.nodes[segmentA.startNodeId].coordinate[1] +
-                    amountA * (
-                        graph.nodes[segmentA.endNodeId].coordinate[1] -
-                        graph.nodes[segmentA.startNodeId].coordinate[1]
-                    )
+                amountA * (
+                    graph.nodes[segmentA.endNodeId].coordinate[1] -
+                    graph.nodes[segmentA.startNodeId].coordinate[1]
+                )
             ];
 
             const nodeId = findOrCreateGraphNode(graph, coordinate);
@@ -384,7 +414,7 @@ function findNearestPathNode(latLng) {
         const result = distancePointToSegment(point, segment.start, segment.end);
 
         if (nearestResult === null || result.distance < nearestResult.distance) {
-            
+
             const amount = result.amount;
             const snappedProjected = {
                 x: segment.start.x + amount * (segment.end.x - segment.start.x),
@@ -501,6 +531,7 @@ function findShortestPath(startNodeId, endNodeId, graph = directionsPathGraph) {
 }
 
 function handleBuildingDirections(feature, layer) {
+    highlightBuilding(feature);
     clearDirectionsRoute();
 
     const buildingNumber = getBuildingNumber(feature);
@@ -510,11 +541,11 @@ function handleBuildingDirections(feature, layer) {
 
     if (frontDoor) {
         // GeoJSON coordinates are [longitude, latitude]
-        destination = L.latLng( 
+        destination = L.latLng(
             frontDoor.geometry.coordinates[1],
             frontDoor.geometry.coordinates[0]
         );
-        
+
         console.log("Using FRONTDOOR:", destination);
     } else {
         // Fall back to the centre of the building polygon
@@ -585,13 +616,13 @@ function generatePathUsingCentreLines(destination) {
 
     function addTemporaryNode(snap) {
         const nodeId = graph.nodes.length;
-        graph.nodes.push({id: nodeId, coordinate: snap.snappedCoordinate, projected: snap.snappedProjected, neighbours: new Set()});
+        graph.nodes.push({ id: nodeId, coordinate: snap.snappedCoordinate, projected: snap.snappedProjected, neighbours: new Set() });
 
         const segment = snap.segment;
         const node = graph.nodes[nodeId];
 
         // Connect the snapped point to both ends of its segment.
-        for (const endpointId of [ segment.startNodeId, segment.endNodeId ]) {
+        for (const endpointId of [segment.startNodeId, segment.endNodeId]) {
             node.neighbours.add(endpointId);
             graph.nodes[endpointId].neighbours.add(node.id);
         }

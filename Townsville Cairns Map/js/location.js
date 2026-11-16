@@ -157,7 +157,7 @@ function checkUserLocationAgainstCampus() {
 
     if (centerMapLocationFound && userLocationMarker) {
         centerMapLocationFound = false;
-        map.setView(userLocationMarker.getLatLng(), 18, {
+        map.setView(userLocationMarker.getLatLng(), 19, {
             animate: true
         });
     }
@@ -215,7 +215,7 @@ function watchUserLocation() {
             if (centerMapLocationFound && userLocationMarker) {
                 centerMapLocationFound = false;
 
-                map.setView(userLocationMarker.getLatLng(), 18, {
+                map.setView(userLocationMarker.getLatLng(), 19, {
                     animate: true
                 });
             }

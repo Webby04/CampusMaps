@@ -6,6 +6,7 @@ var evChargingIcons = createMarkerCluster();
 var bikeIcons = createMarkerCluster();
 var bikewsIcons = createMarkerCluster();
 var foodBevIcons = createMarkerCluster();
+var kitchenettesIcons = createMarkerCluster();
 var atmIcons = createMarkerCluster();
 var helpPhoneIcons = createMarkerCluster();
 var securityIcons = createMarkerCluster();
@@ -52,10 +53,13 @@ function getPOIIcon(type) {
             iconClass = 'poi-bikews';
             break;
         case 'CAFE':
-        case 'KITCHENETTES':
         case 'FOODBEV':
             iconHTML = `<span class="material-symbols-outlined">restaurant</span>`;
             iconClass = 'poi-foodbev';
+            break;
+        case 'KITCHENETTES':
+            iconHTML = `<span class="material-symbols-outlined">microwave_gen</span>`;
+            iconClass = 'poi-kitchenettes';
             break;
         case 'ATM':
             iconHTML = `<span class="material-symbols-outlined">attach_money</span>`;
