@@ -552,7 +552,9 @@ function selectSearchResult(index) {
 // ------- Find POI Marker Layer -------
 
 function findPOILayer(feature) {
-    const poiClusters =[
+    const poiClusters = [
+        motorcycleIcons,
+        accessibleIcons,
         transportIcons,
         escooterIcons,
         evChargingIcons,
