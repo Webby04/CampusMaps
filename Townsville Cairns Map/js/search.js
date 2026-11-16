@@ -51,6 +51,9 @@ function clearSearchEffects() {
         selectedBuildingHighlightLayer = null;
     }
 
+    clearPOIHighlight();
+    clearParkingHighlight();
+
     // Restore POI and parking markers using the active filters.
     restoreSearchableClusters();
 
@@ -69,6 +72,9 @@ function resetSearchForCampusChange() {
         map.removeLayer(selectedBuildingHighlightLayer);
         selectedBuildingHighlightLayer = null;
     }
+
+    clearPOIHighlight();
+    clearParkingHighlight();
 
     // Close the search suggestions.
     closeSearchResults();
@@ -543,6 +549,52 @@ function selectSearchResult(index) {
     selectSearchResultItem(matchingResults[index]);
 }
 
+// ------- Find POI Marker Layer -------
+
+function findPOILayer(feature) {
+    const poiClusters =[
+        transportIcons,
+        escooterIcons,
+        evChargingIcons,
+        bikeIcons,
+        bikewsIcons,
+        foodBevIcons,
+        kitchenettesIcons,
+        atmIcons,
+        helpPhoneIcons,
+        securityIcons,
+        defibIcons,
+        parentRoomIcons,
+        infoIcons,
+        wellnessIcons,
+        showerIcons,
+        pwdIcons
+    ];
+
+
+    for (const cluster of poiClusters) {
+        const layer = cluster.getLayers().find(marker => {
+            const markerFeature = marker.feature;
+
+            if (markerFeature === feature) return true;
+
+            if (!marker.getLatLng || !feature.geometry?.coordinates) return false;
+
+            const [lng, lat] = feature.geometry.coordinates;
+            const markerLatLng = marker.getLatLng();
+            return (
+                markerLatLng.lat === lat &&
+                markerLatLng.lng === lng &&
+                markerFeature?.properties?.description === feature.properties?.description &&
+                markerFeature?.properties?.type === feature.properties?.type
+            );
+        });
+
+        if (layer) return layer;
+    }
+    return null;
+}
+
 function selectSearchResultItem(result) {
     if (!result || !result.feature?.geometry) return;
 
@@ -624,8 +676,11 @@ function selectSearchResultItem(result) {
     searchInput.value = result.name;
 
     // Open the selected feature's details panel.
-    if (result.resultType === "poi") {
-        openPOIDetails(feature);
+    if (result.resultType === "building") {
+        openBuildingDetails(feature, L.geoJSON(feature));
+    } else if (result.resultType === "poi") {
+        const poiLayer = findPOILayer(feature);
+        openPOIDetails(feature, poiLayer);
     } else if (result.resultType === "parking") {
         openParkingDetails(feature);
     }
